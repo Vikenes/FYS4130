@@ -1,0 +1,153 @@
+\documentclass[reprint,english,notitlepage,aps,nobalancelastpage,nofootinbib]{revtex4-1}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{physics,amssymb}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{listings}
+\usepackage{subfigure}
+\usepackage{amsmath,mathtools}
+\usepackage{amsbsy}
+\usepackage{enumitem}
+\usepackage{bbold}
+
+\graphicspath{{../plots/}}
+
+\hypersetup{
+    colorlinks,
+    linkcolor={red!50!black},
+    citecolor={blue!50!black},
+    urlcolor={blue!80!black}}
+
+\lstset{
+	inputpath=,
+	backgroundcolor=\color{white!88!black},
+	basicstyle={\ttfamily\scriptsize},
+	commentstyle=\color{magenta},
+	language=Python,
+	morekeywords={True,False},
+	tabsize=4,
+	stringstyle=\color{green!55!black},
+	frame=single,
+	keywordstyle=\color{blue},
+	showstringspaces=false,
+	columns=fullflexible,
+	keepspaces=true}
+
+
+\newcommand{\closed}[1]{\left(#1\right)}
+\newcommand{\bracket}[1]{\left[#1\right]}
+
+\newcommand{\kt}{\kappa_T}
+\renewcommand{\cp}{c_P}
+\newcommand{\cv}{c_V}
+\renewcommand{\a}{\alpha}
+
+\newcommand{\tmdv}[4]{\closed{\pdv{#1}{#2}}_{#3,#4}}
+\newcommand{\jacobian}[2]{\pdv{(#1)}{(#2)}}
+\renewcommand{\d}{\mathrm{d}}
+
+\begin{document}
+\begin{center}
+\title{\Huge FYS4130 - Oblig 1}
+\author{\large Vetle A. Vikenes}
+\date{\today}
+\noaffiliation
+
+
+\maketitle
+\end{center}
+\onecolumngrid
+
+\section*{\large Task 1 - Black box numerical method}
+
+\begin{align} \label{eq:kappa black box}
+	\kt = -\frac{1}{V}\closed{\pdv{V}{P}}_{T,N}
+\end{align}
+
+
+\section*{\large Task 2 - Partial derivative}
+We want to rewrite the partial derivative 
+\begin{align*}
+	\tmdv{P}{U}{G}{N}.
+\end{align*}
+In this task we will need the standard set of second derivatives given in Swendsen, and we list them here for convenience
+\begin{align}
+	\a &= \frac{1}{V} \tmdv{V}{T}{P}{N} \label{eq:alpha} \\ 
+	\kt &= -\frac{1}{V} \tmdv{V}{P}{T}{N} \label{eq:kappa} \\ 
+	\cp &= \frac{T}{N} \tmdv{S}{T}{P}{N} \label{eq:cp} \\ 
+\end{align}
+We begin by applying the chain rule to the Jacobian, which enables us to get a partial derivative containing $U$ and $G$ in the denominator only. 
+
+\begin{align} 
+	\tmdv{P}{U}{G}{N} &= \jacobian{P,G,N}{U,G,N} = \jacobian{P,G,N}{P,T,N}\cdot\jacobian{P,T,N}{U,G,N}= \tmdv{G}{T}{P}{N} \jacobian{P,T,N}{U,G,N} \nonumber \\
+	&= -S \Big/\jacobian{U,G,N}{P,T,N}, \label{eq:pdv first expansion}
+\end{align}
+where we used the differential form of the Gibbs free energy, $\mathrm{d}G=-S\mathrm{d}T+V\mathrm{d}P+\mu\mathrm{d}N$, to solve the first partial derivative of $G$ with respect to $T$ at constant $P$ and $N$. The second factor was written in terms of the reciprocal such that the thermodynamic potentials in the Jacobian appear in the nominator. 
+
+We will now find an expression for $\pdv*{(U,G,N)}{(P,T,N)}$. To avoid partial derivatives containing $U$ and $G$ simultaneously, we expand the expression by using the definition of Jacobians. 
+
+\begin{align}
+	\jacobian{U,G,N}{P,T,N} &= \tmdv{U}{P}{T}{N} \tmdv{G}{T}{P}{N} - \tmdv{U}{T}{P}{N}\tmdv{G}{P}{T}{N} \nonumber \\ 
+	&= -S\tmdv{U}{P}{T}{N} - V \tmdv{U}{T}{P}{N}, \label{eq:d UGN_d PTN}
+\end{align}
+where the last equation follow from the definition of $\d G$ and the partial derivatives of it. 
+
+For the partial derivative of $U$ with respect to $T$ at constant $P$ and $N$, we consider the differential form of fundamental relation in the energy representation, which at constant $N$ becomes 
+
+\begin{align}
+	\d U &= T \d S - P \d V \nonumber \\ 
+	\implies \tmdv{U}{T}{P}{N} &= T \tmdv{S}{T}{P}{N} - P \tmdv{V}{T}{P}{N} \nonumber \\ 
+	&= N\cp - PV\a, \label{eq:dU_dT}
+\end{align}
+where we used equations \eqref{eq:cp} and \eqref{eq:alpha} for the two partial derivatives. 
+
+For the partial derivative of $U$ with respect to $P$ with $T$ and $N$ held constant we apply the chain rule
+\begin{align}
+	\tmdv{U}{P}{T}{N} &= \jacobian{U,T,N}{P,T,N} = \jacobian{U,T,N}{V,T,N}\cdot \jacobian{V,T,N}{P,T,N} = \tmdv{U}{V}{T}{N} \tmdv{V}{P}{T}{N} \nonumber \\
+	&= \tmdv{U}{V}{T}{N}(-V\kt). \label{eq:dU_dP}
+\end{align}
+Equation \eqref{eq:kappa} was used to rewrite the second partial derivative. For the other partial derivative, we once again use the previouslly mentioned expression for $\d U$ with $N$ held constant 
+\begin{align} \label{eq:dU_dV}
+	\tmdv{U}{V}{T}{N} &= T \tmdv{S}{V}{T}{N} - P.
+\end{align}
+To proceed with the final partial derivative we will first use a Maxwell relation. We notice that $S$ is differentiated with respect to $V$ at constant $T$ and $N$, so we can use the differential form of the Helmholtz free energy to derive the Maxwell relation. 
+\begin{align*}
+	\d F &= -S \d T -P \d V + \mu \d N \implies -\tmdv{F}{T}{V}{N} = S \\ 
+	\tmdv{S}{V}{T}{N} &=-\bracket{\pdv{V}\tmdv{F}{T}{V}{N}}_{T,N} = -\bracket{\pdv{T}\tmdv{F}{V}{T}{N}}_{V,N} = \tmdv{P}{T}{V}{N}.
+\end{align*} 
+We rewrite the last partial derivative using the chain rule 
+\begin{align}
+	\tmdv{P}{T}{V}{N} &= \jacobian{P,V,N}{T,V,N} = \jacobian{P,V,N}{P,T,N}\cdot \jacobian{P,T,N}{T,V,N} = -\jacobian{V,P,N}{T,P,N}\cdot \jacobian{P,T,N}{V,T,N} \nonumber \\ 
+	&= -\tmdv{V}{T}{P}{N} \Big/ \tmdv{V}{P}{T}{N} = -V\a \big/ (-V\kt) = \frac{\a}{\kt}, \label{eq:alpha_kappa}
+\end{align} 
+where in the last step equations \eqref{eq:alpha} and \eqref{eq:kappa} were used to rewrite the nominator and denominator, repsectively. Equation \eqref{eq:dU_dP} can now be solved, by inserting equation \eqref{eq:alpha_kappa} into equation \eqref{eq:dU_dV} 
+\begin{align*}
+	\tmdv{U}{P}{T}{N} &= -V\kt \tmdv{U}{V}{T}{N} = -V\kt \closed{T\frac{\a}{\kt} - P} \\ 
+	&= -VT \a + PV\kt 
+\end{align*}
+
+Inserting equation \eqref{eq:dU_dP} and \eqref{eq:dU_dT} into equation \eqref{eq:d UGN_d PTN} we get 
+\begin{align}
+	\jacobian{U,G,N}{P,T,N} = -S \closed{-VT \a + PV\kt} - V \closed{N\cp - PV\a} = -V\bracket{SP\kt + N\cp -ST\a - PV\a} \label{eq:d UGN_d PTN final expression}
+\end{align}
+
+Finally, inserting equation \eqref{eq:d UGN_d PTN final expression} into equation \eqref{eq:pdv first expansion} we arrive at the final expression 
+\begin{align}
+	\tmdv{P}{U}{G}{N} &= -S \bracket{\jacobian{U,G,N}{P,T,N}}^{-1} = \frac{S/V}{SP\kt + N\cp -ST\a - PV\a}
+\end{align}
+
+
+\section*{\large Task 3}
+ 
+
+
+\subsection*{a)}
+
+
+
+
+
+\end{document}
