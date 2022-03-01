@@ -62,11 +62,28 @@
 \onecolumngrid
 \centering
 \section*{\large Task 1 - Black box numerical method}
-
+We want to find the isothermal compressibility at constant $T$ and $N$,
 \begin{align} \label{eq:kappa black box}
-	\kt = -\frac{1}{V}\closed{\pdv{V}{P}}_{T,N}
+	\kt = -\frac{1}{V}\closed{\pdv{V}{P}}_{T,N},
 \end{align}
+with a black box numerical method which gives us values for $P$ and $N$ as function of intput parameters $T,\,V,$ and $\mu$ which we may vary. The derivatives we're able to compute with our numerical method is the partial derivative of either $P$ or $N$ with respect to one of the input parameters, when the other two are held constant. We must therefore rewrite equation \eqref{eq:kappa black box}, such that it only contains such derivatives. To begin, we use the chain rule on the reciprocal of the partial derivative in equation \eqref{eq:kappa black box}
+\begin{align*}
+	\tmdv{P}{V}{T}{N} &= \jacobian{P,T,N}{V,T,N}=\jacobian{P,T,N}{V,T,\mu}\cdot\jacobian{V,T,\mu}{V,T,N} \\
+	&= \jacobian{P,N,T}{V,\mu,T}\cdot\jacobian{\mu,V,T}{N,V,T}=
+	\jacobian{P,N,T}{V,\mu,T} \Big/ \tmdv{N}{\mu}{V}{T}.
+\end{align*}
+The last factor is a partial derivative we're able to compute, by computing the change in $N$ as we vary $\mu$ only. For the other factor, we expand the jacobian, using its definition 
 
+\begin{align}
+	\jacobian{P,N,T}{V,\mu,T} &= \tmdv{P}{V}{\mu}{T}\tmdv{N}{\mu}{V}{T}-\tmdv{P}{\mu}{V}{T}\tmdv{N}{V}{\mu}{T}. \label{eq:d PNT_d VmuT}
+\end{align}
+We see that the four partial derivatives in equation \eqref{eq:d PNT_d VmuT} are taken with respect to either $V$, with the other input parameters held constant, or $\mu$ with the other input parameters held constant. Measuring the change in $P$ and $N$ with these constraints is thus something our numerical method is capable of, and we have successfully reduced $\kt$ into multiple partial derivatives we're able to solve. The resulting expression for $\kt$ becomes  
+
+\begin{align*}
+	\kt &= -\frac{1}{V}\bracket{\jacobian{P,N,T}{V,\mu,T} \Big/ \tmdv{N}{\mu}{V}{T}}^{-1}=-\frac{1}{V} \tmdv{N}{\mu}{V}{T} \Big/
+	\jacobian{P,N,T}{V,\mu,T} \\
+	&= -\frac{1}{V} \tmdv{N}{\mu}{V}{T} \bracket{\tmdv{P}{V}{\mu}{T}\tmdv{N}{\mu}{V}{T}-\tmdv{P}{\mu}{V}{T}\tmdv{N}{V}{\mu}{T}}^{-1}.
+\end{align*}
 
 \section*{\large Task 2 - Partial derivative}
 We want to rewrite the partial derivative 
