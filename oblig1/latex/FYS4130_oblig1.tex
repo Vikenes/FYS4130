@@ -49,6 +49,9 @@
 \newcommand{\jacobian}[2]{\pdv{(#1)}{(#2)}}
 \renewcommand{\d}{\mathrm{d}}
 
+\newcommand{\nx}{N_x}
+\newcommand{\ny}{N_y}
+\newcommand{\nz}{N_z}
 \begin{document}
 \begin{center}
 \title{\Huge FYS4130 - Oblig 1}
@@ -159,11 +162,21 @@ Finally, inserting equation \eqref{eq:d UGN_d PTN final expression} into equatio
 
 \section*{\large Task 3}
  
-
+\begin{align}
+	F = T \bracket{N_x \ln\closed{\a l b^2 \frac{N_x}{{V}}} + N_y \ln\closed{\a l b^2 \frac{N_y}{{V}}} + N_z \ln\closed{\a l b^2 \frac{N_z}{{V}}} + \gamma l b^2 \frac{\nx\ny+\ny\nz+\nz\nx}{{V}} }
+\end{align}
 
 \subsection*{a)}
+Using $\tilde{V}=V/lb^2$, we can rewrite the four volume terms in the expression by $lb^2/V=1/\tilde{V}$. The expression for the Helmholtz free energy divided by $T$ now becomes 
+\begin{align}
+	\frac{F}{T} = \bracket{N_x \ln\closed{\a  \frac{N_x}{\tilde{V}}} + N_y \ln\closed{\a  \frac{N_y}{\tilde{V}}} + N_z \ln\closed{\a  \frac{N_z}{\tilde{V}}} + \gamma \frac{\nx\ny+\ny\nz+\nz\nx}{\tilde{V}} }
+\end{align}
 
+\subsection*{b)}
 
+\begin{align*}
+	F = T \bracket{N_x \ln\closed{\frac{N_x}{\tilde{V}}} + N_y \ln\closed{\frac{N_y}{\tilde{V}}} + N_z \ln\closed{\frac{N_z}{\tilde{V}}} + \gamma \frac{\nx\ny+\ny\nz+\nz\nx}{\tilde{V}} }
+\end{align*}
 
 
 
