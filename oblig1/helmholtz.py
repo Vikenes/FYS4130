@@ -17,8 +17,8 @@ def F_func(Nx, Ny, N, V):
     return f
 
 
-V = 100 
-N = np.arange(96,401, 3)
+V = 400 
+N = np.arange(108,401, 3)
 # N = 101
 
 f = np.zeros((201,301,301))
@@ -38,6 +38,8 @@ for n in N:
     f_max = np.nanmax(f[n])
 
     f_min = np.where(f[n]==np.nanmin(f[n]))
+    print(f_min, np.nanmin(f[n]))
+
     X_min = X[f_min[0]]
     Y_min = Y[f_min[1]]
 
