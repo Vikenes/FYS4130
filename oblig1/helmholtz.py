@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 
 np.seterr(divide = 'ignore') 
 
+
 def F_func(Nx, Ny, N, V):
     Nz = N - Nx - Ny
     Nz = np.where(Nz>0, Nz, 0)
@@ -15,6 +16,9 @@ def F_func(Nx, Ny, N, V):
     f = logarithms + gamma * cross_terms / V 
     f = np.where(Nz>0, f, nan)
     return f
+
+def G_func(N):
+    return None 
 
 
 V = 400 
@@ -39,6 +43,10 @@ for n in N:
 
     f_min = np.where(f[n]==np.nanmin(f[n]))
     print(f_min, np.nanmin(f[n]))
+
+    print(F_func(18,18,111,V))
+    print(F_func(18,75,111,V))
+    print(F_func(75,18,111,V))
 
     X_min = X[f_min[0]]
     Y_min = Y[f_min[1]]
