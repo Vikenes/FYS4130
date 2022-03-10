@@ -52,6 +52,8 @@
 \newcommand{\nx}{N_x}
 \newcommand{\ny}{N_y}
 \newcommand{\nz}{N_z}
+\newcommand{\V}{\tilde{V}}
+\renewcommand{\P}{\tilde{P}}
 
 \newcommand{\np}{N_+}
 \newcommand{\kb}{k_B}
@@ -165,22 +167,68 @@ Finally, inserting equation \eqref{eq:d UGN_d PTN final expression} into equatio
 
 
 \section*{\large Task 3}
- 
-\begin{align}
+We consider the Helmholtz free energy given by equation \eqref{eq:F_task3}
+\begin{align} \label{eq:F_task3}
 	F = T \bracket{N_x \ln\closed{\a l b^2 \frac{N_x}{{V}}} + N_y \ln\closed{\a l b^2 \frac{N_y}{{V}}} + N_z \ln\closed{\a l b^2 \frac{N_z}{{V}}} + \gamma l b^2 \frac{\nx\ny+\ny\nz+\nz\nx}{{V}} }
 \end{align}
 
-\subsection*{a)}
+\subsection*{a) - Dimensionless volume}
 Using $\tilde{V}=V/lb^2$, we can rewrite the four volume terms in the expression by $lb^2/V=1/\tilde{V}$. The expression for the Helmholtz free energy divided by $T$ now becomes 
-\begin{align}
+\begin{align*} 
 	\frac{F}{T} = \bracket{N_x \ln\closed{\a  \frac{N_x}{\tilde{V}}} + N_y \ln\closed{\a  \frac{N_y}{\tilde{V}}} + N_z \ln\closed{\a  \frac{N_z}{\tilde{V}}} + \gamma \frac{\nx\ny+\ny\nz+\nz\nx}{\tilde{V}} }
+\end{align*}
+
+\subsection*{b) - Equilibrium Helmholtz free energy}
+We will now increase the rod concentration, $n=N/V$, so slow that we always consider the system to be in equilibrium. The temperature and volume is kept constant, but we increase $N$ by adding rods. We will set $\alpha=1$ in all following calculations.  
+\begin{align} \label{eq:F_dimless}
+	\frac{F}{T} = N_x \ln\closed{\frac{N_x}{\tilde{V}}} + N_y \ln\closed{\frac{N_y}{\tilde{V}}} + N_z \ln\closed{\frac{N_z}{\tilde{V}}} + \gamma \frac{\nx\ny+\ny\nz+\nz\nx}{\tilde{V}}
 \end{align}
 
-\subsection*{b)}
+We compute the Helmholtz free energy numerically, and choose $\V=400$ for the dimensionless volume. For the number of particles, we consider $N\in[N_0,\V]$ 
+% NOTE: FYLL INN START 
+For each value of $N$ we compute the helmholtz free energy for all combinations of $\nx,\ny\in[1,N-1]$ and find the corresponding value for $\nz$ from the constraint $N=\nx+\ny+\nz$. From this, we find the values of $\nx,\,\ny$ and $\nz$ that minimizes $F$. 
 
+We plot the helmholtz free energy for a given 
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.8\linewidth]{helmholtz_free_energy.pdf}
+	\caption{Helmholtz}
+	\label{fig:F}
+\end{figure}
+
+
+PRESSURE 
+
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.8\linewidth]{helmholtz_pressure.pdf}
+	\caption{Helmholtz}
+	\label{fig:F_P}
+\end{figure}
+
+
+NUMBER DENSITY 
+
+
+
+\subsection*{c) - Equilibrium Gibbs free energy}
+The Gibbs free energy is given as $G=F+PV$. We find an expression for the pressure, by taking the partial derivative of $F$ with respect to volume, at constant $T$ and $N$
 \begin{align*}
-	F = T \bracket{N_x \ln\closed{\frac{N_x}{\tilde{V}}} + N_y \ln\closed{\frac{N_y}{\tilde{V}}} + N_z \ln\closed{\frac{N_z}{\tilde{V}}} + \gamma \frac{\nx\ny+\ny\nz+\nz\nx}{\tilde{V}} }
+	P &= -\tmdv{F}{V}{T}{N} = -\tmdv{\V}{V}{T}{N}\tmdv{F}{\V}{T}{N}=-\frac{1}{lb^2}\tmdv{F}{\V}{T}{N}
 \end{align*}
+We now define the dimensionless pressure, $\P\equiv Plb^2/T$, and can then differentiate equation \eqref{eq:F_dimless} with respect to $\V$.
+\begin{align*}
+	\P &= -\bracket{-\frac{\nx}{\V} -\frac{\ny}{\V} -\frac{\nz}{\V} - \gamma \frac{\nx\ny+\ny\nz+\nz\nx}{\V^2}} \\ 
+	& = \frac{N}{\V} + \gamma \frac{\nx\ny+\ny\nz+\nz\nx}{\V^2} 
+\end{align*}
+We can now find the dimesnionless Gibbs free energy, $G/T$
+\begin{align*}
+	\frac{G}{T} &= \frac{F}{T} + \frac{PV}{T} = \frac{F}{T} + \P\V \\
+	&= N_x \ln\closed{\frac{N_x}{\tilde{V}}} + N_y \ln\closed{\frac{N_y}{\tilde{V}}} + N_z \ln\closed{\frac{N_z}{\tilde{V}}} + 2\gamma \frac{\nx\ny+\ny\nz+\nz\nx}{\tilde{V}} + N 
+\end{align*}
+
 
 \section*{\large Task 4}
 

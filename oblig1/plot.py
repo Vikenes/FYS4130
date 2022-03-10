@@ -24,10 +24,11 @@ def plot_F_minima(F,xyz,v, save=False):
     N = x+y+z 
     title1 = str('Equilibrium Helmholtz free energy\n')
     title2 = str('Comparing with Helmholtz free energy for two other cases.')
+    plt.figure(figsize=[10,5])
     plt.title(title1+title2)
-    plt.plot(N, f_min, label='$F_{min}$')
-    plt.plot(N, f_eq_n, '--', label='$N_x=N_y=N_z=N/3$')
-    plt.plot(N, f_eq_o, '--', label='$N_x=N_y=1$')
+    plt.plot(N, f_min, label='$F_{min}$', linewidth=2)
+    plt.plot(N, f_eq_n, '--', label='$N_x=N_y=N_z=N/3$', alpha=0.8)
+    plt.plot(N, f_eq_o, '--', label='$N_x=N_y=1$', alpha=0.8)
     plt.xlabel('Number of particles')
     plt.ylabel('Helmholtz free energy, dimensionless')
     plt.legend()
@@ -40,10 +41,10 @@ def plot_F_minima(F,xyz,v, save=False):
 
 def plot_F_pressure(N,P, save=False):
     
-    plt.title('Pressure of box for different number of particles')
+    plt.title('Pressure of box for increased rod concentration')
     plt.plot(N, P, 'o', markersize=5)
-    plt.xlabel('Number of particles, $N=N_x+N_y+N_z$')
-    plt.ylabel('Dimensionless pressure')
+    plt.xlabel('Number of rods, $N=N_x+N_y+N_z$')
+    plt.ylabel(r'Dimensionless pressure, $\tilde{P}$')
     if save:
         file = path_plots + "helmholtz_pressure.pdf"
         print(f'Saving file: {file}')
@@ -55,13 +56,13 @@ def plot_F_pressure(N,P, save=False):
 def plot_F_number(xyz, save=False):
     x,y,z = xyz 
     N = x+y+z
-    
+    plt.figure(figsize=[10,6])
     plt.title('Number density of particles in equlibrium.')
     plt.plot(N, x/N, label='$N_x/N$')
     plt.plot(N, y/N, label='$N_y/N$')
     plt.plot(N, z/N, label='$N_z/N$')
-    plt.xlabel('Total number of particles')
-    plt.ylabel('Number densities')
+    plt.xlabel('Number of rods, $N=N_x+N_y+N_z$')
+    plt.ylabel('Relative rod orientations')
     plt.legend()
     if save:
         file = path_plots + "helmholtz_number_density.pdf"
@@ -114,7 +115,7 @@ def plot_G_number_density(V,xyz, save=False):
     plt.legend()
 
     if save:
-        file = path_plots + "gibbs_PV.pdf"
+        file = path_plots + "gibbs_number_density.pdf"
         print(f'Saving file: {file}')
         plt.savefig(file)
     else:

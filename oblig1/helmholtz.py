@@ -200,12 +200,13 @@ class Particle_container:
         f_eq_orient = self.F_func(1, 1, N_min, self.V)
         f_eq_number = self.F_func(N_min/3, N_min/3, N_min, self.V)
         f_arrays = [f_min, f_eq_number, f_eq_orient]
+        
+        P_min = self.pressure(x_min, y_min, N_min, self.V) # Pressure at minima 
 
         if var == 'F':
             plot.plot_F_minima(f_arrays, xyz,self.V, save)
             
         if var == 'P':
-            P_min = self.pressure(x_min, y_min, N_min, self.V) # Pressure at minima 
             plot.plot_F_pressure(N_min, P_min, save)
         if var == 'N':
             plot.plot_F_number(xyz,save)
@@ -237,14 +238,16 @@ class Particle_container:
 
 
 
-# F = Particle_container(21,200)
+F = Particle_container(21,250)
 # F.plot_helmholtz_contour(108)
 # F.plot_helmholtz_contour(111)
-# F.plot_helmholtz_minima()
+# F.plot_helmholtz_minima(var='F', save=True)
+# F.plot_helmholtz_minima(var='P', save=True)
+F.plot_helmholtz_minima(var='N', save=True)
 
-G_N = 50 # Number of particles
-Gibbs = Particle_container(30, G_N)
-Gibbs.plot_gibbs_minima(V_max = 10*Gibbs.N_max, V_min = 2*Gibbs.N_max, N_v=int(1e3))
+# G_N = 50 # Number of particles
+# Gibbs = Particle_container(30, G_N)
+# Gibbs.plot_gibbs_minima(V_max = 10*Gibbs.N_max, V_min = 2*Gibbs.N_max, N_v=int(1e3))
 
 # V_arr = np.linspace(100,1,int(1e3))
 # F.G_func(10,10,50,V_arr)
