@@ -151,7 +151,7 @@ class Particle_container:
 
         return f_minima, x_minima, y_minima, z_minima 
 
-    def plot_helmholtz_contour(self, n):
+    def plot_helmholtz_contour(self, n, save=False):
         """
         Plots the Helmholtz free energy for different values of Nx and Ny
          - n: total number of particles in plot 
@@ -166,25 +166,10 @@ class Particle_container:
         X_min = self.X[f_min[0]]
         Y_min = self.Y[f_min[1]]
         Z_min = n - X_min - Y_min 
+        xyz_min = [X_min, Y_min, Z_min]
 
-        minima_number = str('Helmholtz free energy for N = {} particles.\n'.format(n))
-        if len(X_min) == 1:
-            minima_loc = str(r'Minima for $N_x=N_y=N_z=${}'.format(X_min[0]))
-        else:
-            a = np.reshape([X_min,Y_min, Z_min], (3,3), order='F')
-            minima_loc = str(fr'Minima for $[N_x,N_y,N_z]=$ {a[0]} and {a[1]} and {a[2]}')
-
-
-        plt.figure(figsize=[8,5])
-        plt.title(minima_number + minima_loc)    
-        plt.pcolormesh(self.X[0:n], self.Y[0:n], self.f[n][0:n,0:n], shading='auto')
-        plt.colorbar(label='F/T, dimensionless')
-        plt.xlabel('$N_x$', fontsize=12)
-        plt.ylabel('$N_y$', fontsize=12)
-
-        plt.plot(*[X_min, Y_min], 'rx', markersize=5, label='$F_{{min}}$'.format(X_min, Y_min))
-        plt.legend(fontsize=12)
-        plt.show()
+        plot.plot_F_contour(self.f, xyz_min, n, X=self.X, Y=self.Y, save=save)
+        
 
 
     def plot_helmholtz_minima(self, var='all', save=False):
@@ -232,22 +217,24 @@ class Particle_container:
         if var == 'G':
             plot.plot_G_minima(g_min, P_min, save)
         if var == 'PV':
-            plot.plot_G_PV(V_arr, self.N_max, P_min)
+            plot.plot_G_PV(V_arr, self.N_max, P_min, save)
         if var == 'N':
             plot.plot_G_number_density(V_arr, xyz, save)
 
 
+F = Particle_container(21,200)
+# F.plot_helmholtz_contour(105, save=True)
+# F.plot_helmholtz_contour(114, save=True)
+# F.plot_helmholtz_minima(var='F', save=False)
+# F.plot_helmholtz_minima(var='P', save=False)
+# F.plot_helmholtz_minima(var='N', save=False)
 
-F = Particle_container(21,250)
-# F.plot_helmholtz_contour(108)
-# F.plot_helmholtz_contour(111)
-# F.plot_helmholtz_minima(var='F', save=True)
-# F.plot_helmholtz_minima(var='P', save=True)
-F.plot_helmholtz_minima(var='N', save=True)
-
-# G_N = 50 # Number of particles
+# G_N = 180 # Number of particles
 # Gibbs = Particle_container(30, G_N)
-# Gibbs.plot_gibbs_minima(V_max = 10*Gibbs.N_max, V_min = 2*Gibbs.N_max, N_v=int(1e3))
+# Gibbs.plot_gibbs_minima(V_max = 10*Gibbs.N_max, \
+                        # V_min = 2*Gibbs.N_max, \
+                        # N_v=int(1e3), \
+                        # var='N', save=False)
 
 # V_arr = np.linspace(100,1,int(1e3))
 # F.G_func(10,10,50,V_arr)
