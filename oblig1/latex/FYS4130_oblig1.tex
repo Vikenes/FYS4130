@@ -52,6 +52,10 @@
 \newcommand{\nx}{N_x}
 \newcommand{\ny}{N_y}
 \newcommand{\nz}{N_z}
+
+\newcommand{\np}{N_+}
+\newcommand{\kb}{k_B}
+
 \begin{document}
 \begin{center}
 \title{\Huge FYS4130 - Oblig 1}
@@ -63,7 +67,7 @@
 \maketitle
 \end{center}
 \onecolumngrid
-\centering
+
 \section*{\large Task 1 - Black box numerical method}
 We want to find the isothermal compressibility at constant $T$ and $N$,
 \begin{align} \label{eq:kappa black box}
@@ -178,6 +182,88 @@ Using $\tilde{V}=V/lb^2$, we can rewrite the four volume terms in the expression
 	F = T \bracket{N_x \ln\closed{\frac{N_x}{\tilde{V}}} + N_y \ln\closed{\frac{N_y}{\tilde{V}}} + N_z \ln\closed{\frac{N_z}{\tilde{V}}} + \gamma \frac{\nx\ny+\ny\nz+\nz\nx}{\tilde{V}} }
 \end{align*}
 
+\section*{\large Task 4}
 
+\begin{align} \label{eq:task4_energy}
+	E=J(\np-N_-)
+\end{align}
+
+\subsection*{a)}
+The system we're considering is analogous to a toin coss, and we find the number of different micrstates from the binomial coefficient, where the constrain $\np+N_-=N$ can be used to eliminate $N_-$
+\begin{align*}
+	\Omega(N,\np) = \frac{N!}{\np!N_-!}=\frac{N!}{\np!(N-\np)!}
+\end{align*}
+
+
+\subsection*{b)}
+To find the entropy as a function for $T$ and $N$ where we assume large $N$, we start by taking the logarithm of $\Omega(N,\np)$ and use Stirling's approximation on the different terms. 
+\begin{align*}
+	\ln\Omega(N,\np) &= \ln(N!) - \ln(\np!)-\ln(N-\np)! \\ 
+	&\approx N\ln N - \np \ln\np - (N-\np)\ln(N-\np) - N + \np + (N-\np) \\
+	&=N\ln N - \np \ln\np - (N-\np)\ln(N-\np)
+\end{align*}
+We want to eliminate $\np$ from the expression in favor of temperature. To do this, we will take the partial derivative of $S$ with respect to $E$
+\begin{align*}
+	\frac{1}{T}=\tmdv{S}{E}{V}{N}=\tmdv{\np}{E}{V}{N}\tmdv{S}{\np}{V}{N}
+\end{align*}
+Rewriting equation \eqref{eq:task4_energy} in terms of $\np$ and $N$ yields an expression for the derivative of $\np$ with respect to $E$
+\begin{align*}
+	E = J(2\np-N) \implies& \np = \frac{1}{2}\closed{\frac{E}{J}+N} \\ 
+	\tmdv{\np}{E}{V}{N} =&\;\; \frac{1}{2J}
+\end{align*}
+Using the definition of entropy, $S = \kb \ln\Omega(N,\np)$, we differentiate that with respect to $\np$, where we use the approximated expression for $\ln\Omega(N,\np)$
+
+\begin{align*}
+	\tmdv{S}{\np}{V}{N} &= \kb \pdv{\np}\bracket{N\ln N - \np\ln\np - (N-\np)\ln(N-\np)} \\ 
+	&= \kb \bracket{-\ln\np - 1 + \ln(N-\np) + 1} \\ 
+	&= \kb\ln\closed{\frac{N-\np}{\np}}
+\end{align*}
+Putting the pieces back together, we get 
+\begin{align*}
+	\frac{1}{T} &= \frac{1}{2J} \kb \ln\closed{\frac{N-\np}{\np}} \\ 
+	\ln\closed{\frac{N-\np}{\np}} &=\frac{2J}{\kb T} \\ 
+	\implies \np = \frac{N}{1+e^{2J/\kb T}}
+\end{align*}
+For simplicity, we now define $x\equiv \frac{2J}{\kb T}$. Before we start inserting our expression for $\np$ to obtain the entropy function we find expressions for $\ln\np$, $N-\np$ and $\ln(N-\np)$ in terms of $N$ and $x$. 
+\begin{align*}
+	\ln\np&=\ln\closed{\frac{N}{1+e^x}} = \ln N - \ln(1+e^x) \\ 
+	N - \np &= N\closed{1 - \frac{1}{1+e^x}}=N\closed{\frac{e^x}{1+e^x}}=\frac{N}{1+e^{-x}} \\
+	\ln(N-\np) &= \ln\closed{\frac{N}{1+e^{-x}}} = \ln N - \ln(1+e^{-x})
+\end{align*}  
+
+Inserting these values for $\ln\Omega(N,\np)$ yields 
+\begin{align*}
+	S=\kb \ln\Omega(N,\np) &= \kb \bracket{N\ln N - \frac{N}{1+e^x}\closed{\ln N - \ln(1+e^x)} - \frac{N}{1+e^{-x}} \closed{\ln N - \ln(1+e^{-x})}} \\ 
+	&=\kb \bracket{N\ln N \closed{1 - \frac{1}{1+e^x} - \frac{1}{1+e^{-x}}} + N\closed{\frac{\ln(1+e^x)}{1+e^x} + \frac{\ln(1+e^{-x})}{1+e^{-x}}}} \\ 
+	&= N\kb \bracket{\frac{\ln(1+e^x)}{1+e^x} + \frac{\ln(1+e^{-x})}{1+e^{-x}}}
+\end{align*}
+To proceed, we simplify further by considering the logarithm in the last term 
+\begin{align*}
+	\ln(1+e^{-x}) &= \ln(e^{-x}(1+e^x)) = -x + \ln(1+e^x) \\ 
+	\implies \frac{1}{1+e^{-x}}\ln(1+e^{-x}) &= \frac{\ln(1+e^x)}{1+e^{-x}} - \frac{x}{1+e^{-x}}
+\end{align*}
+Having two common factors of $\ln(1+e^x)$, the entropy expression simplifies even further 
+
+\begin{align*}
+	S &= N\kb \bracket{\closed{\frac{1}{1+e^x} + \frac{1}{1+e^{-x}}}\ln(1+e^x) - \frac{x}{1+e^{-x}}} \\ 
+	&= N\kb \bracket{\ln(1+e^x) - \frac{x}{1+e^{-x}}}
+\end{align*}
+
+Inserting the expression for $x$ yields the final entropy expression as a function of $T$ and $N$
+\begin{align}
+	S(T,N) &= N\kb \bracket{\ln\closed{1+e^{2J/\kb T}} - \frac{2J/\kb T}{1+e^{-2J/\kb T}}}
+\end{align}
+
+\subsection*{c)}
+To find the heat capacity, we use the chain rule to ease the computation 
+\begin{align*}
+	C_V &= T\tmdv{S}{T}{V}{N} = T \tmdv{x}{T}{V}{N}\tmdv{S}{x}{V}{N} = -T\frac{2J}{\kb T^2}\tmdv{S}{x}{V}{N} \\ 
+	\tmdv{S}{x}{V}{N} &= N\kb \bracket{\frac{e^x}{1+e^x} - \frac{1}{1+e^{-x}} -x \frac{e^{-x}}{(1+e^{-x})^2} } \\ 
+	&= - N\kb x \frac{e^x}{(1+e^x)^2} = -N\kb \frac{2J}{\kb T} \frac{e^{2J/\kb T}}{\closed{1+e^{2J/\kb T}}^2}
+\end{align*}
+Putting it all together, we finnaly arrive at 
+\begin{align*}
+	C_V = \frac{4J^2 N}{\kb} \frac{1}{T^2} \frac{e^{2J/\kb T}}{\closed{1+e^{2J/\kb T}}^2}
+\end{align*}
 
 \end{document}
