@@ -1,6 +1,7 @@
 from cmath import nan
 import numpy as np 
 import matplotlib.pyplot as plt 
+import plot 
 
 np.seterr(divide = 'ignore') 
 
@@ -50,7 +51,7 @@ class Particle_container:
 
     def G_minima(self, V_arr):
         """
-        Compute the Equilibrium helmholtz free energy at fixed N=N_max
+        Compute the Equilibrium Gibbs free energy at fixed N=N_max
         Finds the minima of G for each volume in V_arr 
         Returns the minima of G and the corresponding Nx, Ny, Nz values for V_arr 
         """
@@ -99,13 +100,28 @@ class Particle_container:
         
 
     def pressure(self, Nx, Ny, N, V):
+        """
+        Returns the pressure of the box for a given Nx, Ny, N and volume
+        Using constraint N=Nx+Ny+Nz
+        """ 
         Nz = N - Nx - Ny 
         P = N/V + self.gamma/V**2 * (Nx * Ny + Ny * Nz + Nz * Nx)
-        P = np.where(Nz>0, P, nan)
+
+        P = np.where(Nz>0, P, nan) # Include positive Nz-values only 
         return P 
 
-    def find_minima(self):
-        self.f = np.zeros((self.N_max,self.N_max-1,self.N_max-1))
+    def F_minima(self):
+        """
+        Compute the equilibrium Helmholtz free energy  
+        Finds minima for different number of particles.
+        Returns the minimzed helmholtz free energy with corresponding
+        values for Nx, Ny, Nz
+        """
+
+        self.f = np.zeros((self.N_max,self.N_max-1,self.N_max-1)) # [N_tot, Nx, Ny]
+
+        # Arrays for storing value of Helmholtz free energy, Nx,Ny,Nz
+        # for a given number of total particles  
         f_minima = np.zeros(self.particles)
         x_minima = np.zeros(self.particles)
         y_minima = np.zeros(self.particles)
@@ -116,16 +132,18 @@ class Particle_container:
 
         for i, n in enumerate(self.N):
             n = int(n)
+            # Calculate the helmholtz free energy at each N
             for x in self.X:
                 self.f[n,int(x-1),:] = self.F_func(x,self.Y,n,self.V)
 
-            self.f_max = np.nanmax(self.f[n])
-
+            # Find indices where helmholtz is minimized  
             self.f_min = np.where(self.f[n]==np.nanmin(self.f[n]))
 
-            X_min = self.X[self.f_min[0]]
-            Y_min = self.Y[self.f_min[1]]
+            X_min = self.X[self.f_min[0]] # Nx values at F_min
+            Y_min = self.Y[self.f_min[1]] # Ny values at F_min
 
+            # Store minima values. 
+            # Chosen such that Nx will be largest 
             f_minima[i] = self.f[n][self.f_min][-1]
             x_minima[i] = X_min[-1]
             y_minima[i] = Y_min[-1]
@@ -134,94 +152,99 @@ class Particle_container:
         return f_minima, x_minima, y_minima, z_minima 
 
     def plot_helmholtz_contour(self, n):
-        self.find_minima()
+        """
+        Plots the Helmholtz free energy for different values of Nx and Ny
+         - n: total number of particles in plot 
 
+        Marks the Nx and Ny coordinates corresponding to F_min   
+        """
+
+        self.F_minima() # Compute F. 
+
+        # Find minima points 
         f_min = np.where(self.f[n]==np.nanmin(self.f[n]))
         X_min = self.X[f_min[0]]
         Y_min = self.Y[f_min[1]]
+        Z_min = n - X_min - Y_min 
 
-        plt.title('N = {}, Z_min = {}'.format(n, (n-X_min-Y_min)))    
-        plt.pcolormesh(self.X[0:n],self.Y[0:n],self.f[n][0:n,0:n], shading='auto')
-        plt.colorbar()
-        plt.xlabel('$N_x$')
-        plt.ylabel('$N_y$')
+        minima_number = str('Helmholtz free energy for N = {} particles.\n'.format(n))
+        if len(X_min) == 1:
+            minima_loc = str(r'Minima for $N_x=N_y=N_z=${}'.format(X_min[0]))
+        else:
+            a = np.reshape([X_min,Y_min, Z_min], (3,3), order='F')
+            minima_loc = str(fr'Minima for $[N_x,N_y,N_z]=$ {a[0]} and {a[1]} and {a[2]}')
 
-        plt.plot(*[X_min, Y_min], 'ro', markersize=3, label='$F_{min}$')
-        plt.legend()
+
+        plt.figure(figsize=[8,5])
+        plt.title(minima_number + minima_loc)    
+        plt.pcolormesh(self.X[0:n], self.Y[0:n], self.f[n][0:n,0:n], shading='auto')
+        plt.colorbar(label='F/T, dimensionless')
+        plt.xlabel('$N_x$', fontsize=12)
+        plt.ylabel('$N_y$', fontsize=12)
+
+        plt.plot(*[X_min, Y_min], 'rx', markersize=5, label='$F_{{min}}$'.format(X_min, Y_min))
+        plt.legend(fontsize=12)
         plt.show()
 
 
-    def plot_helmholtz_minima(self):
-        f_min, x_min, y_min, z_min = self.find_minima()
+    def plot_helmholtz_minima(self, var='all', save=False):
+        """
+        Plot quantities at equilibrium Helmholtz free energy.
+        """
+        
+        f_min, x_min, y_min, z_min = self.F_minima()
         N_min = x_min + y_min + z_min 
-        P_minima = self.pressure(x_min, y_min, N_min, self.V)
 
-        plt.figure(1)
-        plt.title('Pressure of the box')
-        plt.plot(N_min, P_minima)
-        plt.xlabel('Number of particles')
-        plt.ylabel('Pressure')
+        
+        xyz = [x_min, y_min, z_min]
 
-        plt.figure(2)
-        plt.title('Equilibrium Helmholtz free energy\nComparing with Helmholtz free energy for two other cases.')
-        plt.plot(N_min, f_min, label='$F_{min}$')
-        plt.plot(N_min, self.F_func(N_min/3, N_min/3, N_min, self.V), '--', label='$N_x=N_y=N_z$')
-        plt.plot(N_min, self.F_func(1, 1, N_min, self.V), '--', label='$N_x=N_y=1$')
-        plt.xlabel('Number of particles')
-        plt.ylabel('Helmholtz free energy')
-        plt.legend()
+        if var == 'F':
+            f_eq_orient = self.F_func(1, 1, N_min, self.V)
+            f_eq_number = self.F_func(N_min/3, N_min/3, N_min, self.V)
+            f_arrays = [f_min, f_eq_number, f_eq_orient]
+            plot.plot_F_minima(f_arrays, xyz,self.V, save)
+            
+        if var == 'P':
+            P_min = self.pressure(x_min, y_min, N_min, self.V) # Pressure at minima 
+            plot.plot_F_pressure(N_min, P_min, save)
+        if var == 'N':
+            plot.plot_F_number(xyz,save)
+        if var == 'all':
+            plot.plot_F_minima(f_arrays, xyz,self.V, save)
+            plot.plot_F_pressure(N_min, P_min, save)
+            plot.plot_F_number(xyz,save)
+        
 
-        plt.figure(3)
-        plt.title('Number density of particles in equlibrium.')
-        plt.plot(N_min, x_min/N_min, label='$N_x/N$')
-        plt.plot(N_min, y_min/N_min, label='$N_y/N$')
-        plt.plot(N_min, z_min/N_min, label='$N_z/N$')
-        plt.xlabel('Total number of particles')
-        plt.ylabel('Number densities')
-        plt.legend()
-        plt.show()
-
-    def plot_gibbs_minima(self, V_max, V_min, N_v):
+    def plot_gibbs_minima(self, V_max, V_min, N_v, var='all', save=False):
         V_arr = np.linspace(V_max, V_min, N_v)
         g_min, x_min, y_min, z_min = self.G_minima(V_arr)
 
         # Compute the pressure at equilibrium Gibbs free energies 
         P_min = self.pressure(x_min, y_min, self.N_max, V_arr)
 
-        plt.figure(1)
-        plt.title('Gibbs free energy at increased pressure', fontsize=13)
-        plt.plot(P_min, g_min, 'o', markersize=0.5)
-        plt.xlabel('Pressure [dimless]', fontsize=12)
-        plt.ylabel('G', fontsize=12)
+        xyz = [x_min, y_min, z_min]
 
-        plt.figure(2)
-        plt.title('Pressure as a function of volume for Gibbs free energy', fontsize=13)
-        plt.plot(V_arr/self.N_max, P_min, 'o', markersize=0.5)
-        plt.xlabel(r'Dimensionless volume $\tilde{V}/N_{max}$', fontsize=12)
-        plt.ylabel(r'Dimensionless pressure, $\tilde{P}$', fontsize=12)
-
-        plt.figure(3)
-        plt.title('Numer of particles in each direction at different volumes', fontsize=13)
-        plt.plot(V_arr/self.N_max, x_min, label=r'$N_x$')
-        plt.plot(V_arr/self.N_max, y_min, label=r'$N_y$')
-        plt.plot(V_arr/self.N_max, z_min, label=r'$N_z$')
-        plt.xlabel(r'Dimensionless volume $\tilde{V}/N_{max}$', fontsize=12)
-        plt.ylabel(r'$N_x,\,N_y,\,N_z$', fontsize=12)
-        plt.legend()
-
-
-        plt.show()
+        if var == 'all':
+            plot.plot_G_minima(g_min, P_min, save)
+            plot.plot_G_PV(V_arr, self.N_max, P_min)
+            plot.plot_G_number_density(V_arr, xyz, save)
+        if var == 'G':
+            plot.plot_G_minima(g_min, P_min, save)
+        if var == 'PV':
+            plot.plot_G_PV(V_arr, self.N_max, P_min)
+        if var == 'N':
+            plot.plot_G_number_density(V_arr, xyz, save)
 
 
 
+# F = Particle_container(21,200)
 # F.plot_helmholtz_contour(108)
 # F.plot_helmholtz_contour(111)
-# F.plot_minima()
-# F.find_minima()
+# F.plot_helmholtz_minima()
 
-G_N = 150 # Number of particles
+G_N = 50 # Number of particles
 Gibbs = Particle_container(30, G_N)
-Gibbs.plot_gibbs_minima(V_max = 10*Gibbs.N_max, V_min = 2*Gibbs.N_max, N_v=int(1e2))
+Gibbs.plot_gibbs_minima(V_max = 10*Gibbs.N_max, V_min = 2*Gibbs.N_max, N_v=int(1e3))
 
 # V_arr = np.linspace(100,1,int(1e3))
 # F.G_func(10,10,50,V_arr)
