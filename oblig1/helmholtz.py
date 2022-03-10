@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 np.seterr(divide = 'ignore') 
 
 
-class Helmholtz:
+class Particle_container:
     def __init__(self, N0, N_max, V=400):
         self.gamma = 10
         self.V = V 
@@ -14,92 +14,89 @@ class Helmholtz:
         self.particles = len(self.N)
 
     def F_func(self, Nx, Ny, N, V):
+        """
+        Computes the Helmholtz free energy for different Nx, Ny, N and V
+        Nz computed by the constraint N=Nx+Ny+Nz 
+        Returns helmholtz free energy for positive Nz-values  
+        """
         Nz = N - Nx - Ny
 
-        Nz = np.where(Nz>0, Nz, 0)
-        logz = Nz * np.where(Nz>0, np.log(Nz/V), 0)
+        Nz = np.where(Nz>0, Nz, 0) # Ommit negative Nz-terms 
+        logz = Nz * np.where(Nz>0, np.log(Nz/V), 0) # Avoid log(0)
         logx = Nx * np.log(Nx / V)
         logy = Ny * np.log(Ny / V)
 
-        logarithms = np.round(logx + logy + logz,10)
-        # logarithms = logx + logz + logy
+        # Prevent numerical differences when adding the logs 
+        # ensures equal value for different permutations of Nx,Ny,Nz
+        logarithms = np.round(logx + logy + logz,10) 
+
         cross_terms = Nx * Ny + Nz * Nx + Nz * Ny 
 
         f = logarithms + self.gamma * cross_terms / V 
-        f = np.where(Nz>0, f, nan)
+        f = np.where(Nz>0, f, nan) # Consider positive Nz-values only 
         return f
 
+
     def G_func(self, Nx, Ny, N, V):
+        """
+        Computes the Gibbs free energy from Nx, Ny, N and V
+        Nz calculated from constraint N=Nx+Ny+Nz
+        Returns G = F + P*V
+        """
         Nz = N - Nx - Ny 
-        cross_terms = Nx*Ny + Ny*Nz + Nz*Nx 
-
         G = self.F_func(Nx, Ny, N, V) + self.pressure(Nx,Ny,N,V) * V 
-        # G_2 = Nx * np.log(Nx/V) + Ny*np.log(Ny/V) + Nz*np.log(Nz/V) + N +2*self.gamma*cross_terms/V 
-        # print(self.F_func(Nx, Ny, N, V))
-        # print(self.pressure(Nx,Ny,N,V) * V )
-
-        # plt.plot(P, G_1)
-        # plt.plot(P, G_2, '--')
-        # plt.plot(self.pressure(Nx,Ny,Nz,V), G_3)
-        # plt.show()
         return G
 
-    def G_minima(self):
-        N_g = int(1e3)
-        self.g  = np.zeros((N_g, self.N_max-1, self.N_max-1))
-        g_minima = np.zeros(N_g) 
-        x_minima = np.zeros(N_g) 
-        y_minima = np.zeros(N_g) 
-        z_minima = np.zeros(N_g) 
 
+    def G_minima(self, V_arr):
+        """
+        Compute the Equilibrium helmholtz free energy at fixed N=N_max
+        Finds the minima of G for each volume in V_arr 
+        Returns the minima of G and the corresponding Nx, Ny, Nz values for V_arr 
+        """
+
+        N_v = len(V_arr)
+
+        # Gibbs free energy at each volume, Nx, Ny 
+        self.g  = np.zeros((N_v, self.N_max-1, self.N_max-1))
+
+        # Arrays for storing the minima of g at each volume
+        # with corresponding Nx,Ny,Nz value 
+        g_minima = np.zeros(N_v) 
+        x_minima = np.zeros(N_v) 
+        y_minima = np.zeros(N_v) 
+        z_minima = np.zeros(N_v) 
+
+
+        # X and Y values 
         self.X_g = np.arange(1, self.N_max)
         self.Y_g = np.arange(1, self.N_max)
 
-        V_array = np.linspace(10*self.N_max, 2*self.N_max,N_g)
+        # Volumes from 10N to 2N
+        V_array = np.linspace(10*self.N_max, 2*self.N_max, N_v)
+
         for i, v in enumerate(V_array):
             
             for x in self.X_g:
+                # Computes g at a particular Volume for all Nx and Ny value  
                 self.g[i,int(x-1),:] = self.G_func(x, self.Y_g, self.N_max, v)
 
+            # Find the indices where G is minimzed 
             self.g_min = np.where(self.g[i]==np.nanmin(self.g[i]))
-            X_min = self.X_g[self.g_min[0]]
-            Y_min = self.Y_g[self.g_min[1]]
 
-            # print(X_min)
-            # input()
+            X_min = self.X_g[self.g_min[0]] # Nx-values corresponding to minima of g
+            Y_min = self.Y_g[self.g_min[1]] # Ny-values corresponding to minima of g
 
+            # Find the minima of g at each vol, with corresponding Nx,Ny,Nz
+            # Using the last element of self.g_min. Corresponds to Nx being the largest 
             g_minima[i] = self.g[i][self.g_min][-1]
             x_minima[i] = X_min[-1]
             y_minima[i] = Y_min[-1]
             z_minima[i] = self.N_max - X_min[-1] - Y_min[-1]
 
 
-
-            # plt.pcolormesh(self.X_g, self.Y_g, self.g[i], shading='auto')
-            # plt.colorbar()
-            # plt.plot(*[X_min, Y_min], 'ro', markersize=20)
-            # plt.show()
-            # exit()
-        # print(x_minima, y_minima)
-        # exit()
-        # plt.plot(V_array, self.pressure(x_minima, y_minima, self.N_max,V_array))
-        # print(x_minima)
+        return g_minima, x_minima, y_minima, z_minima 
         
-        P_min = self.pressure(x_minima, y_minima, self.N_max, V_array)
-        plt.figure(1)
-        plt.plot(P_min, g_minima, 'o', markersize=2)
-
-        plt.figure(2)
-        plt.plot(P_min, V_array)
-
-        plt.figure(3)
-        plt.plot(V_array, x_minima, label='x')
-        plt.plot(V_array, y_minima, label='y')
-        plt.plot(V_array, z_minima, label='z')
-        plt.legend()
-
-
-        plt.show()
 
     def pressure(self, Nx, Ny, N, V):
         Nz = N - Nx - Ny 
@@ -154,7 +151,7 @@ class Helmholtz:
         plt.show()
 
 
-    def plot_minima(self):
+    def plot_helmholtz_minima(self):
         f_min, x_min, y_min, z_min = self.find_minima()
         N_min = x_min + y_min + z_min 
         P_minima = self.pressure(x_min, y_min, N_min, self.V)
@@ -184,15 +181,47 @@ class Helmholtz:
         plt.legend()
         plt.show()
 
+    def plot_gibbs_minima(self, V_max, V_min, N_v):
+        V_arr = np.linspace(V_max, V_min, N_v)
+        g_min, x_min, y_min, z_min = self.G_minima(V_arr)
+
+        # Compute the pressure at equilibrium Gibbs free energies 
+        P_min = self.pressure(x_min, y_min, self.N_max, V_arr)
+
+        plt.figure(1)
+        plt.title('Gibbs free energy at increased pressure', fontsize=13)
+        plt.plot(P_min, g_min, 'o', markersize=0.5)
+        plt.xlabel('Pressure [dimless]', fontsize=12)
+        plt.ylabel('G', fontsize=12)
+
+        plt.figure(2)
+        plt.title('Pressure as a function of volume for Gibbs free energy', fontsize=13)
+        plt.plot(V_arr/self.N_max, P_min, 'o', markersize=0.5)
+        plt.xlabel(r'Dimensionless volume $\tilde{V}/N_{max}$', fontsize=12)
+        plt.ylabel(r'Dimensionless pressure, $\tilde{P}$', fontsize=12)
+
+        plt.figure(3)
+        plt.title('Numer of particles in each direction at different volumes', fontsize=13)
+        plt.plot(V_arr/self.N_max, x_min, label=r'$N_x$')
+        plt.plot(V_arr/self.N_max, y_min, label=r'$N_y$')
+        plt.plot(V_arr/self.N_max, z_min, label=r'$N_z$')
+        plt.xlabel(r'Dimensionless volume $\tilde{V}/N_{max}$', fontsize=12)
+        plt.ylabel(r'$N_x,\,N_y,\,N_z$', fontsize=12)
+        plt.legend()
 
 
-F = Helmholtz(30, 270)
+        plt.show()
+
+
 
 # F.plot_helmholtz_contour(108)
 # F.plot_helmholtz_contour(111)
 # F.plot_minima()
 # F.find_minima()
-F.G_minima()
+
+G_N = 150 # Number of particles
+Gibbs = Particle_container(30, G_N)
+Gibbs.plot_gibbs_minima(V_max = 10*Gibbs.N_max, V_min = 2*Gibbs.N_max, N_v=int(1e2))
 
 # V_arr = np.linspace(100,1,int(1e3))
 # F.G_func(10,10,50,V_arr)
