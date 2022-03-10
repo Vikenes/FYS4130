@@ -195,13 +195,13 @@ class Particle_container:
         f_min, x_min, y_min, z_min = self.F_minima()
         N_min = x_min + y_min + z_min 
 
-        
         xyz = [x_min, y_min, z_min]
 
+        f_eq_orient = self.F_func(1, 1, N_min, self.V)
+        f_eq_number = self.F_func(N_min/3, N_min/3, N_min, self.V)
+        f_arrays = [f_min, f_eq_number, f_eq_orient]
+
         if var == 'F':
-            f_eq_orient = self.F_func(1, 1, N_min, self.V)
-            f_eq_number = self.F_func(N_min/3, N_min/3, N_min, self.V)
-            f_arrays = [f_min, f_eq_number, f_eq_orient]
             plot.plot_F_minima(f_arrays, xyz,self.V, save)
             
         if var == 'P':
