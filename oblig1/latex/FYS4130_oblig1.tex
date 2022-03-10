@@ -261,9 +261,18 @@ To find the heat capacity, we use the chain rule to ease the computation
 	\tmdv{S}{x}{V}{N} &= N\kb \bracket{\frac{e^x}{1+e^x} - \frac{1}{1+e^{-x}} -x \frac{e^{-x}}{(1+e^{-x})^2} } \\ 
 	&= - N\kb x \frac{e^x}{(1+e^x)^2} = -N\kb \frac{2J}{\kb T} \frac{e^{2J/\kb T}}{\closed{1+e^{2J/\kb T}}^2}
 \end{align*}
-Putting it all together, we finnaly arrive at 
+Putting it all together, we finally arrive at 
 \begin{align*}
 	C_V = \frac{4J^2 N}{\kb} \frac{1}{T^2} \frac{e^{2J/\kb T}}{\closed{1+e^{2J/\kb T}}^2}
 \end{align*}
+Without any explicit calculation, we rewrite the exponential factor in terms of a hyperbolic function 
+\begin{align*}
+	\frac{e^x}{(1+e^x)^2} &= \frac{1}{4\cosh^2(\frac{x}{2})} \\
+	\implies \frac{e^{2J/\kb T}}{\closed{1+e^{2J/\kb T}}^2} &= \frac{1}{4 \cosh^2\closed{\frac{J}{\kb T}}}
+\end{align*}
+And our final expression for the heat capacity becomes 
+\begin{align}
+	C_V = \frac{J^2 N}{\kb} \frac{1}{T^2} \frac{1}{\cosh^2\closed{\frac{J}{\kb T}}}
+\end{align}
 
 \end{document}
