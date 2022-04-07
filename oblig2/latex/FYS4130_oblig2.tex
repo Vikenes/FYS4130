@@ -1,0 +1,64 @@
+\documentclass[reprint,english,notitlepage,aps,nobalancelastpage,nofootinbib]{revtex4-1}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{physics,amssymb}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{listings}
+\usepackage{subfigure}
+\usepackage{amsmath,mathtools}
+\usepackage{amsbsy}
+\usepackage{enumitem}
+\usepackage{bbold}
+
+\graphicspath{{../plots/}}
+
+\hypersetup{
+    colorlinks,
+    linkcolor={red!50!black},
+    citecolor={blue!50!black},
+    urlcolor={blue!80!black}}
+
+\lstset{
+	inputpath=,
+	backgroundcolor=\color{white!88!black},
+	basicstyle={\ttfamily\scriptsize},
+	commentstyle=\color{magenta},
+	language=Python,
+	morekeywords={True,False},
+	tabsize=4,
+	stringstyle=\color{green!55!black},
+	frame=single,
+	keywordstyle=\color{blue},
+	showstringspaces=false,
+	columns=fullflexible,
+	keepspaces=true}
+
+
+\newcommand{\closed}[1]{\left(#1\right)}
+\newcommand{\bracket}[1]{\left[#1\right]}
+
+\newcommand{\tmdv}[4]{\closed{\pdv{#1}{#2}}_{#3,#4}}
+\newcommand{\jacobian}[2]{\pdv{(#1)}{(#2)}}
+\renewcommand{\d}{\mathrm{d}}
+
+
+\begin{document}
+\begin{center}
+\title{\Huge FYS4130 - Oblig 2}
+\author{\large Vetle A. Vikenes}
+\date{\today}
+\noaffiliation
+
+
+\maketitle
+\end{center}
+\onecolumngrid
+
+All code used in this oblig can be found on my Github: \url{https://github.com/Vikenes/FYS4130}
+\\
+\section*{\large Task 1 - Transfer Matrices}
+
+\end{document}
