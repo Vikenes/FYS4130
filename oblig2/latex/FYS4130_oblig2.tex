@@ -43,6 +43,11 @@
 \newcommand{\tmdv}[4]{\closed{\pdv{#1}{#2}}_{#3,#4}}
 \newcommand{\jacobian}[2]{\pdv{(#1)}{(#2)}}
 \renewcommand{\d}{\mathrm{d}}
+\newcommand{\sumstate}{\sum_{\{\sigma_j\}}}
+\newcommand{\prodstate}{\prod_{i=0}^{L-1}}
+\newcommand{\ebj}{e^{\beta J}}
+\newcommand{\T}[1]{T_{\sigma_{#1},\sigma_{#1 + 1}}}
+\renewcommand{\l}{\lambda}
 
 
 \begin{document}
@@ -60,5 +65,85 @@
 All code used in this oblig can be found on my Github: \url{https://github.com/Vikenes/FYS4130}
 \\
 \section*{\large Task 1 - Transfer Matrices}
+
+\begin{align} \label{eq:Hamiltonian}
+	H &= -J \sum_{i=0}^{L-1} \delta_{\sigma_i,\sigma_{i+1}}
+\end{align}
+
+\begin{align}
+	m &\equiv \frac{1}{N} \sum_{j=0}^{N-1} m_j \label{eq:order parameter}  \\ 
+	\text{where}\quad m_j &\equiv e^{i(2\pi/3)\sigma_j} \label{eq:magnetization}
+\end{align}
+
+
+\begin{align*}
+	Z &= \sum_{\{\sigma_j\}} e^{-\beta H} = \sumstate e^{\beta J \sum_{i=0}^{L-1} \delta_{\sigma_i,\sigma_{i+1}}} = \sumstate \prod_{i=0}^{L-1} e^{\beta J \delta_{\sigma_i,\sigma_{i+1}}}
+\end{align*}
+
+\begin{align*}
+	T_{\sigma_i,\sigma_{i+1}} &= 
+	\begin{pmatrix}
+		e^{\beta J} & 1 & 1 \\
+		1 & \ebj & 1 \\
+		1 & 1 & \ebj
+	\end{pmatrix}
+\end{align*}
+
+\begin{align*}
+	Z &= \sumstate \prodstate \T{j} = \sumstate T_{\sigma_0,\sigma_1} T_{\sigma_1,\sigma_2}\cdots T_{\sigma_{L-1},\sigma_0} = \Tr(T^N)
+\end{align*}
+
+\begin{align*}
+	T = SDS^{-1}, \:\mathrm{where}\: D = \begin{pmatrix}
+		\lambda_1 & 0 & 0 \\ 
+		0 & \lambda_2 & 0 \\
+		0 & 0 & \lambda_3 
+	\end{pmatrix}
+\end{align*}
+
+\begin{align*}
+	\lambda_1 &= \ebj-1 \\ 
+	\lambda_2 &= \ebj-1 \\ 
+	\lambda_3 &= \ebj+2
+\end{align*}
+
+\begin{align*}
+	Z &= \Tr(SDS^{-1}SDS^{-1}\cdots DS^{-1})=Tr(D^N)=2\lambda_1^N + \lambda_3^N \\ 
+	&= 2(\ebj-1)^N + (\ebj+2)^N
+\end{align*}
+
+\begin{align*}
+	U &= \pdv{(\beta F)}{\beta}
+\end{align*}
+
+\begin{align*}
+	\beta F = -\ln Z = -\ln(2)-N\ln(\ebj-1)-N\ln(\ebj+2)
+\end{align*}
+
+\begin{align*}
+	U = -N \frac{J\ebj}{\ebj-1} - N \frac{J\ebj}{\ebj+2}
+\end{align*}
+
+For an approximate expression of $U$ we can rewrite the partition function in a way that allows us to neglect a term. 
+\begin{align*}
+	Z = 2\l_1^N + \l_3^N = \l_3^N\bracket{2\closed{\frac{\l_1}{\l_3}}^N+1}
+\end{align*} 
+For large $N$ there are two limiting cases. If $\beta$ is very large $\l_1/\l_3\approx1$ so $Z\approx 3\l_3^N$. If, on the other hand, $\beta$ is small we get $Z\approx \l_3^N$, as the fraction goes to zero when $N$ becomes large. Since we have to differentiate the logarithm of $Z$ with respect to $\beta$ to obtain the approximate expression for $U$, the constant in front of $\l_3^N$ is irrelevant. An approximate expression for $U$ is thus 
+\begin{align*}
+	U&=-\pdv{\beta}\ln Z \approx -\pdv{\beta} N \ln \l_3 = -N \pdv{\beta}\ln (\ebj+2) \\ 
+	&= -\frac{NJ}{1+2 e^{-\beta J}} 
+\end{align*}
+
+For $T\to0$ the approximate expression for $U$ becomes 
+\begin{align*}
+	\lim_{\beta\to\infty} U = -NJ
+\end{align*}
+and for $T\to\infty$ we get 
+\begin{align*}
+	\lim_{\beta\to0} U = -\frac{NJ}{1+2}=-\frac{NJ}{3}
+\end{align*}
+
+In the low temperature limit we get the minimum energy of our model, where all the spins are aligned. In the high temperature limit, we have disordered spin states. Since $\sigma_j$ can take three possible values, the probability of neighbouring spins being aligned is $1/3$, and we thus get one third of the total available energy.  
+
 
 \end{document}
