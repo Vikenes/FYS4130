@@ -96,18 +96,33 @@ All code used in this oblig can be found on my Github: \url{https://github.com/V
 \end{align*}
 
 \begin{align*}
-	T = SDS^{-1}, \:\mathrm{where}\: D = \begin{pmatrix}
+	T &= PDP^{-1}, \:\mathrm{where}\: \\ 
+	P &= 
+	\begin{pmatrix*}[r]
+		-1 $ -1 $ 1 \\ 
+		0 $ 1 $ 1 \\ 
+		1 $ 0 $ 1 
+	\end{pmatrix*} ,\quad 
+	P^{-1} = \frac{1}{3} 
+	\begin{pmatrix*}[r]
+		-1 $ \:-1 $\: 2 \\ 
+		-1 $  \:2 $\: -1 \\ 
+		1  $ \:1 $\: 1
+	\end{pmatrix*},\quad
+	D = \begin{pmatrix*}
 		\lambda_1 & 0 & 0 \\ 
 		0 & \lambda_2 & 0 \\
 		0 & 0 & \lambda_3 
-	\end{pmatrix}
+	\end{pmatrix*}
 \end{align*}
 
+The eigenvalues of $T$ are 
 \begin{align*}
 	\lambda_1 &= \ebj-1 \\ 
 	\lambda_2 &= \ebj-1 \\ 
 	\lambda_3 &= \ebj+2
 \end{align*}
+
 
 \begin{align*}
 	Z &= \Tr(SDS^{-1}SDS^{-1}\cdots DS^{-1})=Tr(D^L)=2\lambda_1^L + \lambda_3^L \\ 
@@ -156,79 +171,73 @@ In the low temperature limit we get the minimum energy of our model, where all t
 
 
 \begin{align*}
-	\expval{m_j} &= \frac{1}{Z} \sumstate \mj e^{-\beta H} = \frac{1}{Z} \sumstate e^{i(2\pi/3)\sigma_j} \prodstate e^{\beta J \delta_{\sigma_i,\sigma_{i+1}}}
+	\expval{m_j} &= \frac{1}{Z} \sumstate \mj e^{-\beta H} = \frac{1}{Z} \sumstate e^{i(2\pi/3)\sigma_j} \prodstate e^{\beta J \delta_{\sigma_i,\sigma_{i+1}}} \\ 
+	&= \frac{1}{Z} \sum_{\sigma_0} \sum_{\sigma_j} T_{\sigma_0,\sigma_j}^j e^{i(2\pi/3)\sigma_j} T_{\sigma_j,\sigma_0}^{L-j}
 \end{align*}
+To carry out the sum, we now use that we sum over repeated indices and we thus have to compute the trace of the resulting matrix. It can be shown that the matrix product $PDP^{-1}$ will have the same entries on its diagonal, due to the fact that $\l_1=\l_2$. This implies that the product of the two matrices in our equation for $\expval{\mj}$ will also have the same entries on its diagonal, so the expression becomes
+\begin{align*}
+	\expval{\mj} &= \frac{1}{Z} \closed{T_{0,0}^j\,T_{0,0}^{L-j} + e^{i2\pi/3} \,T_{1,1}^j\,T_{1,1}^{L-j} + e^{-i2\pi/3}\,T_{2,2}^j\,T_{2,2}^{L-j}} \\ 
+	&= \frac{1}{Z} \closed{1 + e^{i2\pi/3} + e^{-i2\pi/3}} 3\,T_{0,0}^{j} \, T_{0,0}^{L-j} \\ 
+	&= 0
+\end{align*}  
+since the sum of spins equals $0$. Thus, we have $\expval{\mj}=0$, which then implies
 
 \begin{align*}
-	\mj &= \begin{pmatrix}
-		1 & 0 & 0 \\
-		0 & e^{i(2\pi/3)} & 0 \\ 
-		0 & 0 & e^{-i(2\pi/3)}
-	\end{pmatrix}
+	\expval{m} = 0,
 \end{align*}
-
-\begin{align*}
-	\expval{\mj} &= \frac{1}{Z} \sumstate \begin{pmatrix}
-		1 & 0 & 0 \\
-		0 & e^{i(2\pi/3)} & 0 \\ 
-		0 & 0 & e^{-i(2\pi/3)}
-	\end{pmatrix} T_{\sigma_0,\sigma_1} T_{\sigma_1,\sigma_2}\cdots T_{\sigma_{L-1},\sigma_0} \\ 
-	&= \frac{1}{Z} \Tr \bracket{ \begin{pmatrix}
-		1 & 0 & 0 \\
-		0 & e^{i(2\pi/3)} & 0 \\ 
-		0 & 0 & e^{-i(2\pi/3)}
-	\end{pmatrix} 
-	\begin{pmatrix}
-		\ebj & 1 & 1 \\ 
-		1 & \ebj & 1 \\
-		1 & 1 & \ebj
-	\end{pmatrix}^L\,	} \\ 
-	&= \frac{1}{Z} \Tr \bracket{ 
-	\begin{pmatrix}
-		\closed{\ebj}^L & 0 & 0 \\ 
-		0 & e^{i2\pi/3}\closed{\ebj}^L & 0 \\ 
-		0 & 0 & e^{-i2\pi/3}\closed{\ebj}^L
-	\end{pmatrix}
-	} \\ 
-	&= \frac{1}{Z} e^{L\beta J}\bracket{1 + e^{i2\pi/3} + e^{-i2\pi/3}} = 0
-\end{align*}
-
-\begin{align*}
-	\expval{\mj}=0 \implies \expval{m} = 0
-\end{align*}
+which is what we wanted to show.
 
 \subsection*{c) - Correlation function}
+The correlation function is defined as 
+\begin{align} \label{eq:corr_func}
+	C(r) &\equiv \expval{m_0^* m_r} - \expval{m_0^*}\expval{m_r}.
+\end{align}
+Having already found that $\expval{\mj}=0$, the last term in equation \eqref{eq:corr_func} vanishes, and we're left with the quantity $\expval{m_0^* m_r}$, which we can write in terms of exponentials as 
 
 \begin{align*}
-	C(r) &\equiv \expval{m_0^* m_r} - \expval{m_0^*}\expval{m_r}
+	\expval{m_0^* m_r} &= \expval{e^{i(2\pi/3)(\sigma_r - \sigma_0)}}.
 \end{align*}
 
+We follow the same procedure as before, writing out all sums except for the ones over $\sigma_0$ and $\sigma_r$ this time. 
 
 \begin{align*}
-	\expval{m_0^* m_r} &= \expval{e^{i(2\pi/3)(\sigma_r - \sigma_0)}}
+	\expval{m_0^* m_r} &= \frac{1}{Z} \sumstate m_0^* m_r \, \prodstate \T{i} = \frac{1}{Z} \sum_{\sigma_0} \sum_{\sigma_r} e^{i\frac{2\pi}{3}(\sigma_r-\sigma_0)} T_{\sigma_0,\sigma_r}^{r} \, T_{\sigma_r,\sigma_0}^{L-r} 
 \end{align*}
+
+Now, the exponential term will contribute differently depending on the relative difference between the two spins. Using the diagonalization $T=PDP^{-1}$ we write the general expression for $T_{i,j}^k$ by performing the matrix multiplications. The resulting matrix will have identical terms on the diagonal, as well as identical terms on the off-diagnoal. These terms are given in equation \eqref{eq:T_power}  
+
+\begin{align} \label{eq:T_power}
+	T_{i,j}^k = \frac{1}{3}\begin{cases}
+		2(\ebj-1)^k + (\ebj+2)^k \quad &\mathrm{for}\; i=j \\ 
+		-(\ebj-1)^k + (\ebj+2)^k \quad &\mathrm{for}\; i\neq j
+	\end{cases}
+\end{align}
+
+When we sum over the two spins, we will get three identical contributions from the diagonal, since the exponential term is $1$ in this case. Since the off-diagonal elements are identical, there will be three identical terms with a factor $e^{i2\pi/3}$ as well as three identical terms with a factor $e^{-i2\pi/3}$. To simplify the writing, we express these three different contributions with the matrix elements $T_{0,0},\,T_{0,1}$ and $T_{1,0}$, corresponding to the common factors $1,\,e^{i2\pi/3}$ and $e^{-i2\pi/3}$, respectively. Omitting the explicit computation of the products, we simply insert the results.  
 
 \begin{align*}
-	m_0^* m_r &= \begin{pmatrix}
-		1 & e^{i2\pi/3} & e^{-i2\pi/3} \\ 
-		e^{-i2\pi/3} & 1 & e^{i2\pi/3} \\ 
-		e^{i2\pi/3} & e^{-i2\pi/3} & 1
-	\end{pmatrix}
+	\expval{m_0^* m_r} = \frac{1}{Z} \Big[ &3\, T_{0,0}^r T_{0,0}^{L-r} + 3e^{i2\pi/3}\, T_{0,1}^r T_{1,0}^{L-r} + 3e^{-i2\pi/3}\, T_{1,0}^r T_{0,1}^{L-r} \Big] \\ 
+	= \frac{1}{Z} \frac{1}{3} \Bigg[ &4(\ebj-1)^L + 2(\ebj-1)^r (\ebj+2)^{L-r} + 2 (\ebj+2)^r (\ebj-1)^{L-r} + (\ebj+2)^L \\
+	& + e^{i2\pi/3}\bracket{ (\ebj-1)^L + (\ebj+2)^L - (\ebj-1)^r (\ebj+2)^{L-r} - (\ebj+2)^r (\ebj-1)^{L-r} } \\
+	& + e^{-i2\pi/3} \bracket{(\ebj-1)^L + (\ebj+2)^L - (\ebj-1)^r (\ebj+2)^{L-r} - (\ebj+2)^r (\ebj-1)^{L-r}} \Bigg] \\ 
+	= \frac{1}{Z}\frac{1}{3} \Bigg[ & 4(\ebj-1)^L + (\ebj+2)^L + 2(\ebj-1)^r (\ebj+2)^{L-r} + 2 (\ebj+2)^r (\ebj-1)^{L-r} \\
+	& - (\ebj-1)^L - (\ebj+2)^L + (\ebj-1)^r (\ebj+2)^{L-r} + (\ebj+2)^r (\ebj-1)^{L-r} \Bigg] \\ 
+	= \frac{1}{Z} \frac{1}{3} \Bigg[ & 3(\ebj-1)^L + 3 (\ebj-1)^r (\ebj+2)^{L-r} + 3 (\ebj+2)^r (\ebj-1)^{L-r} \Bigg],
 \end{align*}
+where we used that $e^{i2\pi/3} + e^{-i2\pi/3}=-1$. Canceling the common factors of $3$ and writing out the partition function, our final expression for the correlatino function becomes 
 
+\begin{align} \label{eq:corr_func_result}
+	C(r) &= \frac{(\ebj-1)^L + (\ebj-1)^r (\ebj+2)^{L-r} + (\ebj-1)^{L-r} (\ebj+2)^r}{2(\ebj-1)^L + (\ebj+2)^L}
+\end{align}
+
+Using WolframAlpha we find the expression for $C(r)$ in the limiting case $L\to\infty$
 \begin{align*}
-	\expval{m_0^* m_r} &= \frac{1}{Z} \sumstate m_0^* m_r \, T^L  
-	= \frac{1}{Z} \Tr \bracket{ 
-	\begin{pmatrix}
-		\closed{\ebj}^L & e^{i2\pi/3} & e^{-i2\pi/3} \\ 
-		e^{-i2\pi/3} & \closed{\ebj}^L & e^{i2\pi/3} \\ 
-		e^{i2\pi/3} & e^{-i2\pi/3} & \closed{\ebj}^L
-	\end{pmatrix}
-	}  
-	= \frac{1}{Z}3e^{L\beta J} \\ 
-	&= \frac{3e^{L\beta J}}{2(\ebj-1)^L+(\ebj+2)^L}
+	\lim_{L\to\infty} C(r) = \closed{\frac{\ebj-1}{\ebj+2}}^r = \closed{\frac{\l_1}{\l_3}}^r
 \end{align*}
-
+For $T=0$, we use WolframAlpha ones again to find the limit as $\beta\to\infty$ and get 
+\begin{align*}
+	\lim_{T\to0} C(r) = 1.
+\end{align*}
 
 
 \end{document}
