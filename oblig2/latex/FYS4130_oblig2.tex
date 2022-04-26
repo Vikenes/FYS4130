@@ -68,19 +68,25 @@ All code used in this oblig can be found on my Github: \url{https://github.com/V
 
 \subsection*{a) Partition function and average internal energy}
 
+We consider a 1D spin chain of length $L$ with periodic boundary conditions. The Hamiltonian of the system given as  
 \begin{align} \label{eq:Hamiltonian}
-	H &= -J \sum_{i=0}^{L-1} \delta_{\sigma_i,\sigma_{i+1}}
+	H &= -J \sum_{i=0}^{L-1} \delta_{\sigma_i,\sigma_{i+1}},
 \end{align}
 
+where $\sigma_i=\{0,\,1,\,2\}$ denotes the spin at site $i$ and $J>0$.    
+
+The order parameter, $m$, and local magnetization, $m_j$, is given by
 \begin{align}
 	m &\equiv \frac{1}{N} \sum_{j=0}^{N-1} m_j \label{eq:order parameter}  \\ 
 	\text{where}\quad m_j &\equiv e^{i(2\pi/3)\sigma_j} \label{eq:magnetization}
 \end{align}
 
-
+To calculate the partition function, we begin by inserting the expression for the Hamiltonian and write the sum in the exponent in terms of products. 
 \begin{align*}
 	Z &= \sum_{\{\sigma_j\}} e^{-\beta H} = \sumstate e^{\beta J \sum_{i=0}^{L-1} \delta_{\sigma_i,\sigma_{i+1}}} = \sumstate \prod_{i=0}^{L-1} e^{\beta J \delta_{\sigma_i,\sigma_{i+1}}}
 \end{align*}
+
+The exponential can be written in terms of transfer matrices representing the different values of the exponential for different spin states. Letting $\sigma_i$ and $\sigma_{i+1}$ govern the row and column, respectively, the transfer matrix becomes 
 
 \begin{align*}
 	T_{\sigma_i,\sigma_{i+1}} &= 
@@ -88,28 +94,38 @@ All code used in this oblig can be found on my Github: \url{https://github.com/V
 		e^{\beta J} & 1 & 1 \\
 		1 & \ebj & 1 \\
 		1 & 1 & \ebj
-	\end{pmatrix}
+	\end{pmatrix}.
 \end{align*}
 
+The transfer matrix will thus look identical for different values of $\sigma_i$, so taking the product between different ones, results in a transfer matrix raised to a certain power.  
+
 \begin{align*}
-	Z &= \sumstate \prodstate \T{j} = \sumstate T_{\sigma_0,\sigma_1} T_{\sigma_1,\sigma_2}\cdots T_{\sigma_{L-1},\sigma_0} = \Tr(T^L)
+	Z &= \sumstate \prodstate \T{j} = \sumstate T_{\sigma_0,\sigma_1} T_{\sigma_1,\sigma_2}\cdots T_{\sigma_{L-1},\sigma_0} 
+\end{align*}
+where we invoked the periodicity, $\sigma_L=\sigma_0$, in the last line. This means that we're summing over repeated indices, and the sum can be carried out by taking the trace of the resulting matrix products. To calculate the product of the matrices, we start by diagonalizing it
+
+\begin{align*}
+	\begin{pmatrix*}[r]
+		-1 & -1 & 0 \\ 
+		2 & 1 & 1 \\ 
+		2 & 1 & 0 
+	\end{pmatrix*}
 \end{align*}
 
 \begin{align*}
 	T &= PDP^{-1}, \:\mathrm{where}\: \\ 
 	P &= 
 	\begin{pmatrix*}[r]
-		-1 $ -1 $ 1 \\ 
-		0 $ 1 $ 1 \\ 
-		1 $ 0 $ 1 
+		-1 & -1 & 1 \\ 
+		0  & 1  & 1 \\ 
+		1  & 0  & 1 
 	\end{pmatrix*} ,\quad 
-	P^{-1} = \frac{1}{3} 
-	\begin{pmatrix*}[r]
-		-1 $ \:-1 $\: 2 \\ 
-		-1 $  \:2 $\: -1 \\ 
-		1  $ \:1 $\: 1
-	\end{pmatrix*},\quad
-	D = \begin{pmatrix*}
+	P^{-1} = \frac{1}{3} \begin{pmatrix*}[r]
+		-1 & -1 & 2 \\ 
+		-1 & 2  & -1 \\ 
+		1  & 1  & 1
+	\end{pmatrix*}
+	,\quad D = \begin{pmatrix*}[r]
 		\lambda_1 & 0 & 0 \\ 
 		0 & \lambda_2 & 0 \\
 		0 & 0 & \lambda_3 
@@ -238,6 +254,18 @@ For $T=0$, we use WolframAlpha ones again to find the limit as $\beta\to\infty$ 
 \begin{align*}
 	\lim_{T\to0} C(r) = 1.
 \end{align*}
+
+
+\section*{\large Task 2 - Monte Carlo Simulations}
+
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.7\linewidth]{correlation1D_025.pdf}
+	\includegraphics[width=0.7\linewidth]{correlation1D_05.pdf}
+	\caption{Correlation}
+	\label{fig:correlation}
+\end{figure}
 
 
 \end{document}
