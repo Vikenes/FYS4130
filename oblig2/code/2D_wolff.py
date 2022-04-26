@@ -1,6 +1,7 @@
 import numpy as np 
 import matplotlib.pyplot as plt 
 from numpy import random
+from numpy.random import randint as rint
 import time 
 import plot
 
@@ -9,24 +10,26 @@ np.random.seed(132)
 
 class Wolff:
 
-    def __init__(self, T, J, NESTEPS=int(1e4), NMSTEPS=int(1e4), NBINS=10, L=16, d=1):
+    def __init__(self, T, J, NESTEPS=int(1e3), NMSTEPS=int(1e2), NBINS=10, L=16, d=1):
         self.q = 3
         self.L = L 
         self.T = T 
         self.J = J 
+        self.TJ = np.linspace(0.1,10,int(1e3))
         self.N = int(L**d)
         self.dirs = 2 * d
 
         self.NESTEPS = NESTEPS 
         self.NMSTEPS = NMSTEPS         
         self.NBINS = NBINS
-         
+        
         self.p_connect = 1 - np.exp(-J/T)
 
-        self.S = np.zeros(self.N)
-        self.M = np.zeros(3)
+        self.S = np.zeros((self.L, self.L), dtype=int)
+
+        self.M = np.zeros(3, dtype=int)
         self.M[0] = self.N
-        
+
         self.W = np.zeros(3, dtype=complex)
         for s in range(self.q):
             self.W[s] = np.exp(1j*2*np.pi*s/self.q)
@@ -36,30 +39,32 @@ class Wolff:
         self.m_0r = np.zeros(self.N, dtype=complex)
 
 
-    def neighbor(self, i, dir):
+    def neighbor(self, i,j, dir):
 
-        directions = {0: int((i + 1) % self.L),
-                      1: int((i - 1 + self.L) % self.L)}
+        directions = {0: [int((i + 1) % self.L), int(j % self.L)],
+                      1: [int((i - 1 + self.L) % self.L), int(j % self.L)],
+                      2: [int(i % self.L), int((j + 1) % self.L)],
+                      3: [int(i % self.L), int((j - 1 + self.L) % self.L)]}
 
         return directions[dir]
 
-    def FlipandBuildFrom(self, s):
-        oldstate = int(self.S[s])
-        newstate = int((self.S[s]+1)%self.q)
+    def FlipandBuildFrom(self, r, s):
+        oldstate = int(self.S[r,s])
+        newstate = int((self.S[r,s]+1)%self.q)
 
-        self.S[s] = newstate 
+        self.S[r,s] = newstate 
         self.M[oldstate] -= 1 
         self.M[newstate] += 1
 
         for dir in range(self.dirs):
-            j = self.neighbor(s, dir)
-            if self.S[j] == oldstate:
+            k, l = self.neighbor(r, s, dir)
+            if self.S[k,l] == oldstate:
                 if random.random() < self.p_connect:
-                    self.FlipandBuildFrom(j)
+                    self.FlipandBuildFrom(k,l)
 
     def equilibriate(self):
         for t in range(self.NESTEPS):
-            self.FlipandBuildFrom(random.randint(int(1e5)) % self.L)
+            self.FlipandBuildFrom(rint(int(1e5)) % self.L, rint(int(1e5)) % self.L)
 
 
     def correlation(self):
@@ -75,15 +80,17 @@ class Wolff:
         M_avg = np.zeros((self.NBINS, 5))
 
         self.equilibriate()
+        print(self.M)
+        exit()
 
         for n in range(self.NBINS):
 
             m = np.zeros((self.NMSTEPS, 5))
 
             for t in range(self.NMSTEPS):
-                self.FlipandBuildFrom(random.randint(int(1e5)) % self.L)
+                self.FlipandBuildFrom(rint(int(1e5)) % self.L, rint(int(1e5))%self.L)
 
-                self.correlation()
+                # self.correlation()
 
                 tm = np.sum(self.W @ self.M) / self.N 
                 tm1 = np.linalg.norm(tm)
@@ -123,6 +130,6 @@ class Wolff:
 
 
 
-ring = Wolff(T=1, J=4, L=16)
-# ring.simulate()
-ring.verify_analytical(save=False)
+ring = Wolff(T=4, J=4, L=16, d=2)
+ring.simulate()
+# ring.verify_analytical(save=False)
