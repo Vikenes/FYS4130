@@ -15,25 +15,25 @@ plt.rc('ytick', labelsize=12)    # fontsize of the tick labels
 plt.rc('legend', fontsize=14)    # legend fontsize
 
 here = os.path.abspath(".")
-path_plots = 'plots/'
+path_plots = '../plots/'
 
-def plot_F_minima(F,xyz,v, save=False):
-    f_min, f_eq_n, f_eq_o = F 
+def plot_1D_correlation(C_anal, C_mc, r, TJ, save=False):
+    c0 = np.array([C_mc[0]])
+    C_mc = np.concatenate((C_mc, c0),axis=0)
     
-    x,y,z = xyz 
-    N = x+y+z 
-    title1 = str('Equilibrium Helmholtz free energy\n')
-    title2 = str('Comparing with Helmholtz free energy for two other cases.')
+    title1 = str('Analytical and numerical correlation function\n')
+    title2 = str(f'For spin chain of length L={len(r)-1} with T/J={TJ:.2f}')
     plt.figure(figsize=[10,5])
+
     plt.title(title1+title2)
-    plt.plot(N, f_min, label='$F_{min}$', linewidth=2)
-    plt.plot(N, f_eq_n, '--', label='$N_x=N_y=N_z=N/3$', alpha=0.8)
-    plt.plot(N, f_eq_o, '--', label='$N_x=N_y=1$', alpha=0.8)
-    plt.xlabel('Number of particles')
-    plt.ylabel('Helmholtz free energy, dimensionless')
+    plt.plot(r, C_anal, 'o-', markersize=8, label='Analytical')
+    plt.plot(r, C_mc.real, 'o-', alpha=0.7, label='Numerical')
+    plt.xlabel(r'Lattice spacing, $r$')
+    plt.ylabel(r'Correlation function, $C(r)$')
     plt.legend()
     if save:
-        file = path_plots + "helmholtz_free_energy.pdf"
+        temp = str(np.round(TJ, 2)).replace('.','')
+        file = path_plots + "correlation1D_" + temp + ".pdf"
         print(f'Saving file: {file}')
         plt.savefig(file)
         plt.clf()
