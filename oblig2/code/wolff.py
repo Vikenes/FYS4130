@@ -4,8 +4,7 @@ from numpy import random
 import time 
 import plot
 
-np.random.seed(132)
-
+# np.random.seed(132)
 
 class Wolff:
 
@@ -101,6 +100,15 @@ class Wolff:
         print(f'Simulation duration = {(time.time()-s_time):.3f} sec')
 
     def verify_analytical(self, load=False, save=False):
+
+        m0r_re, m0r_im, m0mr_re, m0mr_im = np.loadtxt('cpp_uncompleted/corr_params.txt', dtype=float, skiprows=1, unpack=True, delimiter=',')
+        # print(m0r_re)
+
+        data = m0r_re - m0mr_re
+        # print(m0mr_re)
+
+        # exit()
+
         J = self.J 
         T = self.T
         L = self.L 
@@ -114,15 +122,15 @@ class Wolff:
 
         ring.simulate()
 
-        m_avg = np.sum(self.m_avg[0:2])
-        print(f'Average magnetization={m_avg:.3e}')
+        m_avg = self.m_avg[0:2]
+        print(f'Average magnetization={m_avg[0]:.3e} + {m_avg[1]:.3e}i')
 
-        plot.plot_1D_correlation(C_r_anal, self.corr_arr, r, T/J, save)
-
-
+        plot.plot_1D_correlation(C_r_anal, self.corr_arr, r, T/J, data, save)
 
 
 
-ring = Wolff(T=1, J=4, L=16)
+
+
+ring = Wolff(T=2, J=4, L=16)
 # ring.simulate()
 ring.verify_analytical(save=False)

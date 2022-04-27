@@ -5,24 +5,24 @@ from numpy.random import randint as rint
 import time 
 import plot
 
-np.random.seed(132)
+# np.random.seed(132)
 
 
 class Wolff:
 
-    def __init__(self, T, J, NESTEPS=int(1e3), NMSTEPS=int(1e2), NBINS=10, L=16, d=1):
+    def __init__(self, T, J, NESTEPS=int(1e3), NMSTEPS=int(1e3), NBINS=10, L=16, d=1):
         self.q = 3
         self.L = L 
         self.T = T 
         self.J = J 
-        self.TJ = np.linspace(0.1,10,int(1e3))
+        # self.TJ = np.linspace(0.1,10,int(1e3))
         self.N = int(L**d)
         self.dirs = 2 * d
 
         self.NESTEPS = NESTEPS 
         self.NMSTEPS = NMSTEPS         
         self.NBINS = NBINS
-        
+
         self.p_connect = 1 - np.exp(-J/T)
 
         self.S = np.zeros((self.L, self.L), dtype=int)
@@ -80,8 +80,6 @@ class Wolff:
         M_avg = np.zeros((self.NBINS, 5))
 
         self.equilibriate()
-        print(self.M)
-        exit()
 
         for n in range(self.NBINS):
 
@@ -121,15 +119,14 @@ class Wolff:
 
         ring.simulate()
 
-        m_avg = np.sum(self.m_avg[0:2])
-        print(f'Average magnetization={m_avg:.3e}')
+        print(f'Average magnetization={self.m_avg[0]:.3e} + {self.m_avg[1]:.3e}')
 
-        plot.plot_1D_correlation(C_r_anal, self.corr_arr, r, T/J, save)
-
+        # plot.plot_1D_correlation(C_r_anal, self.corr_arr, r, T/J, save)
 
 
 
 
-ring = Wolff(T=4, J=4, L=16, d=2)
-ring.simulate()
-# ring.verify_analytical(save=False)
+
+ring = Wolff(T=2, J=4, L=16, d=2)
+# ring.simulate()
+ring.verify_analytical(save=False)

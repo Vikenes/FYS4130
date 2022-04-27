@@ -3,6 +3,7 @@
 #include<cstdlib>
 #include<math.h>
 #include<complex>
+#include<fstream>
 
 
 #define PI 3.14159265358979323
@@ -22,10 +23,10 @@ const int NBINS=10;     // # of measurement bins
 std::vector<int> S(N);  // Spin array 
 std::vector<int> M(q);  // Number of spins in different states 
 std::vector<std::complex<double> > W(q); // order param weights.
-std::vector<std::complex<double> > W0(1); // order param weights.
-std::vector<std::complex<double> > Wr(1); // order param weights.
-std::vector<std::complex<double> > W0r(1); // order param weights.
 
+std::complex<double> m_0(0.,0.);
+std::vector<std::complex<double>> m_0r(L);
+std::vector<std::complex<double>> m_r(L);
 
 
 enum dirs{RIGHT,LEFT};
@@ -43,15 +44,6 @@ int Nbr(int i,int dir)
     return 0;
 }
 
-int spinstate(int i)
-{
-    int x=xpos(i);
-    W0[0]
-    W0r[0]=std::complex<double>(cos(2*PI*(S[x]-S[0])/q),sin(2*PI*(S[x]-S[0])/q));
-
-}
-
-void WriteToFile();
 
 void FlipandBuildFrom(int s)
 {
@@ -73,7 +65,6 @@ int main()
     double m_avg=0;
     for(int s=0; s<q; s++){
         W[s]=std::complex<double>(cos(2*PI*s/q),sin(2*PI*s/q));
-        W0[s]=std::complex<double>(cos(2*PI*s/q),sin(2*PI*s/q));
     }
     for(int i=0; i<N; i++) S[i]=0;
     for(int s=1; s<q; s++) M[s]=0;
@@ -94,6 +85,14 @@ int main()
         for(int t=0; t<NMSTEPS; t++)
         {
             for(int c=0; c<NCLUSTERS; c++) FlipandBuildFrom(rand()%N);
+
+            m_0 += std::complex<double> (cos(2*PI*S[0]/q),-sin(2*PI*S[0]/q));
+            for(int r=0; r<L; r++){
+                m_r[r] += std::complex<double>(cos(2*PI*S[r]/q),sin(2*PI*S[r]/q));
+                m_0r[r]+= std::complex<double>(cos(2*PI*(S[r]-S[0])/q),sin(2*PI*(S[r]-S[0])/q));
+            }
+
+
             std::complex<double> tm(0., 0.);
             for(int s=0; s<q; s++){
                 tm+=W[s]*double(M[s]);
@@ -106,7 +105,20 @@ int main()
 
         m/=NMSTEPS; m1/=NMSTEPS; m2/=NMSTEPS; m4/=NMSTEPS;
         m_avg += m1;
-        std::cout << m << std::endl; //<< " " << m1 << " " << m2 << " " << m4 << std::endl;
+
     }
     std::cout << "\n" << "m: " << m_avg/NBINS << std::endl;
+    
+    std::fstream corr_values;
+    corr_values.open("corr_params.txt", std::ios_base::app);
+    corr_values << "m0r_re, m0r_im, m0mr_re, m0mr_im" << std::endl;
+
+    m_0/=(NMSTEPS*NBINS);
+    for(int r=0; r<L; r++){
+        m_r[r] /= (NMSTEPS*NBINS);
+        m_0r[r]/= (NMSTEPS*NBINS);
+        corr_values << real(m_0r[r]) << ", " << imag(m_0r[r]) << ", ";
+        corr_values << real(m_0*m_r[r]) << ", " << imag(m_0*m_r[r]) << std::endl;
+    }
+    // std::cout << m_r[2] << std::endl; //<< " " << m1 << " " << m2 << " " << m4 << std::endl;
 }

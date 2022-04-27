@@ -17,9 +17,11 @@ plt.rc('legend', fontsize=14)    # legend fontsize
 here = os.path.abspath(".")
 path_plots = '../plots/'
 
-def plot_1D_correlation(C_anal, C_mc, r, TJ, save=False):
+def plot_1D_correlation(C_anal, C_mc, r, TJ, data, save=False):
     c0 = np.array([C_mc[0]])
     C_mc = np.concatenate((C_mc, c0),axis=0)
+    c00 = np.array([data[0]])
+    data_cpp = np.concatenate((data, c00),axis=0)
     
     title1 = str('Analytical and numerical correlation function\n')
     title2 = str(f'For spin chain of length L={len(r)-1} with T/J={TJ:.2f}')
@@ -28,6 +30,7 @@ def plot_1D_correlation(C_anal, C_mc, r, TJ, save=False):
     plt.title(title1+title2)
     plt.plot(r, C_anal, 'o-', markersize=8, label='Analytical')
     plt.plot(r, C_mc.real, 'o-', alpha=0.7, label='Numerical')
+    plt.plot(r, data_cpp, 'o--', label='cpp')
     plt.xlabel(r'Lattice spacing, $r$')
     plt.ylabel(r'Correlation function, $C(r)$')
     plt.legend()
