@@ -8,7 +8,7 @@
 
 #define PI 3.14159265358979323
 const int q=3;      // number of spin states
-const int L=32;      // Linear system size 
+const int L=8;      // Linear system size 
 const double T=2;   // Temperature in units of J 
 
 const int N=L*L;      // Tot. number of spins 
@@ -78,11 +78,11 @@ void FlipandBuildFrom(int s, int v, float t) {
 }
 
 int main() {   
-    std::ofstream m_values ("m_values_L32.txt");
+    std::ofstream m_values ("m_values_L8.txt");
     // m_values.open("m_values.txt", std::ios_base::app);
     m_values << "T, m_real, m_imag, m2, m4" << std::endl;
 
-    for(float a=0; a<NT; a++){temp[a]=(a+0.01)/10;}
+    for(float a=0; a<NT; a++){temp[a]=(a+0.9)/50;}
 
 
     for(int s=0; s<q; s++){

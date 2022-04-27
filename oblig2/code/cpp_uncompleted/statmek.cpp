@@ -9,7 +9,7 @@
 #define PI 3.14159265358979323
 const int q=3;      // number of spin states
 const int L=16;      // Linear system size 
-const double T=2;   // Temperature in units of J 
+const double T=1;   // Temperature in units of J 
 const int J=4;
 
 const int N=L;      // Tot. number of spins 
@@ -108,9 +108,10 @@ int main()
 
     }
     std::cout << "\n" << "m: " << m_avg/NBINS << std::endl;
+
+    std::cout << "huh" << std::endl; 
     
-    std::fstream corr_values;
-    corr_values.open("corr_params.txt", std::ios_base::app);
+    std::ofstream corr_values ("corr_params_TJ_025.txt");
     corr_values << "m0r_re, m0r_im, m0mr_re, m0mr_im" << std::endl;
 
     m_0/=(NMSTEPS*NBINS);
@@ -120,5 +121,6 @@ int main()
         corr_values << real(m_0r[r]) << ", " << imag(m_0r[r]) << ", ";
         corr_values << real(m_0*m_r[r]) << ", " << imag(m_0*m_r[r]) << std::endl;
     }
+    corr_values.close();
     // std::cout << m_r[2] << std::endl; //<< " " << m1 << " " << m2 << " " << m4 << std::endl;
 }
