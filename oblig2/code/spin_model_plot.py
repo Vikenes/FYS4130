@@ -135,29 +135,35 @@ def compare_Gamma(T, L8, L16, L32, save=False):
         plt.show()
 
 
-corr_ms = np.loadtxt('cpp_uncompleted/corr_params.txt', 
-                dtype=float, 
-                skiprows=1,
-                delimiter=',')
+# corr_ms = np.loadtxt('cpp/corr_values_T05.txt', 
+#                 dtype=float, 
+#                 skiprows=1,
+#                 delimiter=',')
 
-corr_ms_lowT = np.loadtxt('cpp_uncompleted/corr_params_TJ_025.txt', 
-                dtype=float, 
-                skiprows=1,
-                delimiter=',')
+# corr_ms_lowT = np.loadtxt('cpp/corr_values_T025.txt', 
+#                 dtype=float, 
+#                 skiprows=1,
+#                 delimiter=',')
 
-T, m_re, m_im, m2, m4 = np.loadtxt('cpp/L16_test.txt', 
+T, m_re, m_im, m2, m4 = np.loadtxt('cpp/L16_m_values.txt', 
                 dtype=float,
                 unpack=True, 
                 skiprows=1,
                 delimiter=',') 
 
-m2_L8, m4_L8 = np.loadtxt('cpp/L8_test.txt', 
+T2, mr, mi, m2_L8, m4_L8 = np.loadtxt('cpp/L8_gamma.txt', 
+                dtype=float,
+                unpack=True, 
+                skiprows=1,
+                delimiter=',')
+
+m2_L16, m4_L16 = np.loadtxt('cpp/L16_gamma.txt', 
                 dtype=float,
                 unpack=True, 
                 skiprows=1,
                 delimiter=',')[3:]
 
-m2_L32, m4_L32 = np.loadtxt('cpp/L32_test.txt', 
+m2_L32, m4_L32 = np.loadtxt('cpp/L32_gamma.txt', 
                 dtype=float,
                 unpack=True, 
                 skiprows=1,
@@ -168,11 +174,11 @@ m2_L32, m4_L32 = np.loadtxt('cpp/L32_test.txt',
 # plot_1D_correlation(T=1, J=4, data=corr_ms_lowT, save=True)
 
 # plot_avg_mag(T, m=m_re)
-# plot_avg_mag_squared(T, m=m2)
+plot_avg_mag_squared(T, m=m2)
 # plot_Gamma(T, m2=m2, m4=m4)
 gamma_8  = m4_L8 / m2_L8**2
-gamma_16 = m4 / m2**2
+gamma_16 = m4_L16 / m2_L16**2
 gamma_32 = m4_L32 / m2_L32**2
 
 
-compare_Gamma(T, gamma_8, gamma_16, gamma_32)
+# compare_Gamma(T, gamma_8, gamma_16, gamma_32)

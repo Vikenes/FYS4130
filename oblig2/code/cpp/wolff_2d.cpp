@@ -8,7 +8,7 @@
 
 #define PI 3.14159265358979323
 const int q=3;      // number of spin states
-const int L=32;      // Linear system size 
+const int L=16;      // Linear system size 
 // const double T=2;   // Temperature in units of J 
 
 const int N=L*L;      // Tot. number of spins 
@@ -82,8 +82,10 @@ int main(int argc, char** argv) {
 
     std::ofstream m_values (argv[1]);
     m_values << "T, m_real, m_imag, m2, m4" << std::endl;
-
-    for(float a=0; a<NT; a++){temp[a]=(a+100)/125;}
+    double T0=std::stof(argv[2]);
+    double TN=std::stof(argv[3]);
+    double dT=(TN - T0)/(NT-1);
+    for(float a=0; a<NT; a++){temp[a]=a*dT + T0;}
 
 
     for(int s=0; s<q; s++){
