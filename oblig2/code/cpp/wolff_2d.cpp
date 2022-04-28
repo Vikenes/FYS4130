@@ -8,17 +8,18 @@
 
 #define PI 3.14159265358979323
 const int q=3;      // number of spin states
-// const int L=32;      // Linear system size 
+const int L=32;      // Linear system size 
 // const double T=2;   // Temperature in units of J 
 
-// const int N=L*L;      // Tot. number of spins 
-const int NT=50;        // Number of temp. points
+const int N=L*L;      // Tot. number of spins 
+const int NT=51;        // Number of temp. points
 // const double pconnect=1-exp(-J/T);  // Connection prob. 
 
 const int NCLUSTERS=1;  // # of clusters in one step
 const int NESTEPS=10000;// # of equil. MC steps
 const int NMSTEPS=10000;// # of measurement MC steps
 const int NBINS=10;     // # of measurement bins
+
 
 std::vector<std::vector<int> > 
     S(L, std::vector<int>(L));  // Spin array 
@@ -78,13 +79,11 @@ void FlipandBuildFrom(int s, int v, float t) {
 }
 
 int main(int argc, char** argv) {
-    int L=std::stoi(argv[1]);
-    int N=L*L;   
-    std::ofstream m_values (argv[2]);
-    // m_values.open("m_values.txt", std::ios_base::app);
+
+    std::ofstream m_values (argv[1]);
     m_values << "T, m_real, m_imag, m2, m4" << std::endl;
 
-    for(float a=0; a<NT; a++){temp[a]=(a+0.01)/10;}
+    for(float a=0; a<NT; a++){temp[a]=(a+100)/125;}
 
 
     for(int s=0; s<q; s++){

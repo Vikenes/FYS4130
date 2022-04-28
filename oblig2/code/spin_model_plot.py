@@ -145,19 +145,19 @@ corr_ms_lowT = np.loadtxt('cpp_uncompleted/corr_params_TJ_025.txt',
                 skiprows=1,
                 delimiter=',')
 
-T, m_re, m_im, m2, m4 = np.loadtxt('cpp_uncompleted/m_values.txt', 
+T, m_re, m_im, m2, m4 = np.loadtxt('cpp/L16_test.txt', 
                 dtype=float,
                 unpack=True, 
                 skiprows=1,
                 delimiter=',') 
 
-m2_L8, m4_L8 = np.loadtxt('cpp_uncompleted/m_values_L8.txt', 
+m2_L8, m4_L8 = np.loadtxt('cpp/L8_test.txt', 
                 dtype=float,
                 unpack=True, 
                 skiprows=1,
                 delimiter=',')[3:]
 
-m2_L32, m4_L32 = np.loadtxt('cpp_uncompleted/m_values_L32.txt', 
+m2_L32, m4_L32 = np.loadtxt('cpp/L32_test.txt', 
                 dtype=float,
                 unpack=True, 
                 skiprows=1,

@@ -8,10 +8,10 @@
 
 #define PI 3.14159265358979323
 const int q=3;      // number of spin states
-const int L=8;      // Linear system size 
-const double T=2;   // Temperature in units of J 
+// const int L=32;      // Linear system size 
+// const double T=2;   // Temperature in units of J 
 
-const int N=L*L;      // Tot. number of spins 
+// const int N=L*L;      // Tot. number of spins 
 const int NT=50;        // Number of temp. points
 // const double pconnect=1-exp(-J/T);  // Connection prob. 
 
@@ -77,12 +77,14 @@ void FlipandBuildFrom(int s, int v, float t) {
     }
 }
 
-int main() {   
-    std::ofstream m_values ("m_values_L8.txt");
+int main(int argc, char** argv) {
+    int L=std::stoi(argv[1]);
+    int N=L*L;   
+    std::ofstream m_values (argv[2]);
     // m_values.open("m_values.txt", std::ios_base::app);
     m_values << "T, m_real, m_imag, m2, m4" << std::endl;
 
-    for(float a=0; a<NT; a++){temp[a]=(a+0.9)/50;}
+    for(float a=0; a<NT; a++){temp[a]=(a+0.01)/10;}
 
 
     for(int s=0; s<q; s++){
