@@ -4,21 +4,22 @@
 #include<math.h>
 #include<complex>
 #include<fstream>
+#include<string>
 
 
 #define PI 3.14159265358979323
 const int q=3;      // number of spin states
 const int L=16;      // Linear system size 
-const double T=0.5;   // Temperature in units of J 
+const double T=0.25;   // Temperature in units of J 
 // const int J=4;
 
 const int N=L;      // Tot. number of spins 
 const double pconnect=1-exp(-1/T);  // Connection prob. 
 
 const int NCLUSTERS=1;  // # of clusters in one step
-const int NESTEPS=10000;// # of equil. MC steps
-const int NMSTEPS=10000;// # of measurement MC steps
-const int NBINS=10;     // # of measurement bins
+const int NESTEPS=100000;// # of equil. MC steps
+const int NMSTEPS=100000;// # of measurement MC steps
+const int NBINS=20;     // # of measurement bins
 
 std::vector<int> S(N);  // Spin array 
 std::vector<int> M(q);  // Number of spins in different states 
@@ -108,7 +109,8 @@ int main(int argc, char** argv) {
     }
     std::cout << "\n" << "m: " << m_avg/NBINS << std::endl;
 
-    std::ofstream corr_values (argv[1]);
+    std::string name = "output/" + std::string(argv[1]);
+    std::ofstream corr_values (name);
     corr_values << "m0r_re, m0r_im, m0mr_re, m0mr_im" << std::endl;
 
     m_0/=(NMSTEPS*NBINS);

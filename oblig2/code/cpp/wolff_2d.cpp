@@ -4,6 +4,7 @@
 #include<math.h>
 #include<complex>
 #include<fstream>
+#include<string>
 
 
 #define PI 3.14159265358979323
@@ -80,7 +81,8 @@ void FlipandBuildFrom(int s, int v, float t) {
 
 int main(int argc, char** argv) {
 
-    std::ofstream m_values (argv[1]);
+    std::string name = "output/" + std::string(argv[1]);
+    std::ofstream m_values (name);
     m_values << "T, m_real, m_imag, m2, m4" << std::endl;
     double T0=std::stof(argv[2]);
     double TN=std::stof(argv[3]);

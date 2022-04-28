@@ -17,11 +17,11 @@ plt.rc('legend', fontsize=14)    # legend fontsize
 here = os.path.abspath(".")
 path_plots = '../plots/'
 
-def anal_corr(T, J, r, L=16):
-    Z = 2*(np.exp(J/T) - 1)**L + (np.exp(J/T) + 2)**L 
-    term1 = (np.exp(J/T) - 1)**L 
-    term2 = (np.exp(J/T) - 1)**(r) * (np.exp(J/T) + 2)**(L-r)
-    term3 = (np.exp(J/T) + 2)**(r) * (np.exp(J/T) - 1)**(L-r)
+def anal_corr(T, r, L=16):
+    Z = 2*(np.exp(1/T) - 1)**L + (np.exp(1/T) + 2)**L 
+    term1 = (np.exp(1/T) - 1)**L 
+    term2 = (np.exp(1/T) - 1)**(r) * (np.exp(1/T) + 2)**(L-r)
+    term3 = (np.exp(1/T) + 2)**(r) * (np.exp(1/T) - 1)**(L-r)
     return (term1+term2+term3)/Z
 
 def num_corr(data):
@@ -31,15 +31,18 @@ def num_corr(data):
     C_mc = np.concatenate((C_r, c0), axis=0)
     return C_mc
 
-def plot_1D_correlation(T, J, data, L=16, save=False):
+def plot_1D_correlation(T, data, L=16, N_incr=False, save=False):
     r = np.arange(L+1)
     C_mc = num_corr(data)
-    C_anal = anal_corr(T, J, r, L)
+    C_anal = anal_corr(T, r, L)
 
     title1 = str('Analytical and numerical correlation function\n')
-    title2 = str(f'For spin chain of length L={len(r)-1} with T/J={T/J:.2f}')
-    plt.figure(figsize=[10,5])
+    if N_incr:
+        title2 = str(f'With L={L}, T/J={T} and more simulation steps')
+    else:
+        title2 = str(f'For spin chain of length L={L} with T/J={T:.2f}')
 
+    plt.figure(figsize=[10,5])
     plt.title(title1+title2)
     plt.plot(r, C_anal, 'o-', markersize=10, linewidth=3, label='Analytical')
     plt.plot(r, C_mc, 'o', markersize=5, color='red', label='Numerical')
@@ -48,7 +51,9 @@ def plot_1D_correlation(T, J, data, L=16, save=False):
     plt.ylabel(r'Correlation function, $C(r)$')
     plt.legend()
     if save:
-        temp = str(np.round(T/J, 2)).replace('.','')
+        temp = str(T).replace('.','')
+        if N_incr:
+            temp += "_incrN"
         file = path_plots + "correlation1D_" + temp + ".pdf"
         print(f'Saving file: {file}')
         plt.savefig(file)
@@ -61,16 +66,17 @@ def plot_1D_correlation(T, J, data, L=16, save=False):
 
 def plot_avg_mag(T, m, L=16, save=False):
 
-    title = str(f'Average magnetization per site for $L={L}$')
+    title = str(f'Real part of the average magnetization per site for $L={L}$')
     plt.figure(figsize=[10,5])
+    error = 1/np.sqrt(10*10000)
 
     plt.title(title)
     plt.plot(T, m, 'o-')
+    plt.fill_between(T, m-error, m+error, alpha=0.4, color='red')
     plt.xlabel(r'Temperature, $T/J$')
-    plt.ylabel(r'$\langle m \rangle$')
+    plt.ylabel(r'$\mathcal{R}e (\langle m \rangle)$')
     if save:
-        temp = str(np.round(T, 2)).replace('.','')
-        file = path_plots + "avg_mag" + temp + ".pdf"
+        file = path_plots + "avg_mag_re.pdf"
         print(f'Saving file: {file}')
         plt.savefig(file)
         plt.clf()
@@ -87,8 +93,7 @@ def plot_avg_mag_squared(T, m, L=16, save=False):
     plt.xlabel(r'Temperature, $T/J$')
     plt.ylabel(r'$\langle |m|^2 \rangle$')
     if save:
-        temp = str(np.round(T, 2)).replace('.','')
-        file = path_plots + "avg_mag" + temp + ".pdf"
+        file = path_plots + "avg_mag_squared.pdf"
         print(f'Saving file: {file}')
         plt.savefig(file)
         plt.clf()
@@ -120,14 +125,15 @@ def compare_Gamma(T, L8, L16, L32, save=False):
 
     plt.title(title)
     plt.plot(T, L8, 'o-', label='L=8')
-    plt.plot(T, L16, 'o-', alpha=0.5, label='L=16')
+    plt.plot(T, L16, 'o-', label='L=16')
     plt.plot(T, L32, 'o-', label='L=32')
     plt.legend()
     plt.xlabel(r'Temperature, $T/J$')
     plt.ylabel(r'$\langle |m|^4 \rangle / \langle |m|^2 \rangle ^2$')
     if save:
-        temp = str(np.round(T, 2)).replace('.','')
-        file = path_plots + "avg_mag" + temp + ".pdf"
+        NT = "_N" + str(len(T))
+        dT = "_dT" + str(np.round(T[-1] - T[0], 3)).replace('.','')
+        file = path_plots + "gamma_curves" + NT + dT + ".pdf"
         print(f'Saving file: {file}')
         plt.savefig(file)
         plt.clf()
@@ -135,50 +141,93 @@ def compare_Gamma(T, L8, L16, L32, save=False):
         plt.show()
 
 
-# corr_ms = np.loadtxt('cpp/corr_values_T05.txt', 
-#                 dtype=float, 
-#                 skiprows=1,
-#                 delimiter=',')
+corr_ms = np.loadtxt('cpp/output/corr_1d_T05.txt', 
+                dtype=float, 
+                skiprows=1,
+                delimiter=',')
 
-# corr_ms_lowT = np.loadtxt('cpp/corr_values_T025.txt', 
-#                 dtype=float, 
-#                 skiprows=1,
-#                 delimiter=',')
+corr_ms_lowT = np.loadtxt('cpp/output/corr_1d_T025.txt', 
+                dtype=float, 
+                skiprows=1,
+                delimiter=',')
 
-T, m_re, m_im, m2, m4 = np.loadtxt('cpp/L16_m_values.txt', 
+corr_ms_largeN = np.loadtxt('cpp/output/corr_T025_incrN.txt', 
+                dtype=float, 
+                skiprows=1,
+                delimiter=',')
+
+T_large, m_re_largeT = np.loadtxt('cpp/output/m_large_T.txt', 
                 dtype=float,
                 unpack=True, 
                 skiprows=1,
-                delimiter=',') 
+                delimiter=',')[0:2]
 
-T2, mr, mi, m2_L8, m4_L8 = np.loadtxt('cpp/L8_gamma.txt', 
+T_m2, m_re, m_im, m2, m4 = np.loadtxt('cpp/output/L16_m_values.txt', 
                 dtype=float,
                 unpack=True, 
                 skiprows=1,
                 delimiter=',')
 
-m2_L16, m4_L16 = np.loadtxt('cpp/L16_gamma.txt', 
+T_gamma, mr, mi, m2_L8, m4_L8 = np.loadtxt('cpp/output/L8_gamma.txt', 
+                dtype=float,
+                unpack=True, 
+                skiprows=1,
+                delimiter=',')
+
+m2_L16, m4_L16 = np.loadtxt('cpp/output/L16_gamma.txt', 
                 dtype=float,
                 unpack=True, 
                 skiprows=1,
                 delimiter=',')[3:]
 
-m2_L32, m4_L32 = np.loadtxt('cpp/L32_gamma.txt', 
+m2_L32, m4_L32 = np.loadtxt('cpp/output/L32_gamma.txt', 
                 dtype=float,
                 unpack=True, 
                 skiprows=1,
                 delimiter=',')[3:]
 
 
-# plot_1D_correlation(T=2, J=4, data=corr_ms, save=True)
-# plot_1D_correlation(T=1, J=4, data=corr_ms_lowT, save=True)
 
-# plot_avg_mag(T, m=m_re)
-plot_avg_mag_squared(T, m=m2)
+# plot_1D_correlation(T=0.5, data=corr_ms, save=True)
+# plot_1D_correlation(T=0.25, data=corr_ms_lowT, N_incr=False, save=True)
+# plot_1D_correlation(T=0.25, data=corr_ms_largeN, N_incr=True, save=True)
+
+
+# plot_avg_mag(T_large, m=m_re_largeT, save=False)
+# plot_avg_mag_squared(T_m2, m=m2, save=False)
 # plot_Gamma(T, m2=m2, m4=m4)
-gamma_8  = m4_L8 / m2_L8**2
-gamma_16 = m4_L16 / m2_L16**2
-gamma_32 = m4_L32 / m2_L32**2
+
+def Gamma(m4, m2):
+    return m4 / m2**2 
+
+gamma_8  = Gamma(m4_L8 , m2_L8)
+gamma_16 = Gamma(m4_L16,  m2_L16)
+gamma_32 = Gamma(m4_L32,  m2_L32)
+
+compare_Gamma(T_gamma, gamma_8, gamma_16, gamma_32, save=True)
+compare_Gamma(T_gamma[22:28], gamma_8[22:28], gamma_16[22:28], gamma_32[22:28], save=True)
+
+dT_gamma, mr, mi, dm2_L8, dm4_L8 = np.loadtxt('cpp/output/L8_dense.txt', 
+                dtype=float,
+                unpack=True, 
+                skiprows=1,
+                delimiter=',')
+
+dm2_L16, dm4_L16 = np.loadtxt('cpp/output/L16_dense.txt', 
+                dtype=float,
+                unpack=True, 
+                skiprows=1,
+                delimiter=',')[3:]
+
+dm2_L32, dm4_L32 = np.loadtxt('cpp/output/L32_dense.txt', 
+                dtype=float,
+                unpack=True, 
+                skiprows=1,
+                delimiter=',')[3:]
 
 
-# compare_Gamma(T, gamma_8, gamma_16, gamma_32)
+gamma_8d  = Gamma(dm4_L8 , dm2_L8)
+gamma_16d = Gamma(dm4_L16, dm2_L16)
+gamma_32d = Gamma(dm4_L32, dm2_L32)
+
+compare_Gamma(dT_gamma, gamma_8d, gamma_16d, gamma_32d, save=True)

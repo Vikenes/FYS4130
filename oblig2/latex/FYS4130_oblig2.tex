@@ -37,6 +37,23 @@
 	keepspaces=true}
 
 
+\makeatletter 
+
+\renewcommand\onecolumngrid{% <<<<<<
+\do@columngrid{one}{\@ne}%
+\def\set@footnotewidth{\onecolumngrid}% <<<<<<<<<<<<<<<<
+\def\footnoterule{\kern-6pt\hrule width 1.5in\kern6pt}%
+}
+
+\renewcommand\twocolumngrid{% <<<<<<
+		\def\footnoterule{% restore rule
+		\dimen@\skip\footins\divide\dimen@\thr@@
+		\kern-\dimen@\hrule width.5in\kern\dimen@}
+		\do@columngrid{mlt}{\tw@}
+}%
+
+\makeatother   
+
 \newcommand{\closed}[1]{\left(#1\right)}
 \newcommand{\bracket}[1]{\left[#1\right]}
 
@@ -49,6 +66,7 @@
 \newcommand{\T}[1]{T_{\sigma_{#1},\sigma_{#1 + 1}}}
 \renewcommand{\l}{\lambda}
 \newcommand{\mj}{m_j}
+\newcommand{\tj}{T/J}
 
 \begin{document}
 \begin{center}
@@ -60,10 +78,11 @@
 
 \maketitle
 \end{center}
+
+
 \onecolumngrid
 
-All code used in this oblig can be found on my Github: \url{https://github.com/Vikenes/FYS4130}
-\\
+
 \section*{\large Task 1 - Transfer Matrices}
 
 \subsection*{a) Partition function and average internal energy}
@@ -272,14 +291,126 @@ implying that there is a perfect correlation between all spins. This coincides w
 
 \section*{\large Task 2 - Monte Carlo Simulations}
 
+For simplicity, $k_B=J=1$ has been used in all calculation. 
+
+\subsection*{a) - Monte carlo program}
+The code that has been used in this task can be found on Github: \url{https://github.com/Vikenes/FYS4130/tree/main/oblig2/code}. The programs for computations are in the folder "cpp", while the python script is used for plotting. 
+
+Having never written c++ before, my brain could not create a c++ algorithm suitable for both 1D and 2D within the deadline, so two separate scripts have been made. My inexperience will also be noticeable in places where I may have overlooked solutions that are obviously better/smarter than mine.    
+
+\subsubsection*{Numerical parameters and detailed balance}
+
+Unless stated otherwise, all of the Monte Carlo (MC) simulations have been run with $10^4$ number of equilibrium steps, and $10$ bins with $10^4$ measurement steps in each. Similarly, we use $L=16$ sites in each direction, unless stated otherwise, yielding $N=L$ for the 1D simulation and $N=L\cross L$ for the 2D simulation. 
+
+When implementing the Wolff algorithm, we need to use a connection probability appropriate for the system we're considering. For a given spin on the ring, there is a probability $p$ of assigning a bond to one of its neighbours if it has the same spin. The probability of not including the neighbouring spin in the bond is then $1-p$. In both cases, the energy contribution from these spins are $\ebj$. For neighbouring sites with unequal spins, there is a probability of $1$ that we don't assign any bond, and the energy contribution from these sites are $e^0=1$. To get the correct probability for assigning spins to the cluster, we must fullfill the detailed balance, which in this case is the product of the energy between two spins and the probability that bonds are not assigned. The only situation where this factor changes when we flip spins, is when two neighbours initially have equal spins, but not a bond between them, and one of them is flipped. The detailed balance is then 
+\begin{align}
+	P(\text{equal spins, no bond})\cdot e^{\beta J} &= P(\text{unequal spins, no bond})\cdot e^{0} \nonumber  \\ 
+	(1-p)\ebj &= 1 \nonumber \implies p = 1-e^{-\beta J} \\ 
+	p &= 1 - e^{-1/T} \label{eq:connection_probability}
+\end{align}      
+where we in the last line used that $k_B=J=1$ in our simulations. 
+
+\subsection*{b) - Correlation function}
+We use the MC simulation to compute the three quantities needed to calculate the $C(r)$ as it is written in equation \eqref{eq:corr_func}. We plot this result against the analytical solution for both $\tj=0.25$ and $\tj=0.5$, shown in the upper and lower panel of figure \ref{fig:correlation} respectively
+
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=0.7\linewidth]{correlation1D_025.pdf}
-	\includegraphics[width=0.7\linewidth]{correlation1D_05.pdf}
-	\caption{Correlation}
+	\includegraphics[width=0.8\linewidth]{correlation1D_025.pdf}
+	\includegraphics[width=0.8\linewidth]{correlation1D_05.pdf}
+	\caption{Comparison between the numerically and analytically computed correlation function for the 1D spin chain at two different temperatures, using $\sigma_L=\sigma_0$.}
 	\label{fig:correlation}
 \end{figure}
+
+For $\tj=0.5$, we see that the two correlation functions are overlapping nicely, while for $\tj=0.25$, there is some deviations between the two results. These deviations are most likely caused by the value of $p$ at low temperatures. Inserting the two temperature values in our expression for $p$ in equation \eqref{eq:connection_probability}, we get 
+\begin{align*}
+	p(T=0.5) &\approx 0.9817 \\ 
+	p(T=0.25) &\approx 0.8647 
+\end{align*} 
+The high probability of assigning bonds when $T=0.25$ implies that we should attempt a new MC simulation with more steps, in order to get enough samples with bonds not being assigned. Using $10^5$ steps for equilibriation and measuremnts, as well as $20$ bins for the measurements, we compute $C(r)$ for $T=0.25$ once again, as shown in figure \ref{fig:correlation_incrN}. Now, the deviations are barely visible, and we conclude that our program works as it should \footnote{I realize that this doesn't guarantee that the 2D case works, as it is a separate script, but the basic structure of the two programs are unaltered and my results coincide with what other people have gotten}.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.7\linewidth]{correlation1D_025_incrN.pdf}
+	\caption{Comparison of numerical and analytical correlation function with a factor $10$ increase of MC steps and twice the number of bins.}
+	\label{fig:correlation_incrN}
+\end{figure}
+
+\subsection*{c) - Average magnetization}
+Next, we plot the real part of the average magnetization $\expval{m}$ as a function of $\tj\in[0.1,\,10]$, shown in figure \ref{fig:avg_mag}. Included in the plot is the standard deviation $\sigma_N=1/\sqrt{N}$, due to finite measurements. We see that $\expval{m}$ is close to zero for low values of $\tj$, but fluctuates significantly as $\tj\to1$. For high values of $\tj$ we even get values of $\Re(\expval{m})\pm\sigma_N<0$, which we don't expect. At high $\tj$ values, the connection probability is fairly low, and we would expect that we got more stable values if we were to increase the number of MC steps.     
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.7\linewidth]{avg_mag_re.pdf}
+	\caption{Average magnetization for increasing temperatures, with standard deviations indicated by the shaded red area.}
+	\label{fig:avg_mag}
+\end{figure}
+
+\subsection*{d) - Average magnetization squared}
+
+The average magnetization squared per site, $\expval{\abs{m}^2}$ is plotted as a function of $\tj\in[0.01,\,2]$, shown in figure \ref{fig:avg_mag_squared}. We see that $\expval{\abs{m}^2}\to1$ as $\tj\to0$, while $\expval{\abs{m}^2}\to0$ as $\tj\to\infty$. At low $\tj$ the connection probability is very high, which favors alignment of spin. As previously discussed, we expect allignment of spins at low $T$. When spins are equal, taking the absolute value squared of one of the possible values of $m_j$ yields $1$. As $T$ increases, allignment of spins is no longer the case, so the overall average of spins are $0$.  
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.7\linewidth]{avg_mag_squared.pdf}
+	\caption{Average magnetization squared for increasing temperatures, showing the transition from ordered to disordered states.}
+	\label{fig:avg_mag_squared}
+\end{figure}
+
+\subsection*{e) - Finite size scaling}
+
+We want to show that curves of $\Gamma$ vs. $\tj$ crosses at the phase transition temperature for different values of $L$, where $\Gamma$ is defined as 
+\begin{align*}
+	\Gamma &\equiv \frac{\langle\abs{m}^4\rangle}{\langle\abs{m}^2\rangle ^2}
+\end{align*}
+
+We will assume that $\Gamma=\Gamma(t,L^{-1})$, where $t\equiv(T-T_c)/T_c$. We introduce dimensionless length, $L'^{-1}=(L/a)^{-1}$, where $a$ is the lattice spacing. Scaling the lattice spacing by a factor $s$, $a\to a'=sa$ makes the dimenionless length scale as $L'^{-1}\to sL'^{-1}$. Scaling $t$ and $L^{-1}$ by appropriate factors of $s$ yields the following scaling relation for $\Gamma$
+\begin{align*}
+	\Gamma(t,L^{-1}) &= s^0 \Gamma(t s^{y_t},\,L'^{-1} s)
+\end{align*}
+
+where $\Gamma$ itself is dimensionless, so it doesn't scaling with lattice spacing, and $y_t$ is the scaling exponent for $t$. We now choose $s=L'$, such that the finite scaling relation becomes 
+\begin{align*}
+	\Gamma(t,L^{-1}) = \Gamma(t L'^{y_t},1). 
+\end{align*}   
+We can now define the RHS to be $g(t L'^{y_t})$. Since $L'$ is finite, if we're close to the critical temperature we can expand $g$ around $t=0$
+\begin{align*}
+	g(t L'^{y_t}) = g(0) + t L'^{y_t} g'(0) + ... 
+\end{align*}
+Now, if are at the critical temperature, we have $t=0$, and the finite scaling relation becomes 
+\begin{align*}
+	\Gamma(t,L^{-1}) &= g(t L'^{y_t}) = g(0)
+\end{align*}
+and we see that RHS now has become independent of $L$. This means that for different choices of $L$, the resulting curves of $\Gamma$ should cross at the phase transition temperature. 
+
+\subsection*{f) - Estimating the critical temperature}
+We now plot $\Gamma$ as a function of $\tj\in[0.8,\,1.20]$ for the systems sizes $L=\{8,\,16,\,32\}$, using $50$ temperature points. Additionally we include a plot showing the crossing of the curves. These two plots as shown in the upper and lower panel of figure \ref{fig:gamma}, respectively.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.7\linewidth]{gamma_curves_N51_dT04.pdf}
+	\includegraphics[width=0.7\linewidth]{gamma_curves_N6_dT004.pdf}
+	\caption{Moments of magnetization for different system sizes. The crossing point indicates the critical temperature. In the lower panel we see that the curves don't overlap perfectly, but indicates that $0.99< T_c < 1$.}
+	\label{fig:gamma}
+\end{figure}
+We see that the three curves appear to cross somewhere between $\tj=0.990$ and $\tj=0.995$, but we need a higher density of $\tj$ in this region to make a reasonable conclusion about the exact value of the critical temperature.
+
+To investigate the crossing further, we use $50$ values of $\tj\in[0.99,\,1.00]$ and plot the resulting curves of $\Gamma$, shown in figure \ref{fig:gamma_dense}. The small temperature steps results in relatively large fluctuations of the $\Gamma$ curves, so we're still unable to conclude what $T_c/J$ is from this figure, but it appears to occur for $T<T_c$. For the sake of time we choose not to investigate the crossing point further with more MC simulation steps and more bins.   
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.7\linewidth]{gamma_curves_N51_dT001.pdf}
+	\caption{Moments of magnetization for different system sizes near the region $T=0.995$ where we expect to find $T_c$.}
+	\label{fig:gamma_dense}
+\end{figure}
+
+Instead, we assume that curves don't cross at a single point due to the phrasing of the task. There are a few possible reasons for non-overlapping curves that I may think of. One of these, is that we don't have an actual lattice spacing in our model, but have a Hamiltonian which considers neighbouring spins. However, the behaviour of the Hamiltonian under RG transformations may be affected, but it's hard to conclude, as we don't have any concrete expressions. 
+
+Another peculiar fact, is that we actually scale the size of the system in these models, so we have $L^{-1}\to \frac{1}{2}L^{-1}$ when we go from e.g. $L=16$ to $L=32$. Setting $s=L$ to obtain $g(tL^{y_t})$ is then no longer possible, and expanding the function around $t=0$ may actually yield a factor $L$ in one of the constant terms, which means that $\Gamma$ is affected by $L$ at $t=0$. It may be that I've completely misunderstood how the finite size scaling works, but I don't see how we can set $s=L$ in our model. It may be that we should have used $s^{y_L}$, which could then yield some dependency on particular values of $L$. 
+
+Next, we didn't take into account what $y_t$ is. I struggle to see how and why it should be a repuslive or attractive fixed point at all, but this may be a consequence of computing actual transformations which we haven't considered. In these actual transformations there could also be higher order terms contributing, which means that the general transformation relation $Q(s\{K\})\sim sQ(\{Ks^{y_k}\})$ would be invalid for our model. I'm also not entirely sure that $\Gamma$ itself should stay unscaled. Perhaps it should scale by some dimensionless quantity that is dependent of on the system size in some ways.  
+
+As a final consideration, we never really took into account the behaviour of $\Gamma$ for $t\neq0$. For low values of $T$ we have $\Gamma\to1$ and for $T\to2$ we have $\Gamma\to2$. Perhaps an investigation and more thorough consideration of these limits could help solve the puzzle. But it's also possible that the answer simply is that $L$ is too low for crossing to take place.    
 
 
 \end{document}
