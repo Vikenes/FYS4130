@@ -3,6 +3,7 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=vim,c++,julia,macos,python,pycharm,visualstudio,visualstudiocode,tex
 
 monte_carlo_litterature/
+old_exams/
 
 ### C++ ###
 # Prerequisites
