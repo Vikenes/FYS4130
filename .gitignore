@@ -2,7 +2,7 @@
 # Created by https://www.toptal.com/developers/gitignore/api/vim,c++,julia,macos,python,pycharm,visualstudio,visualstudiocode,tex
 # Edit at https://www.toptal.com/developers/gitignore?templates=vim,c++,julia,macos,python,pycharm,visualstudio,visualstudiocode,tex
 
-monte_carlo_litterature/
+litterature/
 old_exams/
 formulas/
 
