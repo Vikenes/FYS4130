@@ -20,6 +20,7 @@
 \newcommand{\curly}[1]{\{ #1 \} }
 \newcommand{\Q}{\mathbb{Q}}
 \renewcommand{\P}{\mathbb{P}}
+\newcommand{\Z}{\mathcal{Z}}
 
 %\newcommand{\addPLOT}[4]{
 %\addplot [domain=#1:#2,samples=200,color=#3,]{#4};}
@@ -63,20 +64,28 @@
 
 
 \subsubsection*{\boxed{\text{Mathematical identities}}}
-\subsubsection*{\scriptsize Stirling's approximations}
+\textbf{Stirling's approximation}
 \begin{align*}
   N! &\approx N^Ne^{-N}\quad(\cdot \sqrt{2\pi N}) \\
   \ln{(N!)} &\approx N\ln{N}-N \\
 \end{align*}
 
-\subsubsection*{\scriptsize Dirac delta-function}
+\textbf{Dirac delta-function}
 
 \begin{align*}
     \int dx\,\delta(u-ax) &= \frac{1}{a}\int dx\,\delta(u/a - x) \\ 
     \int f(x)\delta(g(x))\,dx &= \sum_j \frac{f(x_j)}{g'(x_j)}
 \end{align*}
 
+\textbf{Geometric series}
+\begin{align*}
+    \sum_{n=0}^\infty x^n = \frac{1}{1-x}
+\end{align*}
 
+\textbf{Limit}
+\begin{align*}
+    \lim_{x\to0} x\ln x = 0
+\end{align*}
 
 \textbf{The Euler Equation:}
 For an extensive system we have 
@@ -164,12 +173,41 @@ We do have $\expval{f}\neq\bar{f}$ for:
 \subsection*{\boxed{\text{QM statistical mechanics}}}
 
 \begin{align*}
+    P_n &= \frac{e^{-\beta E_n}}{Z}
+    Z &= \sum_l \Omega(l)\exp(-\beta E_l),\quad \Omega(l)=\text{Degeneracy of energy level}\: l
+\end{align*}
+
+
+\begin{align*}
+    \closed{\pdv{(\beta F)}{\beta}}_{V,N} = -\pdv{\ln Z}{\beta} \implies \beta F = -\ln Z + f(V,N)
+\end{align*}
+For identical particles $f(V,N)=0$, for distinguishable particles $f(V,N)=-\ln N!$. 
+
+For the entropy, we have 
+\begin{align*}
+    S&=-\closed{\pdv{F}{T}}_{V,N} = k_B \ln Z + \frac{1}{T}\expval{E} = k_B \ln Z + \frac{1}{T}\sum_n E_n P_n \\ 
+    &= k_B \sum_n \closed{P_n \ln Z + \beta E_n P_n} = k_B \sum_n \closed{P_n \ln Z - \ln(ZP_n) P_n}
+\end{align*}
+
+
+\begin{align*}
     S = -k_B \sum_n P_n \ln P_n
 \end{align*}
 
+\subsubsection*{\scriptsize Third law of TD}
+Let $l=0$ be the lowest energy level. The partition function can be written as 
 \begin{align*}
-    Z = \sum_l \Omega(l)\exp(-\beta E_l),\quad \Omega(l)=\text{Degeneracy of energy level}\: l
+    Z = \Omega(0)e^{-\beta E_0} \closed{1 + \sum_{l>0} \frac{\Omega(l)}{\Omega(0)} e^{-\beta(E_l-E_0)} }    
 \end{align*}
+Since $E_l>E_0$, for $T\to0$ the sum dies, and we get $Z \to \Omega(0) e^{-\beta E_0}$ for $T\to0$. The probability of finding the system in one of the ground states is then 
+\begin{align*}
+    P_0 = \frac{e^{-\beta E_0}}{\Omega(0)e^{-\beta E_0}} = \frac{1}{\Omega(0)}
+\end{align*}
+So it is equally distributed among the $\Omega(0)$ states. For $T\to0$ we also have $P_n\to0$. Using the entropy definition then gives 
+\begin{align*}
+    S = -k_B \sum_n P_n \ln P_n = k_B \omega(0) \closed{\frac{1}{\Omega(0)}\ln(\Omega(0))} = k_B \ln\Omega(0)
+\end{align*}
+
 
 \begin{align*}
     E_n &= \sum_{j=1}^N E_{n_j} \implies e^{-\beta E_n} = \prod_{j=1}^N e^{-\beta E_{n_j}} \\
@@ -182,7 +220,7 @@ We do have $\expval{f}\neq\bar{f}$ for:
 \end{align*}
 
 
-\subsubsection*{The harmonic solid}
+\subsubsection*{The Harmonic solid}
 Consider a 1D crystal lattice with uniform lattice spacing $a$ between the points. The positions are given by $r_j = R_j + x_j$, where $R_j=a\cdot j$ is the equilibrium position (ind. of time), $x_j$ is the deviation and $j=\curly{0,1,\dots,N-1}$. Modeling it as springs, with periodic BC, we get 
 \begin{align*}
     H = \frac{1}{2} m \sum_{j=0}^{N-1} \dot{r}_j^2 + \frac{K}{2} \sum_j (r_{j+1} - r_j - a)^2 = \frac{m}{2}\sum_{j=0}^{N-1} \dot{x}_j^2 + \frac{K}{2} \sum_j (x_{j+1}-x_j)^2
@@ -219,11 +257,55 @@ and we have effectively managed to decouple the system, such that $H$ is now a c
     \omega_k = 2 \tilde{\omega}\abs{\sin(ka/2)}
 \end{align*}
 
+The harmonic solid is essentially a sum of indipendent QM harmonic oscillators. 
+
+The partition function is a product over $k$, since $H$ is a sum over $k$. It is also a sum over occupation number $n$, and thus yields 
+\begin{align*}
+    Z &= \prod_k \sum_{n=0}^\infty e^{-\beta \hbar \omega_k (n+1/2)} \\ 
+    F &= \sum_k \closed{\frac{\hbar \omega_k}{2} + k_B T \ln\closed{1-e^{-\beta \hbar \omega_k}} } \\
+    U &= \sum_k \closed{\frac{\hbar \omega_k}{2} + \frac{\hbar \omega_k}{e^{\beta \hbar \omega_k} - 1} } \\ 
+    \text{large}\: N \implies U &= \frac{Na}{2\pi} \int_{-\pi/a}^{\pi/a} dk\, \closed{\frac{1}{2}\hbar \omega_k + \frac{\hbar \omega_k}{e^{\beta \hbar \omega_k} - 1} } \\ 
+    \text{high}\: T \implies U &\approx \frac{Na}{2\pi} \int_{-\pi/a}^{\pi/a} dk\, \closed{\frac{1}{2}\hbar \omega_k + k_B T} \\ 
+    \text{high}\: T \implies c_V &= k_B
+\end{align*}
+So for large $T$ the specific heat gives a factor $k_B$ per particle. For 3D it would be $c_V=3k_B$ per particle. 
 
 \subsubsection*{Debye approximation}
+For $T\to0$ then $\beta\to\infty$ which kills the second term in the $U$ integral. However, at certain $k$ we have $\omega_k\to0$, so we must be careful. At low temperatures only the low-energy modes will be significantly excited, as the higher ones are cut off by the exponential term.  
 
+For small values of $k$, we have $\omega_k\approx \tilde{\omega} ka$ which is linear in $k$. The \textit{Debye approximation} gives the linear relation as $\hbar\omega_k=\hbar v \abs{\vec{k}}$, where $v$ is the speed of sound. The Debye approximation can be viewed as an interpolation between known regions of high and low $T$. 
 
+We now consider 3D, and approximate the first Brillouin zone by a sphere of radius $k_D$ such that it contains $3N$ modes. Considering a sphere in $n$ space, we have $n_x,n_y,n_z$ positive, and each have three modes (two transversal one longitudinal) such that 
+\begin{align*}
+    3N&=\frac{3}{8}\int_0^{n_D} 4\pi n^2 dn \implies n_D = (6N/\pi)^{1/3} \\ 
+    k_D \pi n/L &= \closed{\frac{6\pi^2}{a^3}}\quad \text{No N in Olav's calculation}
+\end{align*}
+The Debye energy is then $\hbar \omega_D\equiv \hbar v k_D$. Define the \textit{Debye temperature} $\theta_D\equiv \hbar \omega_D/k_B$. Using spherical coordinates and then setting $x=\beta\hbar v k$, we get 
+\begin{align*}
+    U &= \text{const} + 3N\closed{\frac{a}{2\pi}}^3 \int_{\text{1st B.Z}} d^3 k\,\frac{\hbar v \abs{\vec{k}}}{e^{\beta\hbar v \abs{\vec{k}}} - 1} \\ 
+    &= \text{const} + 3N\closed{\frac{a k_D}{2\pi}}^3 4\pi \frac{k_B T}{(\beta\hbar vk_D)^3} \int_0^{\theta_D / T} dx\, \frac{x^3}{e^x - 1} \\ 
+    &= \text{const} + 9N \frac{k_B T}{(\theta_D / T)^3} \int_0^{\theta_D / T} dx\, \frac{x^3}{e^x - 1}
+\end{align*}
+For high $T\:(T\gg\theta_D)$ we have $x<1$ and we get 
+\begin{align*}
+    U &= \text{const} + 9N \frac{k_B T}{(\theta_D / T)^3} \int_0^{\theta_D / T} dx\, x^2 \\
+    &= \text{const} + 3N k_B T
+\end{align*}
+At low $T\:(T\ll\theta_D)$ we can approximate the upper limit of the integral as $\theta_D/T\to\infty$ where the integral becomes $\pi^4/15$. Thus 
+\begin{align*}
+    U &= \text{const} + \frac{3N\pi^4}{5} \frac{(k_B T)^4}{(\hbar\omega_D)^3} \\ 
+    c_V &= \frac{12}{5}\pi^4 k_B \closed{\frac{k_B T}{\hbar\omega_D}} \propto T^3 
+\end{align*}
+which is the same $T$ dependency as for insulators, and is observed to be correct for insulating crystals. 
 
+\textbf{Summary of the Debye approximation:}
+The steps of the Debye approximation is  
+\begin{enumerate}
+    \item Replace true energy spectrum with an approximate one that is linear in wave number $k$, and spherical symmetric, $\eps(\vec{k})=\hbar v \abs{\vec{k}}$.
+    \item Replace true B.Z. by a spherically symmetric one. 
+    \item Choose size of spherically symmetric B.Z do that it contains exactly $N$ values of $k$ and $3N$ modes. 
+\end{enumerate} 
+The approximation is axcellent at both high and low $T$, but is only mediocre in between. Specific heat from lattice vibrations in real crystals is monotoically increasing with temperature with a $T^3$-dependence at low temperatures to a constant value of $3k_B$ at high temperatures (Dulong and Petit) 
 
 \subsubsection*{\scriptsize Grand Canonical Ensemble}
 In equilibrium with a reservoir. Can exchange energy and particles. 
@@ -380,7 +462,65 @@ Plugging in for $U$ and expanding $\mu^{5/2}$ and $\mu^{1/2}$ up to $T^2$ gives
 \end{align*}
 where $X\eps_F^{3/2}=3/2\cdot N $. The linear dependence is observed for metals at low $T$. 
 
-INSULATORS SMICONDUCTORS 
+
+\subsubsection*{\scriptsize Semiconductors - Fermions at low temperature}
+
+Periodic solids have energy bands separated by energy gaps where $D(\eps_V<\eps<\eps_C)=0$, where $\eps_V$ is the upper energy limit of the \textit{valence band} (VB) and $\eps_C$ is the lower energy of the \textit{conductor band} (CB). At $T=0$ electrons fill up every state up to $\eps_F$, and where $\eps_F$ is found is strongly affecting the behavior of materials. Typical metals have the fermi energy in the CB. But, for a full VB and empty CB we need a high energy to excite electrons (Insulator or semiconductor for small gap). The specific heat is then not linear in $T$ as we found for $T=0$ in the Sommerfeld expansion. 
+
+
+The number of electrons is given by 
+\begin{align*}
+    N &= \int_0^{\eps_V} d\eps\,D_V(\eps) f(\eps) + \int_{\eps_C}^\infty d\eps\,D_C(\eps) f(\eps) \\ 
+    &= \int_0^{\eps_V} d\eps\,D_V(\eps)\quad\text{for low}\: T 
+\end{align*}
+since $f(\eps<\mu)=1$ and $f(\eps>\mu)=0$ as $T\to 0$. Want the same $N$ as we increase $T$. Subtracting the two terms yield 
+\begin{align*}
+    0 &= \int_0^{\eps_V} d\eps\,D_V(\eps) [f(\eps)-1] + \int_{\eps_C}^\infty d\eps\,D_C(\eps) f(\eps)
+\end{align*}
+
+At small, finite $T$, assuming $\mu$ in the middle of the gap gives $f(\eps)-1=-1/(e^{-\beta(\eps-\mu)}+1)\approx-e^{\beta(\eps-\mu)}$ for $\eps<\eps_V$ and $f(\eps)\approx e^{-\beta(\eps-\mu)}$ for $\eps>\eps_C$. Setting $x=\beta(\eps-\eps_C)$ and $y=\beta(\eps_V-\eps)$ gives 
+\begin{align*}
+    0 &= \int_{\eps_C}^\infty d\eps\,D_C(\eps) e^{-\beta(\eps-\mu)} - \int_0^{\eps_V} d\eps\,D_V(\eps) e^{\beta(\eps-\mu)} \\
+    &= \int_0^\infty \frac{dx}{\beta} D_C(x/\beta+\eps_C) e^{\beta(\mu-\eps_C)-x} + \int_{\beta\eps_V\to\infty}^0 \frac{dy}{\beta} D_V(\eps_V-y/\beta) e^{\beta(\eps_V-\mu)-y} 
+\end{align*}
+With a factor $e^{\beta\mu}$ in both integrals, we get the ratio 
+\begin{align*}
+    e^{2\beta\mu} &= e^{\beta(\eps_V+\eps_C)} \bracket{\frac{\int_0^\infty \frac{dy}{\beta} D_V(\eps_V-y/\beta) e^{-y} }{\int_0^\infty \frac{dx}{\beta} D_C(x/\beta+\eps_C) e^{-x}}}
+\end{align*}
+Taking the log to obtain $\mu$ expression, we assume $D_C(\eps)=A(\eps-\eps_C)^a$ for $\eps>\eps_C$ and $D_V(\eps)=B(\eps_V-\eps)^b$ for $\eps<\eps_V$. Then, 
+\begin{align*}
+    \mu &= \frac{\eps_V+\eps_C}{2} + \frac{1}{2\beta} \ln((k_B T)^{b-a} X) \\
+    &= \frac{\eps_V+\eps_C}{2} + \frac{b-a}{2} k_B T \ln k_B T +\frac{1}{2}k_B T \ln X
+\end{align*}
+where X is the remaining integral expression that is independent of $T$. For $a=b$ we get 
+\begin{align*}
+    \mu = \frac{\eps_V+\eps_C}{2} + \frac{1}{2}k_B T \ln(B/A)
+\end{align*}
+which is linear in $T$. 
+
+Using the expression for $\mu$ with $A\sim B$ at low $T$ one find $N_C \sim e^{-\beta/2 (\eps_C-\eps_V)}$ and is exponentially suppressed at low $T$. 
+
+
+\subsubsection*{\tiny Extrinsic Semiconductors (adding dopants)}
+Add impurity in the gap just below $\eps_C$. Two kind of states:
+\begin{itemize}
+    \item Bond state: b,s = band number and $\vec{k}$, $\curly{\uparrow,\downarrow}$  
+    \item Donor state: d,s = where the state is, $\curly{\uparrow,\downarrow}$
+\end{itemize}
+Cost much energy to have both up and down in the same donor state (Coulomb). Ignore Coulomb in overall model, but ommit two spins in a single donor state. The partition function is $\Z=\Z_b \Z_d$. For $\Z_b$ we use $\eps_{b,s}=\eps_b$
+
+\begin{align*}
+    \Z_b &= \prod_b \closed{\sum_{n_{b,\uparrow}} e^{-\beta(\eps_b-\mu)n_{b,\uparrow}} } \closed{\sum_{n_{b,\downarrow}} e^{-\beta(\eps_b-\mu)n_{b,\downarrow}} } \\ 
+    &= \prod_b \closed{1 + 2 e^{-\beta(\eps_b-\mu)} + e^{-2\beta(\eps_b-\mu)}}
+\end{align*}
+
+For donor levels, we get 
+\begin{align*}
+    \Z_d &= \prod_d \Z_{d,1} =  \prod_d (1+2\exp(-\beta\eps_d - \mu)) \\ 
+    n_d &= \frac{1}{\frac{1}{2}e^{\beta(\eps_d-\mu)}+1}
+\end{align*} 
+The factor $1/2$ in $n_d$ for donor levels has given the name \textit{semiconductor statistics} to the occupation number. 
+
 
 
 \subsubsection*{\boxed{\text{Ising model}}}
