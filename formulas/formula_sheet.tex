@@ -1,0 +1,530 @@
+\documentclass[a4paper, english, 12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{babel, textcomp, color, amssymb, subfig, float}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{multicol}   
+\usepackage{bm}
+\usepackage{gensymb}
+\usepackage{amsmath}
+
+
+\usepackage{physics}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\newcommand{\eps}{\epsilon}
+\newcommand{\closed}[1]{\left( #1 \right)}
+\newcommand{\bracket}[1]{\left[ #1 \right]}
+\newcommand{\curlybig}[1]{\left\{ #1 \right\} }
+\newcommand{\curly}[1]{\{ #1 \} }
+\newcommand{\Q}{\mathbb{Q}}
+\renewcommand{\P}{\mathbb{P}}
+
+%\newcommand{\addPLOT}[4]{
+%\addplot [domain=#1:#2,samples=200,color=#3,]{#4};}
+%\newcommand{\addCOORDS}[1]{\addplot coordinates {#1};}
+%\newcommand{\addDRAW}[1]{\draw #1;}
+%\newcommand{\addNODE}[2]{ \node at (#1) {#2};}
+
+%		\PLOTS{x}{y}{left}{
+%			\ADDPLOT{x^2}{-2}{2}{blue}
+%			\ADDCOORDS{(0,1)(1,1)(1,2)}
+%		}
+
+
+\definecolor{svar}{RGB}{0,0,0}
+\definecolor{opgavetekst}{RGB}{109,109,109}
+\definecolor{blygraa}{RGB}{44,52,59}
+
+\hoffset = -60pt
+\voffset = -95pt
+\oddsidemargin = 0pt
+\topmargin = 0pt
+\textheight = 0.97 \paperheight
+\textwidth = 0.97 \paperwidth
+
+\begin{document}
+\tiny
+\begin{multicols*}{2}
+
+
+\subsection*{\boxed{\text{Thermodynamic postulates}}}
+
+\begin{enumerate}
+    \item \textbf{Equilibrium states:} There exists equilibrium states of a macroscopic system that are characterized by a small number of extensive variables. 
+    \item \textbf{Entropy maximization:} The values assumed by the extensive parameters of an isolated composite system in the absence of an internal constraint are those that maximize the entropy over the set of all constrained macroscopic states. $(\Delta S \geq 0)$
+    \item \textbf{Additivity:} The entropy of a composite system is additive over the constituent subsystems $(S(E_a)+S(E_b) = S(E_a+E_b))$
+    \item \textbf{Continuity and differentiability:} The entropy is a continuous and differentiable function of the extensive parameters. 
+    \item \textbf{Extensivity:} The entropy is an extensive function of the extensive variables (not the case when boundary effects are important). $(S(\lambda E, \lambda V)=\lambda S(E,V))$
+    \item \textbf{Monotonicity:} The entropy is a monotonically increasing function of the energy for equilibrium values of the energy. 
+    \item \textbf{The Nernst postulate:} The entropy of any (real/quantum) system is non-negative. ($\lim_{T\to0} S(T)\geq0$)
+\end{enumerate}
+
+
+\subsubsection*{\boxed{\text{Mathematical identities}}}
+\subsubsection*{\scriptsize Stirling's approximations}
+\begin{align*}
+  N! &\approx N^Ne^{-N}\quad(\cdot \sqrt{2\pi N}) \\
+  \ln{(N!)} &\approx N\ln{N}-N \\
+\end{align*}
+
+\subsubsection*{\scriptsize Dirac delta-function}
+
+\begin{align*}
+    \int dx\,\delta(u-ax) &= \frac{1}{a}\int dx\,\delta(u/a - x) \\ 
+    \int f(x)\delta(g(x))\,dx &= \sum_j \frac{f(x_j)}{g'(x_j)}
+\end{align*}
+
+
+
+\textbf{The Euler Equation:}
+For an extensive system we have 
+\begin{align*}
+    U=TS-PV+\mu N
+\end{align*}
+
+\textbf{Gibbs-Duhem:}
+\begin{align*}
+    dU=0 &= SdT-VdP+Nd\mu \\ 
+    \implies d\mu &= -(S/N)dT+(V/N)dP  
+\end{align*}
+
+
+\subsubsection*{\scriptsize Standard set of second derivatives}
+\begin{align*}
+    \alpha &= \frac{1}{V}\left(\pdv{V}{T} \right)_{P,N}, \text{thermal expansion} \\ 
+    \kappa_T &= -\frac{1}{V}\left(\pdv{V}{P} \right)_{T,N}, \text{isothermal compressibility} \\ 
+    c_P &= \frac{T}{N}\left(\pdv{S}{T} \right)_{P,N}, \text{spec. heat pr. part. at const. pressure} \\ 
+    c_V &= \frac{T}{N}\left(\pdv{S}{T} \right)_{V,N}, \text{spec. heat pr. part. at const. volume}
+\end{align*}
+
+Relations between some of them are:
+\begin{align*}
+    c_P &= c_V + \frac{\alpha^2 TV}{N\kappa_T} \\ 
+    \kappa_S &= \kappa_T - \frac{TV \alpha^2}{Nc_P}
+\end{align*}
+
+
+
+
+EXTREMUM + STABILITY 
+VDW
+PT 
+BOLTZMANN+MAX-BOLT 
+
+\subsection*{\boxed{\text{Classical statistical mechanics}}}
+
+The microcanonical ensemble is defined by assigning equal probability to each microstate, so within a given energy range, the probability is $P_s=1/W$, where $W$ is the number of microstates in the energy range.   
+
+\begin{align*}
+    \Omega(E,V,N) &=\frac{1}{h^{3N}N!}\int dq \int dp\, \delta(E-H(p,q)) \\
+    Z &= \int dE\, \Omega(E,V,N) \exp(-\beta E) \\
+    &= \frac{1}{h^{3N}N!}\int dq \int dp\, e^{-\beta H(q,p)} 
+\end{align*}
+
+
+\subsubsection*{\scriptsize Liouville Theorem}
+With systems near a region in phase space (ensemble), we can talk about a density of systems on a grained scale $h^{3N}$. The number of systems in the region $(\Q,\P)$ at a time $t$ is then $\rho(\Q,\P,t)d\Q d\P$. In equilibrium the macroscopic quantities should be independent of time. So for equilibrium states, the density should \textit{not} change in time. The system will follow Newton's e.o.m., so it obeys the continuity equation 
+\begin{align*}
+    \pdv{\rho}{t} &= -\vec{\nabla} \cdot (\rho \vec{v}),\quad \vec{\nabla}=\closed{\pdv{\Q},\pdv{\P}},\: \vec{v}=\closed{\dot{\Q},\dot{\P}} \\ 
+    \pdv{\rho}{t} &= -\sum_{\alpha=1}^{3N}\closed{\pdv{(\rho\dot{q}_\alpha)}{q_\alpha} + \pdv{(\rho\dot{p}_\alpha)}{p_\alpha} }
+\end{align*} 
+Using the product rule for differentiation, Hamilton's equations $\dot{q}_\alpha=\pdv{H}{p_\alpha},\,\dot{p}_\alpha=-\pdv{H}{q_\alpha}$ make the derivatives of the the dotted terms cancel each other, and we get 
+\begin{align*}
+    \pdv{\rho}{t} &= -\sum_{\alpha=1}^{3N} \closed{\pdv{\rho}{q_\alpha} \dot{q}_\alpha + \pdv{\rho}{p_\alpha}\dot{p}_\alpha }
+\end{align*}  
+The change in the density as we flow with the system is now found by the total time derivative of the density 
+\begin{align*}
+    \dv{\rho}{t} &= \pdv{\rho}{t} + \sum_{\alpha=1}^{3N} \closed{\pdv{\rho}{q_\alpha} \dot{q}_\alpha + \pdv{\rho}{p_\alpha}\dot{p}_\alpha } = 0
+\end{align*}
+This is the Liouville theorem. There is thus no local change in the density following a volume element, and the flow in phase space is incompressible. However, in equilibrium statistical mechanics, $\rho$ itself should be $t$ independent in order for measurable quantities to be $t$ independent as well. That is, we want $\pdv{\rho}{t}=0$. Using Poisson brackets, we then have 
+\begin{align*}
+    \pdv{\rho}{t} = \curly{H,\rho},\quad \curly{A,B}=\sum_\alpha \closed{\pdv{A}{q_\alpha}\pdv{B}{p_\alpha} - \pdv{A}{p_\alpha}\pdv{B}{q_\alpha}} 
+\end{align*}
+
+If $\curly{H,\rho}=0$, we get the desired equilibrium result $\pdv{\rho}{t}=0$. If $\rho=\rho(H)$, the chain rule of differentiation will immideately yield $\curly{H,\rho(H)}=0$. This means that the microcanonical ensemble is constant in time, and only depends on $H$. 
+\begin{align*}
+    \rho(\Q,\P) = \frac{1}{h^{3N} N!} \delta\closed{E-H(\Q,\P)}
+\end{align*}
+
+
+\subsubsection*{\scriptsize The ergodic hypothesis}
+In equilibrium statistical mechanics we have ensemble averages $\expval{f}$. Experimentally, however, we usually measure a single system over some finite time, with the average $\bar{f}=\frac{1}{T} \int_0^T dt\,f(T)$. The ergodic hypothesis states that $\boxed{\expval{f}=\bar{f}}$. Can be extremely hard to prove, but holds whenever the trajectories of (nearly) every point in phase-space eventually passes close to every other point on the surface of constant energy. In practice one is often satisfied with $\expval{f}=\bar{f}+\eps$. 
+
+We do have $\expval{f}\neq\bar{f}$ for:
+\begin{itemize}
+    \item Few-body problem with chaos 
+    \item Integrable systems, many-body systems with an infinite number of conserved quantities (typically 1D)
+    \item Borken symmetry phases
+    \item Glasses, very slow dynamics
+\end{itemize} 
+
+
+\subsection*{\boxed{\text{QM statistical mechanics}}}
+
+\begin{align*}
+    S = -k_B \sum_n P_n \ln P_n
+\end{align*}
+
+\begin{align*}
+    Z = \sum_l \Omega(l)\exp(-\beta E_l),\quad \Omega(l)=\text{Degeneracy of energy level}\: l
+\end{align*}
+
+\begin{align*}
+    E_n &= \sum_{j=1}^N E_{n_j} \implies e^{-\beta E_n} = \prod_{j=1}^N e^{-\beta E_{n_j}} \\
+    Z &= \sum_{\curly{n_j}} \prod_{j=1}^N \exp(-\beta E_{n_j}) = \prod_{j=1}^N \left( \sum_{n_j} \exp(-\beta E_{n_j}) \right)
+\end{align*}
+
+\begin{align*}
+    \epsilon_{\vec{k}} &= \frac{\hbar^2 }{2m}k^2 = \frac{\hbar^2 \pi^2}{2mL^2}n^2 = \epsilon_{\vec{k}} \\ 
+    D(\epsilon) &= \int_0^\infty dn_x\,dn_y\,dn_z \delta(\epsilon-\epsilon_{\vec{n}}) = \frac{V}{4\pi^2} \left(\frac{2m}{\hbar^2}\right)^{3/2} \epsilon^{1/2}
+\end{align*}
+
+
+\subsubsection*{The harmonic solid}
+Consider a 1D crystal lattice with uniform lattice spacing $a$ between the points. The positions are given by $r_j = R_j + x_j$, where $R_j=a\cdot j$ is the equilibrium position (ind. of time), $x_j$ is the deviation and $j=\curly{0,1,\dots,N-1}$. Modeling it as springs, with periodic BC, we get 
+\begin{align*}
+    H = \frac{1}{2} m \sum_{j=0}^{N-1} \dot{r}_j^2 + \frac{K}{2} \sum_j (r_{j+1} - r_j - a)^2 = \frac{m}{2}\sum_{j=0}^{N-1} \dot{x}_j^2 + \frac{K}{2} \sum_j (x_{j+1}-x_j)^2
+\end{align*}
+
+Next, we want to transform the system such that coupling terms vanish. We introduce the Fourier transform (ommit tilde's).
+\begin{align*}
+    X_k = \frac{1}{\sqrt{N}} \sum_j x_j e^{-ikR_j},\quad x_j = \frac{1}{\sqrt{N}} \sum_k X_k e^{ikR_j},\quad x_j\in\mathbb{R}\implies X_k^* = X_{-k}
+\end{align*}
+
+The periodic BC yields $x_{j+N}=x_j\implies e^{ikNa}=1\implies k = \frac{2\pi}{Na}n$ for $n\in\mathbb{Z}$. Also, for $\tilde{k}=2\pi z/a$, where $z$ is an integer, $X_{\tilde{k}}=X_k$. This means that all info about $x_j$ is gotten from $X_k$ in the interval $k\in[0,2\pi/a)$ or $k\in[-\pi/a,\pi/a)$. This is the \textit{First Brillouin zone}. Customary to take both positive and negative values of $k(n)$, and we get 
+\begin{align*}
+    n = 0,\pm1,\pm2,\dots, \begin{cases}
+        \pm(N-1)/2 \quad&\text{for }\: N\: \text{odd} \\ 
+        \pm(N/2-1),N/2\quad&\text{for }\: N\: \text{even}
+    \end{cases}
+\end{align*}
+
+
+Now, the kinetic energy can be expressed through the fourier modes, using a geometric series 
+\begin{align*}
+    \sum_j \dot{x}_j^2 &= \sum_j \frac{1}{N}\sum_{k,k'}\dot{X}_k \dot{X_k'} e^{i(k+k')R_j} \\ 
+    \sum_{j=1}^{N-1} e^{i(k+k')R_j} &= \sum_{j=0}^{N-1}e^{i2\pi(n+n') j/N} = N\delta_{n,-n'} \\ 
+    \implies \sum_j \dot{X}_j^2 &= \sum_k \dot{X}_k \dot{X}_{-k} = \sum_k \abs{\dot{X}_k}^2 
+\end{align*}
+Doing a similar calculation for the potential term, one obtains eventually 
+\begin{align*}
+    H = \frac{m}{2} \sum_k \abs{\dot{X}_k}^2 + \frac{K}{2} \sum_k 4\sin^2(ka/2) \abs{X_k}^2
+\end{align*}
+
+and we have effectively managed to decouple the system, such that $H$ is now a collection of independent harmonic oscillators with stiffness $K_k$ and frequency, $\omega_k$ with 
+\begin{align*}
+    K_k = 4K \sin^2(ka/2),\quad \omega_k^2 &= K_k/m = \tilde{\omega}^2 4\sin^2(ka/2) \\
+    \omega_k = 2 \tilde{\omega}\abs{\sin(ka/2)}
+\end{align*}
+
+
+\subsubsection*{Debye approximation}
+
+
+
+
+\subsubsection*{\scriptsize Grand Canonical Ensemble}
+In equilibrium with a reservoir. Can exchange energy and particles. 
+\begin{align*}
+    P(E,N) &= \frac{1}{\mathcal{Z}}\Omega(E,V,N) \exp[-\beta E + \beta \mu N], \\
+    \mathcal{Z} &= \sum_{N=0}^\infty \sum_E \Omega(E,V,N)\exp[-\beta E + \beta \mu N]
+\end{align*}
+
+Denote a quantum number by $\alpha$, with the corresponding occupation number $n_\alpha$. For e.g. electrons, the occupation numbers are $n_\alpha=0,1$, since each state can be occupied by one electron at max. Then, we get 
+\begin{align*}
+    \mathcal{Z} = \sum_{\{n_\epsilon\}} \prod_\epsilon e^{-\beta(\epsilon-\mu)n_\epsilon} = \prod_\epsilon \sum_{n_\epsilon} e^{-\beta(\epsilon-\mu)n_\epsilon} = \prod_\epsilon \mathcal{Z}_\epsilon
+\end{align*} 
+
+
+For an extensive system we then have 
+\begin{align*}
+    \ln\mathcal{Z} = \beta PV 
+\end{align*}
+
+The average values at a particular energy are now given by 
+\begin{align*}
+    \expval{n_\epsilon} &= \frac{1}{\mathcal{Z}_\epsilon} \sum_{n_\epsilon} n_\epsilon e^{-\beta(\epsilon-\mu)n_\epsilon} \\ 
+    \expval{N} = \sum_\epsilon \expval{n_\epsilon} \\ 
+    U &= \expval{E} = \sum_\eps \eps_\alpha \expval{n_\eps}
+\end{align*}
+
+\subsubsection*{\scriptsize Bosons and Fermions}
+For bosons, we have $n_\eps\in\{0,\infty\}$. By using both the geometric sum of the single-energy partition function, and differentiating it, we can express $\expval{n_\eps}$. For fermions we have $n_\eps=0,1$, so we get 
+\begin{align*}
+    \expval{n_\eps} = \frac{1}{e^{\beta(\eps-\mu)} \pm 1}
+\end{align*}
+where $+=$fermions, and $-=$bosons. For the grand partition function we get 
+\begin{align*}
+    \mathcal{Z} = \begin{cases}
+        \prod_\eps (1+\exp(-\beta(\eps-\mu))),\quad&\textbf{fermions} \\ 
+        \prod_\eps {1-\exp[-\beta(\eps-\mu)]}^{-1},\quad&\textbf{bosons}
+    \end{cases}
+\end{align*}
+
+The logarithm is then 
+\begin{align*}
+    \mathcal{Z} &= \pm \sum_\eps \ln(1 \pm \exp[-\beta(\eps-\mu)]) \\ 
+    &= \pm \int_0^\infty d\eps\, D(\eps) \ln(1 \pm \exp[-\beta(\eps-\mu)]) = \beta PV
+\end{align*}
+The integral expressions for $N$ and $U$ are then 
+\begin{align*}
+    N &= \int_0^\infty d\eps\,D(\eps) (\exp[\beta(\eps-\mu)]\pm1)^{-1} \\ 
+    U &= \int_0^\infty d\eps\, \eps D(\eps) (\exp[\beta(\eps-\mu)]\pm1)^{-1}
+\end{align*}
+
+
+\subsubsection*{Bose-Einstein statistics}
+Since $\expval{n_\eps}>0$, for bosons we must have $\eps>\mu$. Setting $\eps=0$ as the lowest energy state, we have $\mu<0$. At low-T, we find the integral expression for $N$ with the substitution $x=\beta\eps$, writing $D(\eps)=\chi \eps^{1/2}$ and $e^{\beta\mu}=\lambda$ 
+\begin{align*}
+    N = \chi (k_B T)^{3/2} \int_0^\infty dx\, \frac{x^{1/2}}{\lambda^{-1} e^x - 1}
+\end{align*}
+Since $\mu<0\implies\lambda^{-1}>1$. Now, $N$ should stay constant, but decreases by a factor $T^{3/2}$ as the temperature is reduced. The integral should then be increased accordingly. The only parameter available is $\lambda$. We thus need $\lambda^{-1}$ as small as possible, but we can't decrease past $\lambda^{-1}=1$. The integral doesn't diverge, and at $\lambda=1$, we have 
+\begin{align*}
+    N = \chi (k_B T_E)^{3/2} 2.315 \implies k_B T_E = \left( \frac{2\pi\hbar^2}{m}\right) \left( \frac{N}{2.612V} \right)^{2/3}
+\end{align*} 
+$N$ not valid for $T<T_E$. The problem is due to $\eps_0=0\to\expval{n_0}=[\exp(-\beta\mu)-1]^{-1}$, which is infinite for $\mu=0$, and is arbitrarily large for small values of $\mu$. Therefore, approximating the sum as an integral doesn't work at low temperatures, since the summand is insufficiently smooth. Solved by treating the lowest energy level separate. 
+\begin{align*}
+    N = N_0 + \int_{\eta\to0^+}^\infty d\eps\,D(\eps) \expval{n_\eps}
+\end{align*}
+where the error goes to zero as $\eta\to0$. Then we get 
+
+\begin{align*}
+    N &= N_0 + N \left(\frac{T}{T_E}\right)^{3/2} \\ 
+    N_0 &= [\exp(-\beta\mu)-1]^{-1} = N\bracket{1-\closed{\frac{T}{T_E}}^{3/2} }
+\end{align*}
+Expaning the \textit{small} $\beta \mu$ for $T<T_E$, we get 
+\begin{align*}
+    \mu \approx -\frac{k_B T}{N}\bracket{1-\closed{\frac{T}{T_E}}^{3/2}}^{-1}
+\end{align*}
+
+
+\subsubsection*{Fermi-Dirac statistics}
+The occupation number is 
+\begin{align*}
+    f(\eps)=\frac{1}{e^{\beta(\eps-\mu)} +1} > 0
+\end{align*}
+and for $T\to0\; (\beta\to\infty)$ it becomes a step function with $f(\eps<\mu)=1$ and $f(\eps>\mu)=0$. 
+
+The Fermi energy is given by $\eps_F \equiv \lim_{T\to0} \mu(T,N)$, and lies exactly in the middle between the energy of the highest occupied state and the lowest non-occupied state. The average occupation number, the \textit{Fermi function} is given by 
+\begin{align*}
+    f(\eps; T\to0) &= \Theta(\eps_F-\eps)
+\end{align*}
+
+Using the step function we get for $T\to0$ 
+\begin{align*}
+    N&=\sum_{\vec{k}} f(\eps_{\vec{k}}) = \int_0^\infty d\eps\, D(\eps)f(\eps) = \int_0^{\eps_F} d\eps\, D(\eps) = X \frac{2}{3} \eps_F^{3/2} \\ 
+    U&=X \frac{2}{5} \eps_F^{5/2}
+\end{align*}
+From $N$, we get $X\propto V\implies \eps_F \propto(N/V)^{2/3}$. For electrons, we must multiply by a factor of $2$ to account for electron spin. 
+
+We get the ratio $U/N=\frac{3}{5}\eps_F$. Using the Euler equation at $T=0$, we get 
+\begin{align*}
+    U=TS-PV+\mu N = -PV+\eps_F N \implies PV \frac{2}{5}\eps_F N 
+\end{align*}
+For $\eps_F=y(N/V)^{2/3}$, we find $\kappa_T^{-1}=\frac{2}{3}\eps_F \frac{N}{V}$
+
+
+
+\subsubsection*{\scriptsize Sommerfeld expansion}
+At low non-zero $T$, the temperature dependence of $N$ and $U$ is difficult to extract. We use the \textit{Sommerfeld expansion}, valid for $k_B T/\eps_F\ll1$, to overcome this with a function $\phi(\eps)$ which is $D(\eps)$ and $\eps D(\eps)$ for $N$ and $U$, respectively. The integral, with $f(\eps)$ being the Fermi function, is then 
+\begin{align*}
+    I = \int_0^\infty d\eps\, \phi(\eps) f(\eps)     
+\end{align*}
+Now, we use that  
+\begin{align*}
+    f(\mu+x) &= \frac{1}{e^{\beta x}+1} = 1 - \frac{1}{e^{-\beta x}+1} = 1-f(\mu-x)
+\end{align*}
+For $\eps<\mu$ we use the RHS, and for $\eps>\mu$ we use the LHS.
+\begin{align*}
+    I &= \int_0^\mu d\eps\, \phi(\eps)\bracket{1-\frac{1}{e^{-\beta(\eps-\mu)} +1 }} + \int_\mu^\infty d\eps\, \phi(\eps) \frac{1}{e^{\beta(\eps-\mu)} +1} \\ 
+    &=\int_0^\mu d\eps\, \phi(\eps) - \int_0^\mu d\eps\, \phi(\eps)\frac{1}{e^{-\beta(\eps-\mu)} +1 } + \int_\mu^\infty d\eps\, \phi(\eps) \frac{1}{e^{\beta(\eps-\mu)} +1}
+\end{align*}
+The first term is the step function contribution, while the latter two are corrections. For the first correction term, substitute $z=-\beta(\eps-\mu)$, and for the last term $z=\beta(\eps-\mu)$. At low $T$, we may approximate the lower limit $z=\beta\mu\to\infty$. Collecting terms yields 
+\begin{align*}
+    I=\int_0^\mu d\eps\, \phi(\eps) + \int_0^\infty \frac{d\eps}{\beta} \frac{\phi(\mu+z/\beta) - \phi(\mu-z/\beta)}{1+e^z} 
+\end{align*}
+
+Taylor expanding both $\phi$ functions gives eventually 
+\begin{align*}
+    \phi(\mu+z/\beta) - \phi(\mu-z/\beta) = \frac{2z}{\beta}\phi'(\mu) + \frac{2}{3!}\closed{\frac{z}{\beta}}^3 \phi'''(\mu)+...
+\end{align*} 
+
+Then the integral becomes 
+\begin{align*}
+    I &= \int_0^\mu d\eps\, \phi(\eps) + (k_B T)^2 \phi'(\mu) 2 \int_{0}^\infty dz\, \frac{z}{e^z+1} + (k_B T)^4 \phi'''(\mu) \frac{2}{3!} \int_0^\infty dz\, \frac{z^3}{e^z+1} \\ 
+    &= \int_0^\mu d\eps\, \phi(\eps) + (k_B T)^2 \phi'(\mu) \frac{\pi^2}{6} + (k_B T)^4 \phi'''(\mu) 7 \frac{\pi^4}{360} + \mathcal{O}(T^6)
+\end{align*}
+
+\textbf{Heat capacity at low T:} We then have 
+\begin{align*}
+    \phi(\eps)=X\eps^{3/2}\implies U=X[2/5 \mu^{5/2} + \pi^2/4 (k_B T)^2 \mu^{1/2}] + \mathcal{O}(T^4)
+\end{align*}
+
+Now we need to determine $\mu$. We know $N(T=0)$, and for increasing $T$ we want $N$ to stay constant. At $T=0$, we have $N=X\frac{2}{3}\eps_F^{3/2}$. At low $T$ we have 
+\begin{align*}
+    N &= X \frac{2}{3}\eps_F^{3/2} = X \frac{2}{3}\mu^{3/2} + X\frac{\pi^2}{12} (k_B T)^{2} \mu^{-1/2} + \mathcal{O}(T^4) \\ 
+    \implies \eps_F^{3/2} &= \mu^{3/2}\bracket{1+\frac{\pi^2}{8}\closed{\frac{k_B T}{\mu}}^2 } + \mathcal{O}(T^4)
+\end{align*}
+$(k_B T/\mu)^2$ is small and can be replaced by $(k_B T/\eps_F)^2$ with and error $\mathcal{O}(T^4)$, and is solved by iteration. Solving the above equation for $\mu$ and taylor expanding the term of power $(-2/3)$ yields 
+\begin{align*}
+    \mu \approx \eps_F \closed{1 - \frac{\pi^2}{12} \closed{\frac{k_B T}{\eps_F}}^2+...}
+\end{align*}
+
+Plugging in for $U$ and expanding $\mu^{5/2}$ and $\mu^{1/2}$ up to $T^2$ gives 
+\begin{align*}
+    U &= \frac{2}{5}X\eps_F^{5/2} + \frac{\pi^2}{6}(k_B T)^2 X\eps_F^{1/2} \\ 
+    \implies C_V &= \frac{\pi^2}{3}k_B \closed{\frac{k_B T}{\eps_F}} X \eps_F^{3/2} \\ 
+    &= \frac{\pi^2}{2} Nk_B \closed{\frac{k_B T}{\eps_F}} + \mathcal{O}(T^3)
+\end{align*}
+where $X\eps_F^{3/2}=3/2\cdot N $. The linear dependence is observed for metals at low $T$. 
+
+INSULATORS SMICONDUCTORS 
+
+
+\subsubsection*{\boxed{\text{Ising model}}}
+Ising model is a proposed theoretical model for magnetism, which is given by 
+\begin{align*}
+    H = -J \sum_{\langle{i,j}\rangle} \sigma_i \sigma_j - h \sum_i \sigma_i 
+\end{align*}
+where $J$ is the \textit{exchange parameter}, due to a derivation from quantum properties of exchangig electrons between neighbors. $h$ is the magnetic field, $\sigma_i=\pm1$ is the "spin", and the summation index $\langle i,j \rangle$ indicates that the sum is over nearest neighbor pairs of sites. 
+
+\subsubsection*{\scriptsize Ising chain (1D)}
+Using $h=0$, we get 
+\begin{align*}
+    H = -J\sum_{i=1}^{N-1} \sigma_i \sigma_{i+1}
+\end{align*}
+
+With open boundary conditions, we now define $\tau_1=\sigma_1,\,\tau_i=\sigma_{i-1}\sigma_i$, where $\tau_i=\pm1$. Thus, the Hamiltonian becomes $H=-J\sum_{i=2}^N \tau_i$. The Hamiltonian is independent of $\tau_1$, which must also be summed over, which essentially accounts for the fact that the Hamiltonian is invariant upon flipping all the spins 
+\begin{align*}
+    Z &= \sum_{\tau_1} \prod_{i=2}^N \closed{\sum_{\tau_i} e^{\beta J \tau_i}} = 2(2\cosh(\beta J))^{N-1} \\ 
+    U &= \pdv{(\beta F)}{\beta} = -(N-1)J\tanh(\beta J) \\ 
+    c &= \frac{1}{N}\pdv{U}{T} = k\beta^2 J^2 \closed{1-\frac{1}{N}} \frac{1}{\cosh^2(\beta J)}
+\end{align*} 
+
+
+\subsubsection*{\scriptsize Ising chain with transfer matrices}
+With $J\neq0$ and $h\neq0$, we now consider periodic boundary conditions with $\sigma_{N+1}=\sigma_1$. We write the Hamiltonian in a symmetric way 
+\begin{align*}
+    H &= -J\sum_{i=1}^N \sigma_i \sigma_{i+1} - \frac{h}{2}\sum_{i=1}^N (\sigma_i+\sigma_{i+1}) \\
+    Z &= \sum_{\curly{\sigma}} \prod_{i=1}^N e^{\bracket{\beta J \sigma_i \sigma_{i+1} + \frac{\beta h}{2}(\sigma_i + \sigma_{i+1}) }} = \sum_{\curly{\sigma}} \prod_{i=1}^N T_{\sigma_i,\sigma_{i+1}}
+\end{align*}
+Where $T$ is a transfer matrix, given as 
+\begin{align*}
+    T = \begin{pmatrix}
+        e^{\beta J-\beta h} & e^{-\beta J} \\ 
+        e^{-\beta J} & e^{\beta J + \beta h}
+    \end{pmatrix}
+\end{align*}
+with the rows governed by $\sigma_i=-1,+1$ and columns by $\sigma_{i+1}=-1,+1$ respectively. Thus, 
+\begin{align*}
+    Z = \sum_{\curly{\sigma}} T_{\sigma_1,\sigma_2} T_{\sigma_2,\sigma_3},\dots,T_{\sigma_N,\sigma_1} = \Tr\closed{T^N}
+\end{align*}
+To solve the trace, we diagonalize the transfer matrix, $T=R^{-1}DR$, and use the cyclic properties of traces, to obtain $Z=\Tr(D^N)=\lambda_1^N + \lambda_2^N$. For large $N$, we let $\lambda_1>\lambda_2$ and get $Z = \lambda_1^N$
+\begin{align*}
+    \lambda_1 &= e^{\beta J}\cosh(\beta J) + \sqrt{e^{2\beta J}\cosh^2(\beta h)-2\sinh(2\beta J) } \\ 
+    \frac{F}{N} &=-k_B T \ln\lambda_1
+\end{align*}
+for $h=0$, we get $F/N=-k_B T \ln(2\cosh(\beta J))$. There is no phase transition in $1D$. 
+
+The magnetization, $m$, and magnetic susceptibility, $\chi$, is given by 
+\begin{align*}
+    m &= \frac{1}{N} \expval{\sigma_j} = \frac{1}{\beta N} \pdv{h} \frac{1}{Z}\sum_{\curly{\sigma}} e^{\beta J \sum_i \sigma_i \sigma_{i+1} + \beta h \sum_i \sigma_i} \\ 
+    &= \frac{1}{\beta N} \pdv{\ln Z}{h} = -\frac{1}{N}\pdv{F}{h} \\ 
+    \chi &= \pdv{m}{h} = \frac{1}{\beta N} \pdv[2]{\ln Z}{h}
+\end{align*}
+
+
+
+\subsubsection*{Mean Field Approximation}
+Approximate interactions on a spin from its neighbors as an average magnetization. We have either $J>0$ favoring alignment of spins (ferromagnet), or $J<0$ favoring anti-alignment. We choose $J>0$ where we expect disorder at high $T$ and order at low $T$. For the mean field approximation, using the average mangetization per site, $m=1/N \sum_j \expval{\sigma_j}$. With our approximation we assume that all sites see the same average magnetization, so $\expval{m}=m_j$. we define the deviation from the average $\tilde{\sigma}_j=\sigma_j-m$. The interaction term now becomes 
+\begin{align*}
+    \sigma_j\sigma_k = m^2 + m(\tilde{\sigma}_j + \tilde{\sigma}_k) + \tilde{\sigma}_j \tilde{\sigma}_k \approx m^2 + m(\tilde{\sigma}_j + \tilde{\sigma}_k)
+\end{align*}
+where we in the \textit{mean field approximation} assume a small deviation, such that the cross term is neglected. Inserting the original terms again, we have $\sigma_j\sigma_k=-m^2+m(\sigma_j+\sigma_k)$. Inserting into the Hamiltonian, we include a factor $1/2$ for the double counting of bonds, and sum over $\sigma_j \sigma_{j+\delta}$, where $\delta$ is the neighbors of $j$, which for the 2D case is $\delta=\pm x,\pm y$.  We introduce the coordination number, $z=\sum_\delta 1$, as the number of neighbors ($z=4$ for the square lattice). Neglecting $h$ for now, the Hamiltonian becomes 
+\begin{align*}
+    H &= -\frac{J}{2}\sum_j \sum_\delta \closed{-m^2 + m\sigma_j + m\sigma_{j+\delta}} = Jm^2 \frac{Nz}{2} - \frac{J}{2} mz \sum_j \sigma_j - \frac{J}{2}m \sum_j \sum_\delta \sigma_{j+\delta} \\ 
+    &= Jm^2 \frac{Nz}{2} - J mz \sum_j \sigma_j
+\end{align*}  
+where the final term comes from shifting $j\to j'=j+\delta$ since we have periodic BC. 
+
+Adding the field again, we get 
+\begin{align*}
+    H_{\mathrm{MFA}} &= Jm^2 \frac{Nz}{2} - (h+Jmz)\sum_j \sigma_j = Jm^2 \frac{Nz}{2} - h_{\mathrm{eff}} 
+\end{align*}
+
+
+The partition function now becomes 
+\begin{align*}
+    Z &= e^{-\beta J m^2 Nz/2} \sum_{\curly{\sigma}} e^{\beta h_{\mathrm{eff}}\sum_j \sigma_j } = e^{-\beta J m^2 Nz/2} \closed{\sum_{\sigma_1} e^{\beta h_{\mathrm{eff}} \sigma_1 } }^N \\ 
+    &= e^{-\beta J m^2 Nz/2} \closed{2\cosh(\beta h_{\mathrm{eff}})}^N = e^{-\beta J m^2 Nz/2} Z_1^N
+\end{align*}
+
+
+Now, we can calculate the average magnetization, remembering that $m=m_j\implies m=m_1=\expval{\sigma_1}$, so we get 
+\begin{align*}
+    m &= \frac{1}{Z_1} \sum_{\sigma_1=-1}^{+1} \sigma_1 e^{(\beta h_{\mathrm{eff}}\sigma_1)} = \tanh(\beta h_{\mathrm{eff}}) \\ 
+    &= \tanh(\beta h + \beta Jzm)
+\end{align*}
+where the last equality is the MFA self-consistent equation for $m$, but there is no closed form solution for it. For $h=0$, set $x=\beta J zm\implies \frac{k_B T}{Jz}x=\tanh(x)$. For disordered we may have the LHS bigger than $1$, which means that $m=0$. For the ordered phase, $k_B T/Jz < 1$, there are $3$ solutions, $x=\pm1,0$, but $x=0$ turns out to be unstable. The critical temperature is $k_B T_c=zJ=4J$ for the square lattice. The exact value, however is $k_B T_c\approx 2.26 J$.   
+
+The unstable solution of $m=0$ in the ordered phase is due to the fact that $F$ must be minimized to be stable, while $k_B T/Jz < 1$ corresponds to a maxima of $F$ for $m=0$.  
+
+
+For $T\lesssim T_c$ with $h=0$, $m$ is small, and we can expand to solve for $m$
+\begin{align*}
+    m \approx \beta J m z - \frac{1}{3} (\beta m J z)^3 \implies m^2 = 3 \closed{\frac{T}{T_c}}^2 \closed{1-\frac{T}{T_c}} 
+\end{align*}
+where we have used that $Jz=k_B T_c$. Near $T_c$, the squared term is negligible, and we get 
+\begin{align*}
+    m \propto \closed{\frac{T_c-T}{T_c}}^{1/2}
+\end{align*}
+
+We always have $m\propto(...)^{\beta}$, and for MFA $\beta=1/2$, while the 2D Ising model has $\beta=1/8$ in reality. 
+
+\
+
+
+
+GENEREAL PT 
+CRITICAL EXPONENTS 
+
+RENOM + SCALING 
+
+
+CUMULANT EXPANSION 
+CLUSTER EXPANSION 
+VIRIAL EXPANSION 
+
+
+DIFFUSION EQ. RW
+MARKOV 
+
+
+\subsubsection*{\scriptsize Binomial distribution}
+\begin{align*}
+    P(k) = \binom{N}{k} p^k (1-p)^{(N-k)}
+\end{align*}
+
+
+\textbf{Equipartition theorem:} The equipartition theorem only applies to systems with energy depending on \textit{quadratic degrees of freedom}. Assuming the system is in equilibrium with a reservoir, and that the energy can be expressed as $E(q)=c q^2$, where $q$ is any quadratic freedom, and $c$ is a coefficient constant, the partition function becomes 
+\begin{align*}
+    Z=\sum_q e^{-\beta E(q)}=\sum_q e^{-\beta c q^2}
+\end{align*}
+We can reasonably assume that the continuous values of $q$ are discretely separated into very small intervals of $\Delta q$. Assuming this is small, the trick is to multiply by $\Delta q$ inside the sum, and divide by it on the outside. The sum can be interpreted as the area under a bar graph, and for very small $\Delta q$, the sum can be approximated as an integral 
+\begin{align*}
+    Z&=\frac{1}{\Delta q}\sum_q e^{-\beta c q^2}\Delta q \approx \frac{1}{\Delta q} \int_{-\infty}^\infty e^{-\beta cq^2}\,dq \\ 
+    &=\frac{1}{\Delta q}\frac{1}{\sqrt{\beta c}}\int_{-\infty}^\infty e^{-x^2}\,dx \\ 
+    &= \frac{1}{\Delta q}\sqrt{\frac{\pi}{\beta c}}=C\beta^{-1/2}
+\end{align*}
+where $C=\sqrt{pi/c}/\Delta q$. The average energy is thus 
+\begin{align*}
+    \expval{E}=-\frac{1}{Z}\pdv{Z}{\beta}=-\frac{\beta^{1/2}}{C}(-1/2)C\beta^{-3/2}=\frac{1}{2\beta} =\frac{1}{2}kT
+\end{align*}
+All constants have cancelled out, and were left with the equipartition theorem. Adding another quadratic degree of freedom, $p$ for instance, would contribute $kT/2$ to the average energy, as expected from the equipartition theorem. 
+
+
+
+\end{multicols*}
+\end{document}
