@@ -809,6 +809,20 @@ and we get a Gaussian distribution with mean $0$ and variance $2Dt$. With $M$ ra
 \end{align*}
 
 
+This result holds for any RW with a symmetric step distribution. Consider general RW with $x(t+\Delta t)=x(t)+l$, where $l$ is now a random length (variable) with a probability distribution $\chi(l)$ that is independent of $t$. The distribution is normalized and symmetric, with $\int dl\,\chi(l)\cdot l^2=a^2$, where the limits are $l=\pm\infty$. For fixed $l$ we previously had $\chi(l)=\frac{1}{2}(\delta(l-a) + \delta(l+a))$. 
+
+Now, what is the distribution $p(x,t+\Delta t)$, given $p(x,t)$. Found by summing all possible paths from $x-l$ up to $x$ between the two times, weighted with the probability of the $l$'s. 
+\begin{align*}
+    p(x,t+\Delta t) &= \int_{-\infty}^\infty dl\, p(x-l,t)\chi(l) \\ 
+    p(x-l,t) &= p(x,t) - l \pdv{p(x,t)}{x} + \frac{l^2}{2!}\pdv[2]{p(x,t)}{x} + \dots \\ 
+    \implies p(x,t+\Delta t) &= p(x,t)\int_{-\infty}^\infty dl\,\chi(l) - \pdv{p(x,t)}{x} \cdot 0 + \frac{1}{2} \pdv[2]{p(x,t)}{x} \int_{-\infty}^\infty dl\,\chi(l)\cdot l^2 \\ 
+    &= p(x,t) + \frac{a^2}{2} \pdv[2]{p(x,t)}{x}
+\end{align*}
+Moving $p(x,t)$ to the LHS and dividing by $\Delta t$ yields 
+\begin{align*}
+    \frac{p(x,t+\Delta t) - p(x,t)}{\Delta t} &= \frac{a^2}{2\Delta t} \pdv[2]{p}{x} \\ 
+    \lim \Delta t\to 0 \implies \pdv{p}{t} &= D \pdv[2]{p}{x}
+\end{align*}
 
 \end{multicols*}
 \end{document}
