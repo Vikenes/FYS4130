@@ -8,7 +8,7 @@
 \usepackage{bm}
 \usepackage{gensymb}
 \usepackage{amsmath}
-
+\usepackage{bbold}
 
 \usepackage{physics}
 \usepackage{tikz}
@@ -770,6 +770,7 @@ MARKOV
 
 
 \subsubsection*{\scriptsize Random Walks}
+
 Fixed length symmetric RW in 1D. The position after $i+1$ steps is 
 \begin{align*}
     x_{i+1} = x_i + l\cdot s 
@@ -821,7 +822,68 @@ Now, what is the distribution $p(x,t+\Delta t)$, given $p(x,t)$. Found by summin
 Moving $p(x,t)$ to the LHS and dividing by $\Delta t$ yields 
 \begin{align*}
     \frac{p(x,t+\Delta t) - p(x,t)}{\Delta t} &= \frac{a^2}{2\Delta t} \pdv[2]{p}{x} \\ 
-    \lim \Delta t\to 0 \implies \pdv{p}{t} &= D \pdv[2]{p}{x}
+    \pdv{p}{t} &= D \pdv[2]{p}{x},\quad \text{for}\: \Delta t \to 0 \to
+\end{align*}
+So all info about microscopics are contained in $D$. 
+
+
+
+\subsubsection*{Markov Chains}
+Random process where random move only depends on current state of the system, not its history. For a two-state system, let $P_i(n)$ be the probability of finding the system in state $i=1,2$ after $n$ steps. Define the transition probability as $W_{1\gets2}\equiv W_{12}$. For the next step, we can write 
+\begin{align*}
+    \begin{pmatrix}
+        P_1 (n+1) \\
+        P_2 (n+1)
+    \end{pmatrix}
+    &= \begin{pmatrix}
+        W_{11} & W_{12} \\ 
+        W_{21} & W_{22}
+    \end{pmatrix}
+    \begin{pmatrix}
+        P_1 (n) \\
+        P_2 (n)
+    \end{pmatrix}
+\end{align*}
+
+So $W_{ij}\geq0$, and the total probability of transfering out of a given state must sum to $1$, so $W_{11}+W_{21}=1$. 
+
+$W$ can be enlarged to $N$ states. Let one step take a time $\Delta t\implies t=n\Delta t$, so $p(t+\delta t)=Wp(t)$ and for $t'=m\Delta t$ $p(t+t')=W^m P(t)$, where $W^m=W(t')$. Now assume $t'$ can be treated as a continuous variable. Then, for $t'\to0,\:W(t')=\mathbb{1}$. For small $t'$ we get 
+\begin{align*}
+    p(t+t') &= p(t) + t' \pdv{p}{t'}p(t) + \dots = p(t) + t' \pdv{W(0)}{t'} p(t) + \dots \\
+    t'\to0\implies \pdv{p}{t} &= \pdv{W(0)}{t}p(t),\quad W(dt') = \mathbb{1} + dt' W' + \dots 
+\end{align*}
+
+In component form we can write the expanded $W$ in terms of its diagonal and off-diagonal elements 
+\begin{align*}
+    W_{ij}(dt') &= (1+dt' W_{ij}')\delta_{ij} + dt' W_{ij}' (1 - \delta_{ij})
+\end{align*}
+
+Since $W_{ij}(dt')$ is a markovian matrix its columns must sum to $1$.
+\begin{align*}
+    1 &= \sum_i W_{ij}(dt') = 1 + dt' W_{jj}' + dt' \sum_i \omega_{ij}
+\end{align*}
+where $\omega_{ij}=W_{ij}'(1-\delta_{ij})$ is the off-diagonal contribution. Solving the above equation yields $W_{jj}'=-\sum_i \omega_{ij}$. Plugging into the component for of $W(dt')$ we get 
+\begin{align*}
+    W_{ij}(dt') = 1 - dt' \sum_{i'} \omega_{i' j}\delta_{ij} + dt' \omega_{ij}
+\end{align*}
+Taking the time derivative and evaluating it at $t'=0$ we get 
+\begin{align*}
+    \pdv{W_{ij}}{t}\eval_{t'=0} = \omega_{ij} - \sum_{i'} \omega_{i' j}\delta_{ij}
+\end{align*}
+
+Plugging back into the expanded equation for the probability, we get 
+\begin{align*}
+    \dv{P_i}{t} &= \sum_j \closed{\omega_{ij} - \sum_{i'}\omega_{i' j}\delta_{ij}}P_j \\ 
+    &= \sum_j \omega_{ij}P_j - \sum_j \sum_{i'} \omega_{i' j} \delta_{ij} P_j
+\end{align*}
+Using the kronecker-delta in the last term yields 
+\begin{align*}
+    \sum_j \sum_{i'} \omega_{i' j} \delta_{ij} P_j = \sum_{i'} \omega_{i' i} P_i = \sum_j \omega_{ji} P_i 
+\end{align*}
+
+The final expression is the Master's equation, given as 
+\begin{align*}
+    \dv{P_i}{t} &= \sum_{j} \closed{\omega_{ij}P_j - \omega_{ji}P_i},\quad \omega_{ii}=0
 \end{align*}
 
 \end{multicols*}
