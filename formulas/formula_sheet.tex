@@ -115,10 +115,99 @@ Relations between some of them are:
 \end{align*}
 
 
+\subsubsection*{\scriptsize Extremum principles}
+Consider the entropy as a function of internal extensive parameters, $U$ and $X$. Entropy as maximized in equilibrium, $\pdv{S}{X}=0,\,\pdv[2]{S}{X}<0$, and expanding around this maxima we get 
+\begin{align*}
+    dS &= \pdv{S}{U} dU + \pdv{S}{X}dX + \pdv[2]{S}{X}dX^2 = \frac{dU}{T} + \pdv[2]{S}{X}dX^2 \\ 
+    dU &= TdS - T \pdv[2]{S}{X}dX^2 
+\end{align*}
+For a process with $dS=0$ (quasi-static), the second derivaitve of the entropy is negative, and we get $\pdv[2]{U}{X}>0$, so \textit{energy is minimized} in equilibrium.  
+
+\textbf{Helmholtz free energy:} Total energy of reservoir and system is $U+U_R$, with its first and second partial derivative wrt $X$ being $0$ and $>0$, respectively, in equilibruim when entropy, volume and number of particles is also given as the sum of that of the system and reservoir. The entropy change, and subsequent change in $F$ becomes 
+\begin{align*}
+    \pdv{(S+S_R)}{X} &= 0 \implies \pdv{S}{X} = - \dv{S_R}{X} \\ 
+    \pdv{F}{X} &= \pdv{U-TS}{X} = \pdv{U}{X} + T\pdv{S_R}{X} = \pdv{U}{X} + \pdv{U_R}{X}
+\end{align*}
+Taking the second order derivative we get 
+\begin{align*}
+    \pdv[2]{F}{X} &= \pdv[2]{U}{X} - T \pdv[2]{S}{X} = \pdv[2]{U+U_R}{X} > 0
+\end{align*} 
+So the Helmholt'z free energy is also minimized in equilibrium. Similar analysis holds for Enhtalpy, with energy minima subject to constant volume, $\partial/\partial X (V+V_R)=0$. 
 
 
-EXTREMUM + STABILITY 
-VDW
+\textbf{Experiments related to these extremum principles:}
+\begin{itemize}
+    \item Entropy: Thermally isolated system with two subvolumes divided by a moveable piston. Releasing the piston, it moves such that it maximizes the entropy
+    \item Energy: Piston now connected by a rod to something outside the cyllinder. Piston is moved quasi-statically to a position with no net force due to the gas. 
+    \item Helmholtz Free Energy: Same as with the energy experiment, but with cyllinder placed in a thermal reservoir of termperature $T$, with which it can exchange energy and entropy. 
+    \item Enthalpy: System in contact with a reservoir at constant pressure that can compress the system.   
+    \item Gibbs Free Energy: System in contact with both a pressure reservoir and a temperature reservoir.   
+\end{itemize}
+
+
+\subsubsection*{\scriptsize Stability Conditions}
+Will now consider what conditions a subsystem must satisfy as a consequence of extremum principles. Consider two combined systems, $S,U,V,N$ and $\hat{S},\hat{U},\hat{V},\hat{N}$, isolated from the rest of the universe. For total constant volume at equilibrium, total energy is minimized. We move a piston such that the two volumeschange by $\Delta V$. The total change in energy is then the change in energy of each subsystem 
+\begin{align*}
+    \Delta U_{tot} = U(S,V+\Delta V,N) + \hat{U}(\hat{S},\hat{V}-\Delta V,\hat{N}) - [U(S,V,N) + \hat{U}(\hat{S},\hat{V},\hat{N})] \geq 0
+\end{align*} 
+Now, consider the two subsystems to be identical, such that the last term becomes $-2U(S,V,N)$. Dividing both sides by $(\Delta V)^2$ and taking the limit $\Delta V\to0$, we obtain a condition in terms of the second derivative of energy wrt volume, which gives us two stability conditions. 
+\begin{align*}
+    \closed{\pdv[2]{U}{V}}_{S,N} = -\closed{\pdv{P}{V}}_{S,N} = \frac{1}{V\kappa_S} =  \geq0 
+\end{align*} 
+So we must have $\kappa_S \geq0$
+
+Performing the same analysis once again, but with an entropy change, $\Delta S$ between the two identical subsystems, we get the stability condition 
+\begin{align*}
+    \closed{\pdv[2]{U}{S}}_{V,N} = \closed{\pdv{T}{S}}_{V,N} = \frac{T}{N c_V} \geq 0 
+\end{align*}
+Alternatively, one may consider the change in entropy from exchange in energy, which gives 
+\begin{align*}
+    \closed{\pdv[2]{S}{U}}_{V,N} = -\frac{1}{T^2} \closed{\pdv{T}{U}}_{V,N} = - \frac{1}{N T^2 c_V} \leq 0
+\end{align*} 
+Both cases give the condition that $c_V\geq0$. 
+
+For volume exchange in the Helmholtz free energy, we get 
+\begin{align*}
+    \closed{\pdv[2]{F}{V}}_{T,N} = -\closed{\pdv{P}{V}}_{T,N} = \frac{1}{V \kappa_T} \geq 0 
+\end{align*}
+so that $\kappa_T \geq 0$. 
+
+For an intensive quantity, such as $T$, one finds that 
+\begin{align*}
+    \closed{\pdv[2]{F}{T}}_{V,N} = -\closed{\pdv{S}{T}}_{V,N} = -\frac{N}{T}c_V \leq 0 
+\end{align*} 
+since $c_V\geq0$. 
+
+For e.g. $F$ and $U$, the Legendre transform gives us the following relation 
+\begin{align*}
+    \closed{\pdv[2]{F}{T}}_{V,N} = - 1 \Big/ \closed{\pdv[2]{U}{S}}_{V,N} 
+\end{align*}
+
+In general, the second partial derivative of a quantity ($U$) with respect to a variable ($S$) has opposite sign of the second partial derivative of the Legende transform ($F$) with respect to the new variable ($T$). It is also a general rule that the two second partial derivatives are negative reciprocals of each other.     
+
+As a summary, the stability conditions are 
+\begin{align*}
+    U(S,V,N):&\quad \closed{\pdv[2]{U}{S}}_{V,N} \geq0,\quad \closed{\pdv[2]{U}{V}}_{S,N} \geq 0 \\ 
+    F(T,V,N):&\quad \closed{\pdv[2]{F}{T}}_{V,N} \leq0,\quad \closed{\pdv[2]{F}{V}}_{T,N} \geq 0 \\
+    H(S,P,N):&\quad \closed{\pdv[2]{H}{S}}_{P,N} \geq0,\quad \closed{\pdv[2]{H}{P}}_{S,N} \leq 0 \\ 
+    G(T,P,N):&\quad \closed{\pdv[2]{G}{T}}_{P,N} \leq0,\quad \closed{\pdv[2]{G}{P}}_{T,N} \leq 0 
+\end{align*}
+
+
+
+\subsubsection*{\scriptsize Phase Transitions}
+To illustrate, consider the van der Waals Fluid. From ideal gas, add attraction term, $-a N^2/V$, for neighboring particles, and restrict volume due to hard particle spheres, $V\to V-bN$. This yields 
+\begin{align*}
+    F_{IG} &= -N k_B T \bracket{\ln(V/N) + \frac{3}{2}\ln(k_B T)+X} \\ 
+    F_{VdW} &= - N k_B T \bracket{\ln\closed{\frac{V-bN}{N}} + \frac{3}{2}\ln(k_B T)+X} - a(N^2/V)
+\end{align*}
+
+This yields the following expression for pressure and energy 
+\begin{align*}
+    P = \frac{Nk_B T}{V - bN} - \frac{a N^2}{V^2},\quad U = \frac{3}{2}N k_B T - a \closed{\frac{N^2}{V}}
+\end{align*}
+
+
 PT 
 BOLTZMANN+MAX-BOLT 
 
@@ -173,7 +262,7 @@ We do have $\expval{f}\neq\bar{f}$ for:
 \subsection*{\boxed{\text{QM statistical mechanics}}}
 
 \begin{align*}
-    P_n &= \frac{e^{-\beta E_n}}{Z}
+    P_n &= \frac{e^{-\beta E_n}}{Z} \\
     Z &= \sum_l \Omega(l)\exp(-\beta E_l),\quad \Omega(l)=\text{Degeneracy of energy level}\: l
 \end{align*}
 
@@ -205,9 +294,9 @@ Since $E_l>E_0$, for $T\to0$ the sum dies, and we get $Z \to \Omega(0) e^{-\beta
 \end{align*}
 So it is equally distributed among the $\Omega(0)$ states. For $T\to0$ we also have $P_n\to0$. Using the entropy definition then gives 
 \begin{align*}
-    S = -k_B \sum_n P_n \ln P_n = k_B \omega(0) \closed{\frac{1}{\Omega(0)}\ln(\Omega(0))} = k_B \ln\Omega(0)
+    S = -k_B \sum_n P_n \ln P_n = k_B \Omega(0) \closed{\frac{1}{\Omega(0)}\ln(\Omega(0))} = k_B \ln\Omega(0)
 \end{align*}
-
+So for $T\to0$ the entropy is independent of $T$, and $\Omega(0)\geq1$ since it is a degeneracy, which means that $S(T\to0)\geq0$. Even for $\Omega(0)=a^N$, that is the degeneracy depends on the system size and $a>1$, we have $S(T=0)/N=k_B \ln a>0$. 
 
 \begin{align*}
     E_n &= \sum_{j=1}^N E_{n_j} \implies e^{-\beta E_n} = \prod_{j=1}^N e^{-\beta E_{n_j}} \\
@@ -626,6 +715,44 @@ We always have $m\propto(...)^{\beta}$, and for MFA $\beta=1/2$, while the 2D Is
 \
 
 
+\subsubsection*{\scriptsize Phase Transitions (PT) - Generalities}
+\textbf{Definitions:}
+\begin{itemize}
+    \item \textbf{Phase:} Region in phase space where free energy is analytic (function of its arguments)
+    \item \textbf{Phase transition:} Non-analytic
+    \item \textbf{First order PT:} The derivative of the free energy is discontinuous. 
+    \item \textbf{Continuous PT:} All first derivatives of free energy is continuous, but one or more higher order derivatives are discontinuous. 
+\end{itemize}
+
+\subsubsection*{\tiny Existence of PT} 
+
+\textbf{Energy/Entropy argument:} THe partition function is $Z=\exp(-\beta F)=\sum_s \exp[-\beta H(s)]$, and at low $T$, $Z$ is dominated by the lowest energy configurations. Assume there are $N_g$ such states with energy $E_g$. This yields $Z\approx N_g \exp(-\beta E_g)=\exp[-\beta(E_g - k_B T \ln N_g)]$. Approximating the entropy as $S\approx k_B T \ln N_g$ we get $F_g(\text{low}-T)\approx E_g - k_B T \ln N_g$. $N_g$ is usually small. Excited states have $E>E_g$ and are not favored at low $T$, unless there are considerably many of them, such that their entropy becomes significant. Denote excitation by $E_{\mathrm{ex}}$, which is not much larger than $E_g$, with $N_\mathrm{ex}$ so that $F_\mathrm{ex}=E_\mathrm{ex}-k_B T \ln N_\mathrm{ex}$. We expect a PT when $F_g=F_\mathrm{ex}$. For small $\ln N_g$ we then get 
+\begin{align*}
+    k_B T_c \approx \frac{\Delta E}{\ln N_\mathrm{ex}}
+\end{align*} 
+We expect excited states to dominate $Z$ for $T>T_c$, and $E_g$ states to dominate for $T<T_c$. 
+
+For the 1D ising model of $N$ spins with open boundary conditions and no applied magnetic field, there are $N_g=2$ ground states (all up or all down), with $E_g=-J(N-1)$. The first excited states is with approximately half of spins up and the other half down, with $E_\mathrm{ex}=E_g+2J$ and $N_\mathrm{ex}=N-1$. We then get 
+\begin{align*}
+    k_B T_c = 2J/(\ln(N-1)-\ln 2) \to 0,\quad\text{for}\: N\to\infty
+\end{align*}
+Hence, no PT at finite $T$ in 1D Ising. 
+
+For the 2D Ising model, we have $N_g=2$ again. The energy difference is $\Delta E=2J\cdot l$, where $l$ is the circumference of the domain enclosing a collection of oppositely directed spins. The number of excited states are given by the number of ways of doing a random walk on the lattice with $l$ steps that encloses a domain, and is approximately $N_\mathrm{ex}\approx N(z-1)^l \cdot 2$, where $N$ contribution is from the number of starting points, and $z=4$ is the number of neighbors in 2D lattice. Thus,
+\begin{align*}
+    k_B T_c = \frac{2J\cdot l}{\ln(2N(z-1)^l)-\ln2} = \frac{2J \cdot l}{\ln N + l\cdot \ln3}
+\end{align*}
+For large $N$ there are also large $l$-s dominating the domain, so that 
+\begin{align*}
+    k_B T_c\sim \frac{2Jl}{l\ln(z-1)}=\frac{2J}{\ln3}=1.82 J
+\end{align*}
+the exact value for 2D Ising is $k_B T_c\approx 2.269J$.
+
+\subsubsection*{\tiny Landau argument for PT existence}
+A symmetry can't be continuously deformed into another symmetry. Thus: Two phases with different symmetries are always separated by one or more PT's (There can still be PT between phases of same symmetries).
+
+
+
 
 GENEREAL PT 
 CRITICAL EXPONENTS 
@@ -642,27 +769,44 @@ DIFFUSION EQ. RW
 MARKOV 
 
 
-\subsubsection*{\scriptsize Binomial distribution}
+\subsubsection*{\scriptsize Random Walks}
+Fixed length symmetric RW in 1D. The position after $i+1$ steps is 
 \begin{align*}
-    P(k) = \binom{N}{k} p^k (1-p)^{(N-k)}
+    x_{i+1} = x_i + l\cdot s 
+\end{align*}
+where $s=\pm1$ with prob. $p=1/2$ for each, and $l$ is the step length. It follows that $\expval{x_{i+1}}=\expval{x_i}\implies \expval{x_N}=\expval{x_0}$, since we have symmetric walk. However, the expected value of $X_N^2$ gives a measure of the elapsed length, and one finds $\expval{x_{i+1}^2}=\expval{x_i^2}+l^2 \implies \expval{x_N^2}=\expval{x_0^2}+Nl^2$, so for $x_0=0$, we get $\sqrt{\expval{x_N^2}}=l\sqrt(N)$. 
+
+With a probability $P$ and $(1-P)$ of moving to the right and left, respectively, the position after $N=L+R$ steps is $x_N=(R-L)l = (2R-N)l$, with a probability 
+\begin{align*}
+    P_N(R) = \binom{N}{R} P^R (1-P)^{N-R}
 \end{align*}
 
+So we have a binomial probability distribution. Some properties of this distribution are  
+\begin{align*}
+    \sum_{R=0}^N P_N(R) &= 1 \\ 
+    \expval{R} &= \sum_R R\cdot P_N(R)=NP \\ 
+    \expval{R^2} &= \sum_R R^2 P_N(R) = NP(1-p) + N^2 P^2 \\
+    \sigma^2 &= P(1-P)N \\ 
+    p_N(R) &\approx \frac{1}{\sqrt{2\pi P(1-P)N}}\exp\bracket{-\frac{(R-PN)^2}{2P(1-P)N}}
+\end{align*}
+so the binomial distribution can be approximated by a Gaussian for sufficiently large $R$ and $N$. 
 
-\textbf{Equipartition theorem:} The equipartition theorem only applies to systems with energy depending on \textit{quadratic degrees of freedom}. Assuming the system is in equilibrium with a reservoir, and that the energy can be expressed as $E(q)=c q^2$, where $q$ is any quadratic freedom, and $c$ is a coefficient constant, the partition function becomes 
+This gives $\expval{X_N}=Nl(2P-1)$ and $\expval{x_N^2}=4l^2 NP(1-P) + \expval{x_N}^2$ so we get $\expval{x_N^2} - \expval{x_N}^2 = 4l^2 N P(1-P)$.
+
+Now, for $R,N$ large, with $P=1/2$ once again, we can approximate with a Gaussian. Introduce probability density $P_N(x)\equiv P(x)/2l$, since $P(x)$ is the Gaussian distribution for discrete $x$. Then, for $t=N\Delta t$ we get 
 \begin{align*}
-    Z=\sum_q e^{-\beta E(q)}=\sum_q e^{-\beta c q^2}
-\end{align*}
-We can reasonably assume that the continuous values of $q$ are discretely separated into very small intervals of $\Delta q$. Assuming this is small, the trick is to multiply by $\Delta q$ inside the sum, and divide by it on the outside. The sum can be interpreted as the area under a bar graph, and for very small $\Delta q$, the sum can be approximated as an integral 
+    P_N(x) &= \frac{1}{\sqrt{2\pi Nl^2}} e^{-\frac{x^2}{2Nl^2}} \\ 
+    &= \frac{1}{\sqrt{2\pi \frac{l^2}{\Delta t} t}} \exp[-\frac{x^2}{2\frac{l^2}{\Delta t} t}]
+\end{align*}  
+From microscopic, we define the \textit{Diffusion constant}, $D\equiv \frac{l^2}{2\Delta t}$. Thus, we get 
 \begin{align*}
-    Z&=\frac{1}{\Delta q}\sum_q e^{-\beta c q^2}\Delta q \approx \frac{1}{\Delta q} \int_{-\infty}^\infty e^{-\beta cq^2}\,dq \\ 
-    &=\frac{1}{\Delta q}\frac{1}{\sqrt{\beta c}}\int_{-\infty}^\infty e^{-x^2}\,dx \\ 
-    &= \frac{1}{\Delta q}\sqrt{\frac{\pi}{\beta c}}=C\beta^{-1/2}
+    P_N(x) &= \frac{1}{\sqrt{2\pi 2Dt}} e^{-\frac{x^2}{2\cdot 2Dt}}
 \end{align*}
-where $C=\sqrt{pi/c}/\Delta q$. The average energy is thus 
+and we get a Gaussian distribution with mean $0$ and variance $2Dt$. With $M$ random walkers (particles), all with $x(t=0)=0$, the density of walkers per unit length at time $t$, $\rho(x,t)$, fulfills the Diffusion equation 
 \begin{align*}
-    \expval{E}=-\frac{1}{Z}\pdv{Z}{\beta}=-\frac{\beta^{1/2}}{C}(-1/2)C\beta^{-3/2}=\frac{1}{2\beta} =\frac{1}{2}kT
+    \rho(x,t) &= M p(x,t) \\ 
+    \pdv{\rho(x,t)}{t} &= D \pdv[2]{\rho(x,t)}{x}
 \end{align*}
-All constants have cancelled out, and were left with the equipartition theorem. Adding another quadratic degree of freedom, $p$ for instance, would contribute $kT/2$ to the average energy, as expected from the equipartition theorem. 
 
 
 
