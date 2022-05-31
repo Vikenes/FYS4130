@@ -1,0 +1,427 @@
+\documentclass[a4paper, english, 12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{babel, textcomp, color, amssymb, subfig, float}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{multicol}   
+\usepackage{bm}
+\usepackage{gensymb}
+\usepackage{amsmath}
+\usepackage{bbold}
+
+\usepackage{physics}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\newcommand{\eps}{\epsilon}
+\newcommand{\closed}[1]{\left( #1 \right)}
+\newcommand{\bracket}[1]{\left[ #1 \right]}
+\newcommand{\curlybig}[1]{\left\{ #1 \right\} }
+\newcommand{\curly}[1]{\{ #1 \} }
+\newcommand{\Q}{\mathbb{Q}}
+\renewcommand{\P}{\mathbb{P}}
+\newcommand{\Z}{\mathcal{Z}}
+
+%\newcommand{\addPLOT}[4]{
+%\addplot [domain=#1:#2,samples=200,color=#3,]{#4};}
+%\newcommand{\addCOORDS}[1]{\addplot coordinates {#1};}
+%\newcommand{\addDRAW}[1]{\draw #1;}
+%\newcommand{\addNODE}[2]{ \node at (#1) {#2};}
+
+%		\PLOTS{x}{y}{left}{
+%			\ADDPLOT{x^2}{-2}{2}{blue}
+%			\ADDCOORDS{(0,1)(1,1)(1,2)}
+%		}
+
+
+\definecolor{svar}{RGB}{0,0,0}
+\definecolor{opgavetekst}{RGB}{109,109,109}
+\definecolor{blygraa}{RGB}{44,52,59}
+
+\hoffset = -60pt
+\voffset = -95pt
+\oddsidemargin = 0pt
+\topmargin = 0pt
+\textheight = 0.97 \paperheight
+\textwidth = 0.97 \paperwidth
+
+\begin{document}
+\tiny
+\begin{multicols*}{2}
+
+
+\subsubsection*{\boxed{\text{Mathematical identities}}}
+\begin{align*}
+  N! & \approx N^N e^{-N}\:(\cdot \sqrt{2\pi N}),\quad  \ln{(N!)}  \approx N\ln{N}-N \\
+  \int dx\,\delta(u-ax) &= \frac{1}{a}\int dx\,\delta(u/a - x) \\ 
+  \int f(x)\delta(g(x))\,dx &= \sum_j \frac{f(x_j)}{g'(x_j)} \\
+  \sum_{n=0}^\infty x^n &= \frac{1}{1-x},\quad \lim_{x\to0} x\ln x = 0
+\end{align*}
+
+\subsubsection*{\scriptsize Standard set of second derivatives}
+\begin{align*}
+    \alpha &= \frac{1}{V}\left(\pdv{V}{T} \right)_{P,N},\: \kappa_T = -\frac{1}{V}\left(\pdv{V}{P} \right)_{T,N},\: c_{P/V} = \frac{T}{N}\left(\pdv{S}{T} \right)_{P/V,N} \\
+    c_P &= c_V + \frac{\alpha^2 TV}{N\kappa_T},\quad \kappa_S = \kappa_T - \frac{TV \alpha^2}{Nc_P}
+\end{align*}
+
+
+\subsubsection*{\scriptsize Phase Transitions}
+To illustrate, consider the van der Waals Fluid. From ideal gas, add attraction term, $-a N^2/V$, for neighboring particles, and restrict volume due to hard particle spheres, $V\to V-bN$. This yields 
+\begin{align*}
+    F_{IG} &= -N k_B T \bracket{\ln(V/N) + \frac{3}{2}\ln(k_B T)+X} \\ 
+    F_{VdW} &= - N k_B T \bracket{\ln\closed{\frac{V-bN}{N}} + \frac{3}{2}\ln(k_B T)+X} - a(N^2/V)
+\end{align*}
+
+This yields the following expression for pressure and energy 
+\begin{align*}
+    P = \frac{Nk_B T}{V - bN} - \frac{a N^2}{V^2},\quad U = \frac{3}{2}N k_B T - a \closed{\frac{N^2}{V}}
+\end{align*}
+
+
+PT 
+BOLTZMANN+MAX-BOLT 
+
+\subsection*{\boxed{\text{Classical statistical mechanics}}}
+
+\textbf{Microcanonical ensemble:} Assign equal prob. to each microstate, $P_s=1/W$, where $W$ is the number of microstates in energy range.   
+
+\begin{align*}
+    \Omega(E,V,N) &=\frac{1}{h^{3N}N!}\int dq \int dp\, \delta(E-H(p,q)) \\
+    Z &= \int dE\, \Omega(E,V,N) \exp(-\beta E) = \frac{1}{h^{3N}N!}\int dq \int dp\, e^{-\beta H(q,p)} 
+\end{align*}
+
+
+\subsubsection*{\scriptsize Liouville Theorem}
+
+\begin{align*}
+    \dv{\rho}{t} &= \pdv{\rho}{t} + \sum_{\alpha=1}^{3N} \closed{\pdv{\rho}{q_\alpha} \dot{q}_\alpha + \pdv{\rho}{p_\alpha}\dot{p}_\alpha } = 0 \\
+    \pdv{\rho}{t} &= \curly{H,\rho},\quad \curly{A,B}=\sum_\alpha \closed{\pdv{A}{q_\alpha}\pdv{B}{p_\alpha} - \pdv{A}{p_\alpha}\pdv{B}{q_\alpha}} \\ 
+    \rho(\Q,\P) &= \frac{1}{h^{3N} N!} \delta\closed{E-H(\Q,\P)}
+\end{align*}
+
+
+\subsection*{\boxed{\text{QM statistical mechanics}}}
+
+\begin{align*}
+    P_n &= \frac{e^{-\beta E_n}}{Z},\: Z = \sum_l \Omega(l)\exp(-\beta E_l),\quad \Omega(l)=\text{Deg. of }E_l \\
+    S &= -k_B \sum_n P_n \ln P_n,\quad \beta F = -\ln Z + f(V,N).\:(f=-\ln N!\text{ for dist. part.}) \\
+    Z &= \sum_{\curly{n_j}} \prod_{j=1}^N \exp(-\beta E_{n_j}) = \prod_{j=1}^N \left( \sum_{n_j} \exp(-\beta E_{n_j}) \right) \\
+    \epsilon_{\vec{k}} &= \frac{\hbar^2 }{2m}k^2 = \frac{\hbar^2 \pi^2}{2mL^2}n^2 = \epsilon_{\vec{k}},\:D(\epsilon) = \frac{V}{4\pi^2} \left(\frac{2m}{\hbar^2}\right)^{3/2} \epsilon^{1/2}
+\end{align*}
+
+
+
+\subsubsection*{\scriptsize Grand Canonical Ensemble}
+In equilibrium with a reservoir. Can exchange energy and particles. 
+
+\begin{align*}
+    \mathcal{Z} &= \sum_{\{n_\epsilon\}} \prod_\epsilon e^{-\beta(\epsilon-\mu)n_\epsilon} = \prod_\epsilon \sum_{n_\epsilon} e^{-\beta(\epsilon-\mu)n_\epsilon} = \prod_\epsilon \mathcal{Z}_\epsilon \\
+    \expval{n_\epsilon} &= \frac{1}{\mathcal{Z}_\epsilon} \sum_{n_\epsilon} n_\epsilon e^{-\beta(\epsilon-\mu)n_\epsilon},\quad \expval{N} = \sum_\epsilon \expval{n_\epsilon},\quad U = \expval{E} = \sum_\eps \eps \expval{n_\eps}
+\end{align*} 
+
+
+
+\subsubsection*{\scriptsize Bosons and Fermions}
+Using $+$ for fermions and $-$ for bosons: 
+\begin{align*}
+    \expval{n_\eps} &= \frac{1}{e^{\beta(\eps-\mu)} \pm 1},\quad \mathcal{Z} = \begin{cases}
+        \prod_\eps (1+\exp(-\beta(\eps-\mu))),\:&\textbf{f} \\ 
+        \prod_\eps {1-\exp[-\beta(\eps-\mu)]}^{-1},\:&\textbf{b}
+    \end{cases} \\
+    \ln \mathcal{Z} &= \pm \sum_\eps \ln(1 \pm e^{-\beta(\eps-\mu)}) \approx \pm \int_0^\infty d\eps\, D(\eps) \ln(1 \pm e^{-\beta(\eps-\mu)})\:[=\beta PV] \\
+    N &= \int_0^\infty d\eps\,D(\eps) (\exp[\beta(\eps-\mu)]\pm1)^{-1}.\:U = \int_0^\infty d\eps\, \eps D(\eps) (\exp[\beta(\eps-\mu)]\pm1)^{-1} 
+\end{align*}
+
+
+
+\subsubsection*{\scriptsize Bose-Einstein statistics}
+Since $\expval{n_\eps}>0$, must have $\eps>\mu$ for bosons. Set lowest energy state as $\eps=0\implies\mu<0$. At low-T, using $x=\beta\eps$, $D(\eps)=\chi \eps^{1/2}$ and $e^{\beta\mu}=\lambda$ 
+\begin{align*}
+    N &= \chi (k_B T)^{3/2} \int_0^\infty dx\, \frac{x^{1/2}}{\lambda^{-1} e^x - 1} \xrightarrow{\lambda^{-1}=1} \chi (k_B T_E)^{3/2} 2.315 \\
+    k_B T_E &= \left( \frac{2\pi\hbar^2}{m}\right) \left( \frac{N}{2.612V} \right)^{2/3} \\
+    T<T_E:\:N &= N_0 + N \left(\frac{T}{T_E}\right)^{3/2} = [\exp(-\beta\mu)-1]^{-1} = N\bracket{1-\closed{\frac{T}{T_E}}^{3/2} } \\
+    \mu &\approx -\frac{k_B T}{N}\bracket{1-\closed{\frac{T}{T_E}}^{3/2}}^{-1},\quad\text{expanding small }\beta\mu \text{ for } T<T_E
+\end{align*}
+
+\subsubsection*{\scriptsize Fermi-Dirac statistics}
+The occupation number as $T\to0$ is (MULTIPLY D BY FACTOR 2 FOR ELECTRONS) 
+\begin{align*}
+    f(\eps)&=\frac{1}{e^{\beta(\eps-\mu)} +1} \xrightarrow{T\to0} \Theta(\eps_F-\eps),\quad \eps_F\equiv \lim_{T\to0}\mu(T,N) \\
+    N&= X \frac{2}{3} \eps_F^{3/2},\quad U=X \frac{2}{5} \eps_F^{5/2} \implies \eps_F  \propto (N/V)^{2/3} \\
+    U/N &= \frac{3}{5}\eps_F \xrightarrow[T=0]{\text{Euler eq.}} PV=\frac{2}{5}\eps_F N \\ 
+    \eps_F &= y(N/V)^{2/3}\implies \kappa_T^{-1}= \frac{2}{3}\eps_F \frac{N}{V}
+\end{align*}
+
+
+\subsubsection*{\scriptsize Sommerfeld expansion}
+At low non-zero $T$, valid for $k_B T/\eps_F\ll1$. 
+\begin{align*}
+    I &= \int_0^\infty d\eps\, \phi(\eps) f(\eps) \\    
+    f(\mu+x) &= \frac{1}{e^{\beta x}+1} = 1 - \frac{1}{e^{-\beta x}+1} = 1-f(\mu-x) \\
+    I &=\int_0^\mu d\eps\, \phi(\eps) - \int_0^\mu d\eps\, \phi(\eps)\frac{1}{e^{-\beta(\eps-\mu)} +1 } + \int_\mu^\infty d\eps\, \phi(\eps) \frac{1}{e^{\beta(\eps-\mu)} +1} \\
+    &\phi(\mu+z/\beta) - \phi(\mu-z/\beta) = \frac{2z}{\beta}\phi'(\mu) + \frac{2}{3!}\closed{\frac{z}{\beta}}^3 \phi'''(\mu)+... \\
+    I&= \int_0^\mu d\eps\, \phi(\eps) + (k_B T)^2 \phi'(\mu) 2 \int_{0}^\infty dz\, \frac{z}{e^z+1} + \\ 
+    &= \int_0^\mu d\eps\, \phi(\eps) + (k_B T)^2 \phi'(\mu) \frac{\pi^2}{6} + (k_B T)^4 \phi'''(\mu) 7 \frac{\pi^4}{360} + \mathcal{O}(T^6) \\
+    U:\:&\phi(\eps)=X\eps^{3/2}\implies U=X[2/5 \mu^{5/2} + \pi^2/4 (k_B T)^2 \mu^{1/2}] + \mathcal{O}(T^4) \\
+    \mu &\approx \eps_F \closed{1 - \frac{\pi^2}{12} \closed{\frac{k_B T}{\eps_F}}^2+...},\quad\text{iterate, expand use N(T=0)}
+\end{align*}
+
+Plugging in for $U$ and expanding $\mu^{5/2}$ and $\mu^{1/2}$ up to $T^2$ gives 
+\begin{align*}
+    U &= \frac{2}{5}X\eps_F^{5/2} + \frac{\pi^2}{6}(k_B T)^2 X\eps_F^{1/2} \implies C_V = \frac{\pi^2}{2} Nk_B \closed{\frac{k_B T}{\eps_F}} + \mathcal{O}(T^3)
+\end{align*}
+where $X\eps_F^{3/2}=3/2\cdot N $. The linear dependence is observed for metals at low $T$. 
+
+
+
+\subsubsection*{\scriptsize The Harmonic solid}
+1D crystal lattice with spacing $a$. Pos.: $r_j = R_j + x_j$, $R_j=a\cdot j$ is equil. pos., $x_j$ is the deviation and $j=0,1,\dots,N-1$. Model as springs, with P.BC, 
+\begin{align*}
+    H &= \frac{m}{2}\sum_{j=0}^{N-1} \dot{x}_j^2 + \frac{K}{2} \sum_j (x_{j+1}-x_j)^2 \\ 
+    H &= \frac{m}{2} \sum_k \abs{\dot{X}_k}^2 + \frac{K}{2} \sum_k 4\sin^2(ka/2) \abs{X_k}^2 \\
+    K_k &= 4K \sin^2(ka/2),\quad \omega_k^2 = K_k/m = \tilde{\omega}^2 4\sin^2(ka/2) \\
+    Z &= \prod_k \sum_{n=0}^\infty e^{-\beta \hbar \omega_k (n+1/2)},\: F= \sum_k \closed{\frac{\hbar \omega_k}{2} + k_B T \ln\closed{1-e^{-\beta \hbar \omega_k}} } \\
+\end{align*}
+
+P.BC: $x_{j+N}=x_j\implies k = \frac{2\pi}{Na}n$, $n\in\mathbb{Z}$. Also, for $\tilde{k}=2\pi z/a$, $z\int\mathbb{Z}$, $X_{\tilde{k}}=X_k$. All info about $x_j$ gotten from $X_k$ in $k\in[-\pi/a,\pi/a)$. This is the \textit{First Brillouin zone}.
+\begin{align*}
+\end{align*}
+
+
+\subsubsection*{\scriptsize Debye approximation}
+
+$\omega_k\approx \tilde{\omega} ka$ for small $k$. \textit{Debye approximation:} $\hbar\omega_k=\hbar v \abs{\vec{k}}$ as lin. rel., $v$ is speed of sound (interpolate between known low and high $T$ sol). Sphere of radius $k_D=(6\pi^2/a^3)$. Debye energy and temperature: $\hbar \omega_D\equiv \hbar v k_D$ and $\theta_D\equiv \hbar \omega_D/k_B$. $x=\beta\hbar v k$, we get 
+\begin{align*}
+    U &= \text{const} + 3N\closed{\frac{a}{2\pi}}^3 \int_{\text{1st B.Z}} d^3 k\,\frac{\hbar v \abs{\vec{k}}}{e^{\beta\hbar v \abs{\vec{k}}} - 1}\:(\text{gen. HS in 3D}) \\ 
+    &= \text{const} + 9N \frac{k_B T}{(\theta_D / T)^3} \int_0^{\theta_D / T} dx\, \frac{x^3}{e^x - 1}
+\end{align*}
+For high and low $T\:(T\gg\theta_D)$ and $T\ll\theta_D$, we get   
+\begin{align*}
+    U & = \text{const} + 3N k_B T \\
+    U & = \text{const} + \frac{3N\pi^4}{5} \frac{(k_B T)^4}{(\hbar\omega_D)^3},\quad c_V = \frac{12}{5}\pi^4 k_B \closed{\frac{k_B T}{\hbar\omega_D}} \propto T^3 
+\end{align*}
+
+
+\subsubsection*{\boxed{\text{Ising model}}}
+1D chain: $h=0$
+\begin{align*}
+    Z &= \sum_{\tau_1} \prod_{i=2}^N \closed{\sum_{\tau_i} e^{\beta J \tau_i}} = 2(2\cosh(\beta J))^{N-1} \\ 
+    U &= -(N-1)J\tanh(\beta J),\quad c = k_B \beta^2 J^2 \closed{1-\frac{1}{N}} \frac{1}{\cosh^2(\beta J)}
+\end{align*} 
+
+
+\subsubsection*{\scriptsize Ising chain with transfer matrices}
+$J\neq0$, $h\neq0$, use P.BC. ($\sigma_{N+1}=\sigma_1$). Write H symmetrically 
+\begin{align*}
+    H &= -J\sum_{i=1}^N \sigma_i \sigma_{i+1} - \frac{h}{2}\sum_{i=1}^N (\sigma_i+\sigma_{i+1}) \\
+    Z &= \sum_{\curly{\sigma}} \prod_{i=1}^N T_{\sigma_i,\sigma_{i+1}}=\Tr(T^N)=\lambda_1^N+\lambda_2^N,\quad T = \begin{pmatrix}
+        e^{\beta J-\beta h} & e^{-\beta J} \\ 
+        e^{-\beta J} & e^{\beta J + \beta h}
+    \end{pmatrix} \\
+    \lambda_1 &= e^{\beta J}\cosh(\beta J) + \sqrt{e^{2\beta J}\cosh^2(\beta h)-2\sinh(2\beta J) },\quad(\lambda_1>\lambda_2) \\ 
+    \frac{F}{N} &=-k_B T \ln\lambda_1 \xrightarrow{h=0} -k_B T \ln(2\cosh(\beta J)) \\
+    m &= \frac{1}{N} \expval{\sigma_j} = \frac{1}{\beta N} \pdv{\ln Z}{h} = -\frac{1}{N}\pdv{F}{h},\quad \chi = \pdv{m}{h} = \frac{1}{\beta N} \pdv[2]{\ln Z}{h}
+\end{align*}
+
+
+
+\subsubsection*{Mean Field Approximation}
+
+\begin{align*}
+    \tilde{\sigma}=\sigma-m\implies \sigma_j\sigma_k  \approx m^2 + m(\tilde{\sigma}_j + \tilde{\sigma}_k) \implies \sigma_j \sigma_k \approx -m^2 + m(\sigma_j + \sigma_k)
+\end{align*}
+In the Hamiltonian, include factor $1/2$ for the double counting of spin. Sum over $\sigma_j \sigma_{j+\delta}$. Introduce $z=2d=\sum_\delta 1$. PBC: Shift $j\to j'=j+\delta$ 
+\begin{align*}
+    H &= -\frac{J}{2}\sum_j \sum_\delta \closed{-m^2 + m\sigma_j + m\sigma_{j+\delta}} = Jm^2 \frac{Nz}{2} - J mz \sum_j \sigma_j
+\end{align*}  
+
+Adding the field again, defining $h_\mathrm{eff}=Jmz+h$, we get $H_\mathrm{MFA}=Jm^2 \frac{Nz}{2} - h_{\mathrm{eff}}$. Since all spins are the same on average, sum over $\sigma_1$ $N$ times. 
+\begin{align*}
+    Z &= e^{-\beta J m^2 Nz/2} \closed{2\cosh(\beta h_{\mathrm{eff}})}^N = e^{-\beta J m^2 Nz/2} Z_1^N \\
+    m &= \frac{1}{Z_1} \sum_{\sigma_1=-1}^{+1} \sigma_1 e^{(\beta h_{\mathrm{eff}}\sigma_1)} = \tanh(\beta h + \beta Jzm)\quad(m=m_1)
+\end{align*}
+Disordered: $m=0$. Ordered: $k_B T/Jz < 1$, $3$ solutions: $x=\pm1,0$, but $x=0$ unstable. $k_B T_c=zJ$. For $T\lesssim T_c$ with $h=0$, $m$ is small, and we can expand to solve for $m$
+\begin{align*}
+    m &\approx \beta J m z - \frac{1}{3} (\beta m J z)^3 \implies m^2 = 3 \closed{\frac{T}{T_c}}^2 \closed{1-\frac{T}{T_c}} \\
+    m &\propto \closed{\frac{T_c-T}{T_c}}^{1/2}\quad(T\sim T_c)
+\end{align*}
+
+
+\subsubsection*{\tiny Existence of PT} 
+
+\begin{align*}
+    k_B T_c &\approx \frac{\Delta E}{\ln N_\mathrm{ex}} \\
+    k_B T_c &= 2J/(\ln(N-1)-\ln 2) \to 0,\quad\text{for}\: N\to\infty\quad(\text{1D Ising}) \\
+    k_B T_c &= \frac{2J\cdot l}{\ln(2N(z-1)^l)-\ln2} = \frac{2J \cdot l}{\ln N + l\cdot \ln3}\quad \text{(2D Ising)}
+\end{align*} 
+
+
+\subsubsection*{\tiny Landau argument for PT existence}
+A symmetry can't be continuously deformed into another symmetry. Thus: Two phases with different symmetries are always separated by one or more PT's (There can still be PT between phases of same symmetries).
+
+
+\subsubsection*{\scriptsize Critical exponents}
+Many quantities behave like power laws of $t$ close to $T_c$ for cont. PT's. E.g. 
+\begin{align*}
+    C(r) = \expval{(m(r) - \expval{m(r)})(m(0) - \expval{m(0)})} \sim f(r) e^{-r/ \xi} 
+\end{align*}
+And with $\xi\to\infty$ at $T_c$, we get $C(r)\to f(r)$. 
+
+General parameters 
+\begin{align*}
+    \alpha:\: & c_V \sim \frac{1}{\abs{t}^\alpha},\quad \beta:\: m \sim (-t)^\beta\:(\text{order param. } t<0) \\ 
+    \gamma:\:& \chi=\partial_H m(H=0) \sim \frac{1}{\abs{t}^\gamma},\quad \delta:\: m \sim \abs{H}^{1/\delta}\: (t=0) \\
+    \nu:\: & \xi \sim \frac{1}{\abs{t}^\nu},\quad \eta:\: C(r) \sim \frac{1}{\abs{r}^{d-2+\eta}},\: (r\ll\xi) \\
+    \nu(2-\eta) &= \gamma,\: \alpha + 2\beta + \gamma = 2,\: \beta(\delta-1) = \gamma,\: 2-\alpha = \nu d
+\end{align*}
+
+
+\subsubsection*{\scriptsize Renomrmalization group}
+Universality: Same behavior at PT for several different microscopic systems. 
+
+RG-trans: Trans. betw. different microscopic models behaving the same at macroscopic scales. 
+
+Example: 1D Ising with a const., $C$. 
+\begin{align*}
+    Z = \sum_{\curly{\sigma}} T_{s_a s_{2a}}\dots T_{s_{Na} s_a}. \quad T_{i=j}=e^{\beta J + \beta C},\:T_{i\neq j}=e^{-\beta J +\beta C}
+\end{align*}
+Now, perform sum over every second site. Sum over $s_{2a}$ yields $T^2=2e^{2\beta C} \binom{\cosh(2\beta J)\quad 1}{1\quad \cosh(2\beta J)}=e^{\beta C'} \exp\closed{\beta J'\binom{1 \quad -1}{-1 \quad 1}}=T'$. The new transfer matrix is for the Ising chain with spin on every second site. Now, $H'=-\sum_r (J' s_r s_{r+a'}+C'),\:a'=2a$, with 
+\begin{align*}
+    &2e^{2\beta C} \cosh(2\beta J) = e^{\beta C'} e^{\beta J'},\quad 2e^{2\beta C}=e^{\beta C'} e^{-\beta J'} \\ 
+    &K_1 \equiv e^{-2\beta J},\quad K_1' \equiv e^{-2\beta J'},\quad K_2 \equiv e^{-2\beta C},\quad K_2' \equiv e^{-2\beta C'}
+\end{align*} 
+Now, $K_1=1\implies \beta J\to 0$ (disordered) and $K_1\implies \beta J\to\infty$ (ordered). Solving for $K_1'$, we get $K_1'=\frac{2K_1}{1+K_1^2}$. Since $K_1\in(0,1)$ then $1+K_1^2>1$. Iterating (subsequent RG trans.) for $K_1>0$ we will converge to $K_1=1$. Then, for $K_1\gtrsim0,\:K_1'\approx 2K_1$. We have $K_1=K_1(a),\: K_1'=K_1(2a)$. 
+
+In general, for incr. latt. spacing $s>1$, we have $K(sa)=s^{y_k} K(a)$. $y_k$ is scaling expo., repr. repulsive fp when positive (relevant), attractive fp when negative (irrelevant) (marginal for $y_k=0$, go beyond lin.). 
+
+The scaling relation in general is, for any dim-full quantity, $Q$ with satial dim $D$, measured in units off latt. spacing, $\boxed{\tilde{Q}(\curly{K})=s^D \tilde{Q}(\curly{K s^{y_k}})}$.
+
+Usually two relevant coupling, $t$ and $h$. Drop hats $\xi(h,t) = s \xi(hs^{y_h},ts^{y_t}),\:y_h,y_t>0$. arbitrary $s>1$, choose it s.t. $ts^{y_t}=1\implies s=t^{-1/y_t}$. 
+\begin{align*}
+    \xi(h,t) = t^{-1/y_t} \xi(ht^{-y_h / y_t},1),\:h=0\implies \xi(0,t) = \frac{1}{t^{1/y_t}} \xi(0,1)
+\end{align*}
+where $x(0,1)$ is a number. Compare to crit. exp. we see that $\xi\sim 1/\abs{t^\nu}\implies \nu=1/y_t$. For $m=-T df(h=0)/dh$, choose $s=(-t)^{-1/y_t}$. 
+
+\subsubsection*{\tiny Finite size scaling}
+Numerics: Finite system size, $L$. Intr. dimless len $L^{-1}=(L/a)^{-1}$, for $a'=as$ dimless len incr. as $L'^{-1}=sL^{-1}$. Then, corr.len (drop $h$) scales as (choose $s=L$)
+\begin{align*}
+    \xi(t,L^{-1}) = L \xi(t L^{y_t},1)=L g(tL^{y_t}),\quad \xi(tL^{y_t}\to\infty)\sim 1/t^\nu \implies g(x)\to 1/x^{1/y_t} \\
+    \text{(Fin.L near t=0):}\: g(x)=g(0)+x g'(0) \implies \xi(t,L^{-1})/L = g(0) + tL^{y_t} g'(0)
+\end{align*}  
+At $t=0$, RHS ind. of $L$. Compute $\xi/L$ for different $L$, $T_c$ found where curves cross. Exponent, $\nu$, gotten by computing $\partial_T(\xi/L)_{(T=T_c)}=L^{y_t}g'(0)/T_c$. Plot log of LHS vs. log of $L$, get straight line with slope $y_t$. 
+
+\subsubsection*{\scriptsize Cumulant expansion}
+
+Use mom. gen. func. 
+\begin{align*}
+    P_k&=\int dx\, P(x)e^{-ikx} = \sum_{m=0}^\infty \frac{(-ik)^m}{m!}\expval{x^m} \\
+    \ln P_k &\equiv \sum_{l=1}^\infty \frac{(-ik)^\ell}{\ell!} \expval{x^\ell}_c
+\end{align*}
+Equate $P_k$ with the exponentiated $\ln P_k$, compare powers of $(-ik)$. Yields $\expval{x}_c=\expval{x},\:\expval{x^2}_c=\expval{x^2}-\expval{x}^2,...$. $\expval{x^p}$: Draw $p$ dots, connect in all possible ways. Cluster of $m$ dots is $\expval{x^m}_c$, (disjoint: $m=0$). 
+
+Part. func. for interacting gas, $H=\sum_{i=1}^N \frac{\vec{p}_i^2}{2m}+\tilde{u}(\mathbb{Q})$. 
+\begin{align*}
+    Z = Z_0 \int \frac{d \mathbb{Q}}{V^N} e^{-\beta\tilde{u}} = Z_0 \sum_{m=0}^\infty \frac{(-\beta)^m}{m!} \int \frac{d^3 q_1}{V}\cdots \frac{d^3 q_N}{V}[\tilde{u}(q_1,\dots,q_n)]^m
+\end{align*}
+so $Z=Z_0 \sum_m (-\beta)^m/m! \expval{\tilde{u}^m}$. For free energy, $\ln Z\sim F$, we get 
+\begin{align*}
+    \ln Z = \ln Z_0 + \sum_{\ell=1}^\infty \frac{(-\beta)^\ell}{\ell!} \expval{\tilde{u}^\ell}_c
+\end{align*}
+With assumptions of potential, can now find contr. to $F$ from cumulants. Assuming $\tilde{u}(q...)=\sum_{i<j}u(\vec{q}_i-\vec{q}_j)$ and $u(-q)=u(q)$, the first cum. is 
+\begin{align*}
+    \expval{\tilde{u}^1}_c = \expval{\tilde{u}}=\frac{N(N-1)}{2}\int d^3 q/V u(\vec{q})
+\end{align*}
+Diag. for pair-wise int. P pairs for $\expval{\tilde{u}^p}$, connect each by dotted line. Label points, numbers on different pairs can be equal. Merge opints if numbers on different pairs are equal. Find the number of ways, $G$, to assign labels to diagram to get a spec. topology. For a given diagram there is a factor $u(q_i-q_j)$ for each dotted line. An integral $\int d^3 q/V$ for each point. A factor $G$. The sum of $G$ for each order $p$ should equal $(N(N-1)/2)^p$. \textbf{Disconnected and one-particle reducable diagrams don't contribute}. 
+
+\subsubsection*{\scriptsize Cluster expansion}
+For hard-core ($u$ big for $q\to0$), the $p$-th term is $\sim \int u^p(q)$. But $p+1$ term is bigger, so the series can't be truncated. Use 
+\begin{align*}
+    p_1 (-\beta)  + p_2 (-\beta)^2 /2! + \dots + p_p (-\beta)^p /p! = \frac{N(N-1)}{2V} \int d^3 q (e^{-\beta u}-1)
+\end{align*}
+where the integrand is $f(q)$. The GC-PF becomes 
+\begin{align*}
+    Z(\mu,T,V) &= \sum_{N=0}^\infty \frac{1}{N!} \closed{\frac{e^{\beta\mu N}}{\lambda^3}}^N S_N \\ 
+    S_N &=\int d^3 q_1 \dots d^3 q_N e^{-\beta \tilde{u}} = \int \prod_{i<j}\closed{e^{-\beta u(q_i-q_j)}-1+1} = \int \prod (f_{ij}+1) \\
+    &= \sum_{\curly{n_\ell}}' \prod b_\ell^{n_\ell} W(\curly{n_\ell}),\quad \sum': \sum_{\ell=1}^N n_\ell \ell =N
+\end{align*}
+$b_\ell$ all ways to connect points, $S_N$: how to connect $N$ points. Connected=$f_{ij}\to V\int d^3 q f(q)$, disc.: $1$, contributes a factor $V$. $W=$number of ways of labeling groups of $n_\ell$ $\ell$ clusters. $W=N!/(n_1 ! (2!)^{n_2} n_2 ! ...)=N!/\prod_\ell (\ell!)^{n_\ell} n_\ell!$.
+Final expression for PF 
+\begin{align*}
+    Z = \exp\bracket{\sum_{\ell=1}^\infty (e^{\beta\mu}/\lambda^3)^\ell + \frac{b_\ell}{\ell!} }
+\end{align*}
+Only linked-cluster-diags contr. to $\ln Z$.  
+
+
+\subsubsection*{\scriptsize Virial expansion}
+Deviation from IGL as exp. in $N/V$
+\begin{align*}
+    \beta P = N/V \closed{1 + B_2(T)\frac{N}{V} + B_3(T) \closed{\frac{N}{V}}^2 + \dots}
+\end{align*}
+
+
+
+
+\subsubsection*{\scriptsize Random Walks}
+
+\begin{align*}
+    \sum_{R=0}^N P_N(R) &= 1 \\ 
+    \expval{R} &= \sum_R R\cdot P_N(R)=NP \\ 
+    \expval{R^2} &= \sum_R R^2 P_N(R) = NP(1-p) + N^2 P^2 \\
+    \sigma^2 &= P(1-P)N \\ 
+    p_N(R) &\approx \frac{1}{\sqrt{2\pi P(1-P)N}}\exp\bracket{-\frac{(R-PN)^2}{2P(1-P)N}}
+\end{align*}
+so the binomial distribution can be approximated by a Gaussian for sufficiently large $R$ and $N$. 
+
+This gives $\expval{X_N}=Nl(2P-1)$ and $\expval{x_N^2}=4l^2 NP(1-P) + \expval{x_N}^2$ so we get $\expval{x_N^2} - \expval{x_N}^2 = 4l^2 N P(1-P)$.
+
+Now, for $R,N$ large, with $P=1/2$ once again, we can approximate with a Gaussian. Introduce probability density $P_N(x)\equiv P(x)/2l$, since $P(x)$ is the Gaussian distribution for discrete $x$. Then, for $t=N\Delta t$ and $D\equiv \frac{l^2}{2\Delta t}$ we get 
+
+\begin{align*}
+    P_N(x) &= \frac{1}{\sqrt{2\pi 2Dt}} e^{-\frac{x^2}{2\cdot 2Dt}}
+\end{align*}
+and we get a Gaussian distribution with mean $0$ and variance $2Dt$. With $M$ random walkers (particles), all with $x(t=0)=0$, the density of walkers per unit length at time $t$, $\rho(x,t)$, fulfills the Diffusion equation 
+\begin{align*}
+    \rho(x,t) &= M p(x,t) \\ 
+    \pdv{\rho(x,t)}{t} &= D \pdv[2]{\rho(x,t)}{x}
+\end{align*}
+
+
+This result holds for any RW with a symmetric step distribution. Consider general RW with $x(t+\Delta t)=x(t)+l$, where $l$ is now a random length (variable) with a probability distribution $\chi(l)$ that is independent of $t$. The distribution is normalized and symmetric, with $\int dl\,\chi(l)\cdot l^2=a^2$, where the limits are $l=\pm\infty$. For fixed $l$ we previously had $\chi(l)=\frac{1}{2}(\delta(l-a) + \delta(l+a))$. 
+
+Now, what is the distribution $p(x,t+\Delta t)$, given $p(x,t)$. Found by summing all possible paths from $x-l$ up to $x$ between the two times, weighted with the probability of the $l$'s. 
+\begin{align*}
+    p(x,t+\Delta t) &= \int_{-\infty}^\infty dl\, p(x-l,t)\chi(l) \\ 
+    p(x-l,t) &= p(x,t) - l \pdv{p(x,t)}{x} + \frac{l^2}{2!}\pdv[2]{p(x,t)}{x} + \dots \\ 
+    \implies p(x,t+\Delta t) &= p(x,t)\int_{-\infty}^\infty dl\,\chi(l) - \pdv{p(x,t)}{x} \cdot 0 + \frac{1}{2} \pdv[2]{p(x,t)}{x} \int_{-\infty}^\infty dl\,\chi(l)\cdot l^2 \\ 
+    &= p(x,t) + \frac{a^2}{2} \pdv[2]{p(x,t)}{x}
+\end{align*}
+Moving $p(x,t)$ to the LHS and dividing by $\Delta t$ yields 
+\begin{align*}
+    \frac{p(x,t+\Delta t) - p(x,t)}{\Delta t} &= \frac{a^2}{2\Delta t} \pdv[2]{p}{x} \\ 
+    \pdv{p}{t} &= D \pdv[2]{p}{x},\quad \text{for}\: \Delta t \to 0 \to
+\end{align*}
+So all info about microscopics are contained in $D$. 
+
+
+
+\subsubsection*{Markov Chains}
+
+\begin{align*}
+    \begin{pmatrix}
+        P_1 (n+1) \\
+        P_2 (n+1)
+    \end{pmatrix}
+    &= \begin{pmatrix}
+        W_{11} & W_{12} \\ 
+        W_{21} & W_{22}
+    \end{pmatrix}
+    \begin{pmatrix}
+        P_1 (n) \\
+        P_2 (n)
+    \end{pmatrix} \\ 
+    \dv{P_i}{t} &= \sum_{j} \closed{\omega_{ij}P_j - \omega_{ji}P_i},\quad \omega_{ii}=0
+\end{align*}
+
+
+\end{multicols*}
+\end{document}
